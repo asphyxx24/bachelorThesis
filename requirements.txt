@@ -1,0 +1,11 @@
+# Schicht 3: API-Latenz-Messungen
+httpx[http2]>=0.27
+websockets>=13.0
+python-dotenv>=1.0
+certifi>=2024.0
+
+# Analyse (spaeter)
+# pandas
+# scipy
+# matplotlib
+# jupyter
