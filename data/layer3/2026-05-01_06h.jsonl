@@ -1,0 +1,403 @@
+{"ts": "2026-05-01T06:00:03.514341+00:00", "tag": "06h", "run": 0, "metric": "stt_ttft", "api": "deepgram", "connect_ms": 467.5, "send_ms": 5.9, "ttft_ms": 586.8, "total_ms": 1054.4, "transcript_len": 0}
+{"ts": "2026-05-01T06:00:07.695524+00:00", "tag": "06h", "run": 1, "metric": "stt_ttft", "api": "deepgram", "connect_ms": 490.2, "send_ms": 8.4, "ttft_ms": 667.4, "total_ms": 1157.6, "transcript_len": 0}
+{"ts": "2026-05-01T06:00:10.879423+00:00", "tag": "06h", "run": 2, "metric": "stt_ttft", "api": "deepgram", "connect_ms": 460.6, "send_ms": 0.9, "ttft_ms": 657.2, "total_ms": 1117.8, "transcript_len": 0}
+{"ts": "2026-05-01T06:00:14.115901+00:00", "tag": "06h", "run": 3, "metric": "stt_ttft", "api": "deepgram", "connect_ms": 458.5, "send_ms": 0.7, "ttft_ms": 658.2, "total_ms": 1116.8, "transcript_len": 0}
+{"ts": "2026-05-01T06:00:17.301581+00:00", "tag": "06h", "run": 4, "metric": "stt_ttft", "api": "deepgram", "connect_ms": 459.3, "send_ms": 0.8, "ttft_ms": 656.2, "total_ms": 1115.6, "transcript_len": 0}
+{"ts": "2026-05-01T06:00:20.380363+00:00", "tag": "06h", "run": 5, "metric": "stt_ttft", "api": "deepgram", "connect_ms": 454.5, "send_ms": 0.7, "ttft_ms": 660.4, "total_ms": 1114.9, "transcript_len": 0}
+{"ts": "2026-05-01T06:00:24.326535+00:00", "tag": "06h", "run": 6, "metric": "stt_ttft", "api": "deepgram", "connect_ms": 457.4, "send_ms": 0.7, "ttft_ms": 583.8, "total_ms": 1041.3, "transcript_len": 0}
+{"ts": "2026-05-01T06:00:26.742872+00:00", "tag": "06h", "run": 7, "metric": "stt_ttft", "api": "deepgram", "connect_ms": 335.2, "send_ms": 0.8, "ttft_ms": 471.2, "total_ms": 806.5, "transcript_len": 0}
+{"ts": "2026-05-01T06:00:29.238719+00:00", "tag": "06h", "run": 8, "metric": "stt_ttft", "api": "deepgram", "connect_ms": 331.8, "send_ms": 0.9, "ttft_ms": 553.1, "total_ms": 884.9, "transcript_len": 0}
+{"ts": "2026-05-01T06:00:31.646845+00:00", "tag": "06h", "run": 9, "metric": "stt_ttft", "api": "deepgram", "connect_ms": 330.4, "send_ms": 0.7, "ttft_ms": 455.9, "total_ms": 786.3, "transcript_len": 0}
+{"ts": "2026-05-01T06:00:34.040603+00:00", "tag": "06h", "run": 10, "metric": "stt_ttft", "api": "deepgram", "connect_ms": 314.7, "send_ms": 0.7, "ttft_ms": 467.9, "total_ms": 782.7, "transcript_len": 0}
+{"ts": "2026-05-01T06:00:36.437072+00:00", "tag": "06h", "run": 11, "metric": "stt_ttft", "api": "deepgram", "connect_ms": 331.1, "send_ms": 0.7, "ttft_ms": 453.2, "total_ms": 784.4, "transcript_len": 0}
+{"ts": "2026-05-01T06:00:39.214203+00:00", "tag": "06h", "run": 12, "metric": "stt_ttft", "api": "deepgram", "connect_ms": 455.0, "send_ms": 0.7, "ttft_ms": 669.0, "total_ms": 1124.1, "transcript_len": 0}
+{"ts": "2026-05-01T06:00:41.915041+00:00", "tag": "06h", "run": 13, "metric": "stt_ttft", "api": "deepgram", "connect_ms": 442.1, "send_ms": 0.7, "ttft_ms": 610.3, "total_ms": 1052.5, "transcript_len": 0}
+{"ts": "2026-05-01T06:00:44.698420+00:00", "tag": "06h", "run": 14, "metric": "stt_ttft", "api": "deepgram", "connect_ms": 467.3, "send_ms": 0.7, "ttft_ms": 658.1, "total_ms": 1125.5, "transcript_len": 0}
+{"ts": "2026-05-01T06:00:47.441313+00:00", "tag": "06h", "run": 15, "metric": "stt_ttft", "api": "deepgram", "connect_ms": 453.4, "send_ms": 0.7, "ttft_ms": 635.8, "total_ms": 1089.2, "transcript_len": 0}
+{"ts": "2026-05-01T06:00:50.637704+00:00", "tag": "06h", "run": 16, "metric": "stt_ttft", "api": "deepgram", "connect_ms": 465.8, "send_ms": 0.9, "ttft_ms": 635.9, "total_ms": 1101.7, "transcript_len": 0}
+{"ts": "2026-05-01T06:00:54.675823+00:00", "tag": "06h", "run": 17, "metric": "stt_ttft", "api": "deepgram", "connect_ms": 448.9, "send_ms": 0.8, "ttft_ms": 658.1, "total_ms": 1107.0, "transcript_len": 0}
+{"ts": "2026-05-01T06:00:57.954518+00:00", "tag": "06h", "run": 18, "metric": "stt_ttft", "api": "deepgram", "connect_ms": 458.0, "send_ms": 0.7, "ttft_ms": 637.9, "total_ms": 1096.0, "transcript_len": 0}
+{"ts": "2026-05-01T06:01:00.710901+00:00", "tag": "06h", "run": 19, "metric": "stt_ttft", "api": "deepgram", "connect_ms": 449.3, "send_ms": 0.7, "ttft_ms": 656.3, "total_ms": 1105.6, "transcript_len": 0}
+{"ts": "2026-05-01T06:01:03.374540+00:00", "tag": "06h", "run": 20, "metric": "stt_ttft", "api": "deepgram", "connect_ms": 444.9, "send_ms": 0.8, "ttft_ms": 570.9, "total_ms": 1015.9, "transcript_len": 0}
+{"ts": "2026-05-01T06:01:06.101083+00:00", "tag": "06h", "run": 21, "metric": "stt_ttft", "api": "deepgram", "connect_ms": 459.4, "send_ms": 0.7, "ttft_ms": 609.6, "total_ms": 1069.1, "transcript_len": 0}
+{"ts": "2026-05-01T06:01:08.823161+00:00", "tag": "06h", "run": 22, "metric": "stt_ttft", "api": "deepgram", "connect_ms": 458.5, "send_ms": 0.8, "ttft_ms": 606.7, "total_ms": 1065.2, "transcript_len": 0}
+{"ts": "2026-05-01T06:01:11.219838+00:00", "tag": "06h", "run": 23, "metric": "stt_ttft", "api": "deepgram", "connect_ms": 332.7, "send_ms": 0.8, "ttft_ms": 451.9, "total_ms": 784.7, "transcript_len": 0}
+{"ts": "2026-05-01T06:01:13.614144+00:00", "tag": "06h", "run": 24, "metric": "stt_ttft", "api": "deepgram", "connect_ms": 330.3, "send_ms": 0.7, "ttft_ms": 451.0, "total_ms": 781.4, "transcript_len": 0}
+{"ts": "2026-05-01T06:01:16.005497+00:00", "tag": "06h", "run": 25, "metric": "stt_ttft", "api": "deepgram", "connect_ms": 314.0, "send_ms": 0.7, "ttft_ms": 458.5, "total_ms": 772.6, "transcript_len": 0}
+{"ts": "2026-05-01T06:01:18.397599+00:00", "tag": "06h", "run": 26, "metric": "stt_ttft", "api": "deepgram", "connect_ms": 328.1, "send_ms": 0.7, "ttft_ms": 451.9, "total_ms": 780.1, "transcript_len": 0}
+{"ts": "2026-05-01T06:01:20.778566+00:00", "tag": "06h", "run": 27, "metric": "stt_ttft", "api": "deepgram", "connect_ms": 314.1, "send_ms": 0.7, "ttft_ms": 453.5, "total_ms": 767.6, "transcript_len": 0}
+{"ts": "2026-05-01T06:01:23.181947+00:00", "tag": "06h", "run": 28, "metric": "stt_ttft", "api": "deepgram", "connect_ms": 320.1, "send_ms": 0.8, "ttft_ms": 470.8, "total_ms": 790.9, "transcript_len": 0}
+{"ts": "2026-05-01T06:01:25.586548+00:00", "tag": "06h", "run": 29, "metric": "stt_ttft", "api": "deepgram", "connect_ms": 317.7, "send_ms": 0.7, "ttft_ms": 472.4, "total_ms": 790.2, "transcript_len": 0}
+{"ts": "2026-05-01T06:01:28.004373+00:00", "tag": "06h", "run": 30, "metric": "stt_ttft", "api": "deepgram", "connect_ms": 331.6, "send_ms": 0.7, "ttft_ms": 472.2, "total_ms": 803.8, "transcript_len": 0}
+{"ts": "2026-05-01T06:01:30.413995+00:00", "tag": "06h", "run": 31, "metric": "stt_ttft", "api": "deepgram", "connect_ms": 329.4, "send_ms": 0.8, "ttft_ms": 452.9, "total_ms": 782.4, "transcript_len": 0}
+{"ts": "2026-05-01T06:01:32.822642+00:00", "tag": "06h", "run": 32, "metric": "stt_ttft", "api": "deepgram", "connect_ms": 333.1, "send_ms": 0.8, "ttft_ms": 454.3, "total_ms": 787.4, "transcript_len": 0}
+{"ts": "2026-05-01T06:01:35.539091+00:00", "tag": "06h", "run": 33, "metric": "stt_ttft", "api": "deepgram", "connect_ms": 461.8, "send_ms": 0.7, "ttft_ms": 599.2, "total_ms": 1061.1, "transcript_len": 0}
+{"ts": "2026-05-01T06:01:38.780474+00:00", "tag": "06h", "run": 34, "metric": "stt_ttft", "api": "deepgram", "connect_ms": 460.9, "send_ms": 0.7, "ttft_ms": 640.2, "total_ms": 1101.2, "transcript_len": 0}
+{"ts": "2026-05-01T06:01:42.030580+00:00", "tag": "06h", "run": 35, "metric": "stt_ttft", "api": "deepgram", "connect_ms": 458.8, "send_ms": 0.8, "ttft_ms": 656.4, "total_ms": 1115.3, "transcript_len": 0}
+{"ts": "2026-05-01T06:01:45.257453+00:00", "tag": "06h", "run": 36, "metric": "stt_ttft", "api": "deepgram", "connect_ms": 440.6, "send_ms": 0.8, "ttft_ms": 656.4, "total_ms": 1097.1, "transcript_len": 0}
+{"ts": "2026-05-01T06:01:48.033977+00:00", "tag": "06h", "run": 37, "metric": "stt_ttft", "api": "deepgram", "connect_ms": 469.6, "send_ms": 0.8, "ttft_ms": 648.6, "total_ms": 1118.2, "transcript_len": 0}
+{"ts": "2026-05-01T06:01:50.725558+00:00", "tag": "06h", "run": 38, "metric": "stt_ttft", "api": "deepgram", "connect_ms": 451.3, "send_ms": 0.7, "ttft_ms": 587.8, "total_ms": 1039.2, "transcript_len": 0}
+{"ts": "2026-05-01T06:01:53.510443+00:00", "tag": "06h", "run": 39, "metric": "stt_ttft", "api": "deepgram", "connect_ms": 470.6, "send_ms": 0.7, "ttft_ms": 656.8, "total_ms": 1127.5, "transcript_len": 0}
+{"ts": "2026-05-01T06:01:56.208146+00:00", "tag": "06h", "run": 40, "metric": "stt_ttft", "api": "deepgram", "connect_ms": 451.5, "send_ms": 0.8, "ttft_ms": 591.2, "total_ms": 1042.7, "transcript_len": 0}
+{"ts": "2026-05-01T06:02:00.294563+00:00", "tag": "06h", "run": 41, "metric": "stt_ttft", "api": "deepgram", "connect_ms": 456.5, "send_ms": 0.8, "ttft_ms": 580.8, "total_ms": 1037.4, "transcript_len": 0}
+{"ts": "2026-05-01T06:02:03.354919+00:00", "tag": "06h", "run": 42, "metric": "stt_ttft", "api": "deepgram", "connect_ms": 458.2, "send_ms": 0.7, "ttft_ms": 578.0, "total_ms": 1036.2, "transcript_len": 0}
+{"ts": "2026-05-01T06:02:07.438678+00:00", "tag": "06h", "run": 43, "metric": "stt_ttft", "api": "deepgram", "connect_ms": 438.4, "send_ms": 0.7, "ttft_ms": 584.3, "total_ms": 1022.7, "transcript_len": 0}
+{"ts": "2026-05-01T06:02:10.675382+00:00", "tag": "06h", "run": 44, "metric": "stt_ttft", "api": "deepgram", "connect_ms": 468.0, "send_ms": 0.8, "ttft_ms": 632.8, "total_ms": 1100.9, "transcript_len": 0}
+{"ts": "2026-05-01T06:02:13.984408+00:00", "tag": "06h", "run": 45, "metric": "stt_ttft", "api": "deepgram", "connect_ms": 472.1, "send_ms": 0.7, "ttft_ms": 612.2, "total_ms": 1084.3, "transcript_len": 0}
+{"ts": "2026-05-01T06:02:17.190504+00:00", "tag": "06h", "run": 46, "metric": "stt_ttft", "api": "deepgram", "connect_ms": 470.6, "send_ms": 0.8, "ttft_ms": 600.5, "total_ms": 1071.1, "transcript_len": 0}
+{"ts": "2026-05-01T06:02:20.466173+00:00", "tag": "06h", "run": 47, "metric": "stt_ttft", "api": "deepgram", "connect_ms": 468.4, "send_ms": 0.8, "ttft_ms": 657.8, "total_ms": 1126.3, "transcript_len": 0}
+{"ts": "2026-05-01T06:02:23.293668+00:00", "tag": "06h", "run": 48, "metric": "stt_ttft", "api": "deepgram", "connect_ms": 478.4, "send_ms": 0.8, "ttft_ms": 691.8, "total_ms": 1170.2, "transcript_len": 0}
+{"ts": "2026-05-01T06:02:26.433634+00:00", "tag": "06h", "run": 49, "metric": "stt_ttft", "api": "deepgram", "connect_ms": 440.1, "send_ms": 0.8, "ttft_ms": 579.3, "total_ms": 1019.5, "transcript_len": 0}
+{"ts": "2026-05-01T06:02:29.833568+00:00", "tag": "06h", "run": 50, "metric": "stt_ttft", "api": "deepgram", "connect_ms": 453.8, "send_ms": 0.8, "ttft_ms": 602.4, "total_ms": 1056.2, "transcript_len": 0}
+{"ts": "2026-05-01T06:02:33.952665+00:00", "tag": "06h", "run": 51, "metric": "stt_ttft", "api": "deepgram", "connect_ms": 458.4, "send_ms": 0.7, "ttft_ms": 622.1, "total_ms": 1080.6, "transcript_len": 0}
+{"ts": "2026-05-01T06:02:37.663696+00:00", "tag": "06h", "run": 52, "metric": "stt_ttft", "api": "deepgram", "connect_ms": 470.0, "send_ms": 0.9, "ttft_ms": 638.7, "total_ms": 1108.7, "transcript_len": 0}
+{"ts": "2026-05-01T06:02:40.770331+00:00", "tag": "06h", "run": 53, "metric": "stt_ttft", "api": "deepgram", "connect_ms": 443.5, "send_ms": 0.9, "ttft_ms": 588.3, "total_ms": 1031.8, "transcript_len": 0}
+{"ts": "2026-05-01T06:02:44.010526+00:00", "tag": "06h", "run": 54, "metric": "stt_ttft", "api": "deepgram", "connect_ms": 461.2, "send_ms": 0.8, "ttft_ms": 586.2, "total_ms": 1047.4, "transcript_len": 0}
+{"ts": "2026-05-01T06:02:46.412401+00:00", "tag": "06h", "run": 55, "metric": "stt_ttft", "api": "deepgram", "connect_ms": 335.1, "send_ms": 0.7, "ttft_ms": 453.3, "total_ms": 788.5, "transcript_len": 0}
+{"ts": "2026-05-01T06:02:49.223073+00:00", "tag": "06h", "run": 56, "metric": "stt_ttft", "api": "deepgram", "connect_ms": 467.2, "send_ms": 0.7, "ttft_ms": 684.8, "total_ms": 1152.0, "transcript_len": 0}
+{"ts": "2026-05-01T06:02:51.956123+00:00", "tag": "06h", "run": 57, "metric": "stt_ttft", "api": "deepgram", "connect_ms": 466.0, "send_ms": 0.7, "ttft_ms": 608.7, "total_ms": 1074.7, "transcript_len": 0}
+{"ts": "2026-05-01T06:02:54.699241+00:00", "tag": "06h", "run": 58, "metric": "stt_ttft", "api": "deepgram", "connect_ms": 471.6, "send_ms": 0.7, "ttft_ms": 613.1, "total_ms": 1084.7, "transcript_len": 0}
+{"ts": "2026-05-01T06:02:57.387596+00:00", "tag": "06h", "run": 59, "metric": "stt_ttft", "api": "deepgram", "connect_ms": 446.1, "send_ms": 0.7, "ttft_ms": 590.2, "total_ms": 1036.3, "transcript_len": 0}
+{"ts": "2026-05-01T06:03:00.123409+00:00", "tag": "06h", "run": 60, "metric": "stt_ttft", "api": "deepgram", "connect_ms": 454.0, "send_ms": 0.8, "ttft_ms": 628.9, "total_ms": 1082.9, "transcript_len": 0}
+{"ts": "2026-05-01T06:03:02.819685+00:00", "tag": "06h", "run": 61, "metric": "stt_ttft", "api": "deepgram", "connect_ms": 452.8, "send_ms": 1.5, "ttft_ms": 590.5, "total_ms": 1043.3, "transcript_len": 0}
+{"ts": "2026-05-01T06:03:05.509621+00:00", "tag": "06h", "run": 62, "metric": "stt_ttft", "api": "deepgram", "connect_ms": 446.3, "send_ms": 0.7, "ttft_ms": 590.2, "total_ms": 1036.6, "transcript_len": 0}
+{"ts": "2026-05-01T06:03:08.198089+00:00", "tag": "06h", "run": 63, "metric": "stt_ttft", "api": "deepgram", "connect_ms": 444.7, "send_ms": 0.7, "ttft_ms": 591.1, "total_ms": 1035.9, "transcript_len": 0}
+{"ts": "2026-05-01T06:03:10.958512+00:00", "tag": "06h", "run": 64, "metric": "stt_ttft", "api": "deepgram", "connect_ms": 451.4, "send_ms": 0.8, "ttft_ms": 658.3, "total_ms": 1109.8, "transcript_len": 0}
+{"ts": "2026-05-01T06:03:13.403845+00:00", "tag": "06h", "run": 65, "metric": "stt_ttft", "api": "deepgram", "connect_ms": 337.2, "send_ms": 0.7, "ttft_ms": 496.3, "total_ms": 833.6, "transcript_len": 0}
+{"ts": "2026-05-01T06:03:15.799876+00:00", "tag": "06h", "run": 66, "metric": "stt_ttft", "api": "deepgram", "connect_ms": 331.9, "send_ms": 0.7, "ttft_ms": 451.9, "total_ms": 783.8, "transcript_len": 0}
+{"ts": "2026-05-01T06:03:18.231603+00:00", "tag": "06h", "run": 67, "metric": "stt_ttft", "api": "deepgram", "connect_ms": 328.1, "send_ms": 0.8, "ttft_ms": 492.0, "total_ms": 820.1, "transcript_len": 0}
+{"ts": "2026-05-01T06:03:20.928406+00:00", "tag": "06h", "run": 68, "metric": "stt_ttft", "api": "deepgram", "connect_ms": 455.2, "send_ms": 0.8, "ttft_ms": 589.6, "total_ms": 1044.8, "transcript_len": 0}
+{"ts": "2026-05-01T06:03:23.318795+00:00", "tag": "06h", "run": 69, "metric": "stt_ttft", "api": "deepgram", "connect_ms": 327.7, "send_ms": 0.7, "ttft_ms": 452.8, "total_ms": 780.5, "transcript_len": 0}
+{"ts": "2026-05-01T06:03:25.718460+00:00", "tag": "06h", "run": 70, "metric": "stt_ttft", "api": "deepgram", "connect_ms": 333.0, "send_ms": 0.7, "ttft_ms": 453.1, "total_ms": 786.1, "transcript_len": 0}
+{"ts": "2026-05-01T06:03:28.141502+00:00", "tag": "06h", "run": 71, "metric": "stt_ttft", "api": "deepgram", "connect_ms": 315.0, "send_ms": 0.8, "ttft_ms": 451.8, "total_ms": 766.8, "transcript_len": 0}
+{"ts": "2026-05-01T06:03:30.520855+00:00", "tag": "06h", "run": 72, "metric": "stt_ttft", "api": "deepgram", "connect_ms": 314.2, "send_ms": 0.7, "ttft_ms": 453.1, "total_ms": 767.3, "transcript_len": 0}
+{"ts": "2026-05-01T06:03:33.598672+00:00", "tag": "06h", "run": 73, "metric": "stt_ttft", "api": "deepgram", "connect_ms": 459.1, "send_ms": 0.7, "ttft_ms": 590.3, "total_ms": 1049.5, "transcript_len": 0}
+{"ts": "2026-05-01T06:03:36.648836+00:00", "tag": "06h", "run": 74, "metric": "stt_ttft", "api": "deepgram", "connect_ms": 438.4, "send_ms": 0.8, "ttft_ms": 581.5, "total_ms": 1019.9, "transcript_len": 0}
+{"ts": "2026-05-01T06:03:39.765599+00:00", "tag": "06h", "run": 75, "metric": "stt_ttft", "api": "deepgram", "connect_ms": 452.0, "send_ms": 0.8, "ttft_ms": 657.5, "total_ms": 1109.5, "transcript_len": 0}
+{"ts": "2026-05-01T06:03:42.904266+00:00", "tag": "06h", "run": 76, "metric": "stt_ttft", "api": "deepgram", "connect_ms": 457.3, "send_ms": 0.8, "ttft_ms": 656.4, "total_ms": 1113.9, "transcript_len": 0}
+{"ts": "2026-05-01T06:03:45.307412+00:00", "tag": "06h", "run": 77, "metric": "stt_ttft", "api": "deepgram", "connect_ms": 337.6, "send_ms": 0.7, "ttft_ms": 453.9, "total_ms": 791.5, "transcript_len": 0}
+{"ts": "2026-05-01T06:03:47.711062+00:00", "tag": "06h", "run": 78, "metric": "stt_ttft", "api": "deepgram", "connect_ms": 342.0, "send_ms": 0.7, "ttft_ms": 451.6, "total_ms": 793.7, "transcript_len": 0}
+{"ts": "2026-05-01T06:03:50.105284+00:00", "tag": "06h", "run": 79, "metric": "stt_ttft", "api": "deepgram", "connect_ms": 315.2, "send_ms": 0.7, "ttft_ms": 467.8, "total_ms": 783.1, "transcript_len": 0}
+{"ts": "2026-05-01T06:03:52.533324+00:00", "tag": "06h", "run": 80, "metric": "stt_ttft", "api": "deepgram", "connect_ms": 336.1, "send_ms": 0.8, "ttft_ms": 460.0, "total_ms": 796.2, "transcript_len": 0}
+{"ts": "2026-05-01T06:03:54.919617+00:00", "tag": "06h", "run": 81, "metric": "stt_ttft", "api": "deepgram", "connect_ms": 317.3, "send_ms": 0.8, "ttft_ms": 459.6, "total_ms": 777.0, "transcript_len": 0}
+{"ts": "2026-05-01T06:03:57.320491+00:00", "tag": "06h", "run": 82, "metric": "stt_ttft", "api": "deepgram", "connect_ms": 318.6, "send_ms": 0.8, "ttft_ms": 468.7, "total_ms": 787.3, "transcript_len": 0}
+{"ts": "2026-05-01T06:03:59.769796+00:00", "tag": "06h", "run": 83, "metric": "stt_ttft", "api": "deepgram", "connect_ms": 332.9, "send_ms": 0.7, "ttft_ms": 503.5, "total_ms": 836.4, "transcript_len": 0}
+{"ts": "2026-05-01T06:04:02.169630+00:00", "tag": "06h", "run": 84, "metric": "stt_ttft", "api": "deepgram", "connect_ms": 333.8, "send_ms": 1.2, "ttft_ms": 453.7, "total_ms": 787.5, "transcript_len": 0}
+{"ts": "2026-05-01T06:04:04.545261+00:00", "tag": "06h", "run": 85, "metric": "stt_ttft", "api": "deepgram", "connect_ms": 312.1, "send_ms": 0.7, "ttft_ms": 451.1, "total_ms": 763.2, "transcript_len": 0}
+{"ts": "2026-05-01T06:04:06.953381+00:00", "tag": "06h", "run": 86, "metric": "stt_ttft", "api": "deepgram", "connect_ms": 339.9, "send_ms": 0.8, "ttft_ms": 456.6, "total_ms": 796.6, "transcript_len": 0}
+{"ts": "2026-05-01T06:04:09.653643+00:00", "tag": "06h", "run": 87, "metric": "stt_ttft", "api": "deepgram", "connect_ms": 454.5, "send_ms": 0.7, "ttft_ms": 593.2, "total_ms": 1047.8, "transcript_len": 0}
+{"ts": "2026-05-01T06:04:12.416569+00:00", "tag": "06h", "run": 88, "metric": "stt_ttft", "api": "deepgram", "connect_ms": 451.4, "send_ms": 0.7, "ttft_ms": 658.8, "total_ms": 1110.2, "transcript_len": 0}
+{"ts": "2026-05-01T06:04:15.187743+00:00", "tag": "06h", "run": 89, "metric": "stt_ttft", "api": "deepgram", "connect_ms": 464.7, "send_ms": 0.7, "ttft_ms": 649.3, "total_ms": 1114.0, "transcript_len": 0}
+{"ts": "2026-05-01T06:04:17.962235+00:00", "tag": "06h", "run": 90, "metric": "stt_ttft", "api": "deepgram", "connect_ms": 459.5, "send_ms": 0.9, "ttft_ms": 658.0, "total_ms": 1117.5, "transcript_len": 0}
+{"ts": "2026-05-01T06:04:20.371025+00:00", "tag": "06h", "run": 91, "metric": "stt_ttft", "api": "deepgram", "connect_ms": 344.1, "send_ms": 0.7, "ttft_ms": 453.4, "total_ms": 797.5, "transcript_len": 0}
+{"ts": "2026-05-01T06:04:22.803894+00:00", "tag": "06h", "run": 92, "metric": "stt_ttft", "api": "deepgram", "connect_ms": 334.2, "send_ms": 0.7, "ttft_ms": 487.1, "total_ms": 821.3, "transcript_len": 0}
+{"ts": "2026-05-01T06:04:25.224459+00:00", "tag": "06h", "run": 93, "metric": "stt_ttft", "api": "deepgram", "connect_ms": 314.4, "send_ms": 0.7, "ttft_ms": 493.3, "total_ms": 807.8, "transcript_len": 0}
+{"ts": "2026-05-01T06:04:27.615093+00:00", "tag": "06h", "run": 94, "metric": "stt_ttft", "api": "deepgram", "connect_ms": 314.9, "send_ms": 0.8, "ttft_ms": 462.4, "total_ms": 777.4, "transcript_len": 0}
+{"ts": "2026-05-01T06:04:30.013138+00:00", "tag": "06h", "run": 95, "metric": "stt_ttft", "api": "deepgram", "connect_ms": 332.8, "send_ms": 0.8, "ttft_ms": 451.7, "total_ms": 784.6, "transcript_len": 0}
+{"ts": "2026-05-01T06:04:34.078723+00:00", "tag": "06h", "run": 96, "metric": "stt_ttft", "api": "deepgram", "connect_ms": 455.5, "send_ms": 0.7, "ttft_ms": 590.7, "total_ms": 1046.2, "transcript_len": 0}
+{"ts": "2026-05-01T06:04:37.137136+00:00", "tag": "06h", "run": 97, "metric": "stt_ttft", "api": "deepgram", "connect_ms": 451.8, "send_ms": 0.8, "ttft_ms": 582.6, "total_ms": 1034.4, "transcript_len": 0}
+{"ts": "2026-05-01T06:04:40.289264+00:00", "tag": "06h", "run": 98, "metric": "stt_ttft", "api": "deepgram", "connect_ms": 452.6, "send_ms": 0.7, "ttft_ms": 578.9, "total_ms": 1031.5, "transcript_len": 0}
+{"ts": "2026-05-01T06:04:43.025739+00:00", "tag": "06h", "run": 99, "metric": "stt_ttft", "api": "deepgram", "connect_ms": 468.7, "send_ms": 0.7, "ttft_ms": 610.8, "total_ms": 1079.6, "transcript_len": 0}
+{"ts": "2026-05-01T06:04:43.026273+00:00", "tag": "06h", "api": "deepgram", "metric": "stt_ttft", "n": 100, "errors": 0, "stats": {"mean": 562.3, "p50": 588.3, "p95": 660.4, "p99": 691.8, "stdev": 81.9, "min": 451.0, "max": 691.8}}
+{"ts": "2026-05-01T06:04:43.949846+00:00", "tag": "06h", "run": 0, "metric": "llm", "api": "requesty", "model": "google/gemini-2.5-flash", "headers_ms": 922.5, "ttft_ms": 922.7, "ttl_ms": 922.7, "token_count": 1, "response_len": 19}
+{"ts": "2026-05-01T06:04:46.190258+00:00", "tag": "06h", "run": 1, "metric": "llm", "api": "requesty", "model": "google/gemini-2.5-flash", "headers_ms": 737.4, "ttft_ms": 737.5, "ttl_ms": 737.6, "token_count": 1, "response_len": 32}
+{"ts": "2026-05-01T06:04:48.422852+00:00", "tag": "06h", "run": 2, "metric": "llm", "api": "requesty", "model": "google/gemini-2.5-flash", "headers_ms": 729.6, "ttft_ms": 729.7, "ttl_ms": 729.7, "token_count": 1, "response_len": 27}
+{"ts": "2026-05-01T06:04:50.793142+00:00", "tag": "06h", "run": 3, "metric": "llm", "api": "requesty", "model": "google/gemini-2.5-flash", "headers_ms": 867.4, "ttft_ms": 867.6, "ttl_ms": 867.6, "token_count": 1, "response_len": 27}
+{"ts": "2026-05-01T06:04:53.132240+00:00", "tag": "06h", "run": 4, "metric": "llm", "api": "requesty", "model": "google/gemini-2.5-flash", "headers_ms": 836.1, "ttft_ms": 836.3, "ttl_ms": 836.3, "token_count": 1, "response_len": 33}
+{"ts": "2026-05-01T06:04:55.470232+00:00", "tag": "06h", "run": 5, "metric": "llm", "api": "requesty", "model": "google/gemini-2.5-flash", "headers_ms": 836.1, "ttft_ms": 836.2, "ttl_ms": 836.2, "token_count": 1, "response_len": 19}
+{"ts": "2026-05-01T06:04:57.795209+00:00", "tag": "06h", "run": 6, "metric": "llm", "api": "requesty", "model": "google/gemini-2.5-flash", "headers_ms": 822.0, "ttft_ms": 822.2, "ttl_ms": 822.2, "token_count": 1, "response_len": 27}
+{"ts": "2026-05-01T06:05:00.294665+00:00", "tag": "06h", "run": 7, "metric": "llm", "api": "requesty", "model": "google/gemini-2.5-flash", "headers_ms": 996.5, "ttft_ms": 996.6, "ttl_ms": 996.6, "token_count": 1, "response_len": 32}
+{"ts": "2026-05-01T06:05:02.620564+00:00", "tag": "06h", "run": 8, "metric": "llm", "api": "requesty", "model": "google/gemini-2.5-flash", "headers_ms": 822.9, "ttft_ms": 823.1, "ttl_ms": 823.1, "token_count": 1, "response_len": 10}
+{"ts": "2026-05-01T06:05:04.928821+00:00", "tag": "06h", "run": 9, "metric": "llm", "api": "requesty", "model": "google/gemini-2.5-flash", "headers_ms": 805.2, "ttft_ms": 805.3, "ttl_ms": 805.3, "token_count": 1, "response_len": 13}
+{"ts": "2026-05-01T06:05:07.305270+00:00", "tag": "06h", "run": 10, "metric": "llm", "api": "requesty", "model": "google/gemini-2.5-flash", "headers_ms": 873.3, "ttft_ms": 873.4, "ttl_ms": 873.4, "token_count": 1, "response_len": 19}
+{"ts": "2026-05-01T06:05:09.622682+00:00", "tag": "06h", "run": 11, "metric": "llm", "api": "requesty", "model": "google/gemini-2.5-flash", "headers_ms": 814.4, "ttft_ms": 814.6, "ttl_ms": 814.6, "token_count": 1, "response_len": 10}
+{"ts": "2026-05-01T06:05:12.143409+00:00", "tag": "06h", "run": 12, "metric": "llm", "api": "requesty", "model": "google/gemini-2.5-flash", "headers_ms": 1017.7, "ttft_ms": 1017.9, "ttl_ms": 1017.9, "token_count": 1, "response_len": 19}
+{"ts": "2026-05-01T06:05:14.432356+00:00", "tag": "06h", "run": 13, "metric": "llm", "api": "requesty", "model": "google/gemini-2.5-flash", "headers_ms": 785.9, "ttft_ms": 786.1, "ttl_ms": 786.1, "token_count": 1, "response_len": 13}
+{"ts": "2026-05-01T06:05:16.703194+00:00", "tag": "06h", "run": 14, "metric": "llm", "api": "requesty", "model": "google/gemini-2.5-flash", "headers_ms": 767.8, "ttft_ms": 768.0, "ttl_ms": 768.0, "token_count": 1, "response_len": 19}
+{"ts": "2026-05-01T06:05:19.047671+00:00", "tag": "06h", "run": 15, "metric": "llm", "api": "requesty", "model": "google/gemini-2.5-flash", "headers_ms": 841.5, "ttft_ms": 841.7, "ttl_ms": 841.7, "token_count": 1, "response_len": 13}
+{"ts": "2026-05-01T06:05:21.625709+00:00", "tag": "06h", "run": 16, "metric": "llm", "api": "requesty", "model": "google/gemini-2.5-flash", "headers_ms": 1074.9, "ttft_ms": 1075.1, "ttl_ms": 1075.1, "token_count": 1, "response_len": 27}
+{"ts": "2026-05-01T06:05:23.898791+00:00", "tag": "06h", "run": 17, "metric": "llm", "api": "requesty", "model": "google/gemini-2.5-flash", "headers_ms": 770.1, "ttft_ms": 770.3, "ttl_ms": 770.3, "token_count": 1, "response_len": 32}
+{"ts": "2026-05-01T06:05:26.264932+00:00", "tag": "06h", "run": 18, "metric": "llm", "api": "requesty", "model": "google/gemini-2.5-flash", "headers_ms": 863.2, "ttft_ms": 863.3, "ttl_ms": 863.3, "token_count": 1, "response_len": 27}
+{"ts": "2026-05-01T06:05:28.593134+00:00", "tag": "06h", "run": 19, "metric": "llm", "api": "requesty", "model": "google/gemini-2.5-flash", "headers_ms": 825.1, "ttft_ms": 825.3, "ttl_ms": 825.3, "token_count": 1, "response_len": 13}
+{"ts": "2026-05-01T06:05:30.924501+00:00", "tag": "06h", "run": 20, "metric": "llm", "api": "requesty", "model": "google/gemini-2.5-flash", "headers_ms": 828.4, "ttft_ms": 828.6, "ttl_ms": 828.6, "token_count": 1, "response_len": 3}
+{"ts": "2026-05-01T06:05:33.449621+00:00", "tag": "06h", "run": 21, "metric": "llm", "api": "requesty", "model": "google/gemini-2.5-flash", "headers_ms": 1021.9, "ttft_ms": 1022.1, "ttl_ms": 1022.1, "token_count": 1, "response_len": 10}
+{"ts": "2026-05-01T06:05:35.750304+00:00", "tag": "06h", "run": 22, "metric": "llm", "api": "requesty", "model": "google/gemini-2.5-flash", "headers_ms": 797.8, "ttft_ms": 797.9, "ttl_ms": 798.0, "token_count": 1, "response_len": 27}
+{"ts": "2026-05-01T06:05:38.139048+00:00", "tag": "06h", "run": 23, "metric": "llm", "api": "requesty", "model": "google/gemini-2.5-flash", "headers_ms": 885.7, "ttft_ms": 885.9, "ttl_ms": 885.9, "token_count": 1, "response_len": 32}
+{"ts": "2026-05-01T06:05:40.432594+00:00", "tag": "06h", "run": 24, "metric": "llm", "api": "requesty", "model": "google/gemini-2.5-flash", "headers_ms": 790.6, "ttft_ms": 790.8, "ttl_ms": 790.8, "token_count": 1, "response_len": 27}
+{"ts": "2026-05-01T06:05:42.720466+00:00", "tag": "06h", "run": 25, "metric": "llm", "api": "requesty", "model": "google/gemini-2.5-flash", "headers_ms": 784.8, "ttft_ms": 785.0, "ttl_ms": 785.0, "token_count": 1, "response_len": 27}
+{"ts": "2026-05-01T06:05:45.278478+00:00", "tag": "06h", "run": 26, "metric": "llm", "api": "requesty", "model": "google/gemini-2.5-flash", "headers_ms": 1054.9, "ttft_ms": 1055.1, "ttl_ms": 1055.1, "token_count": 1, "response_len": 3}
+{"ts": "2026-05-01T06:05:47.545791+00:00", "tag": "06h", "run": 27, "metric": "llm", "api": "requesty", "model": "google/gemini-2.5-flash", "headers_ms": 764.2, "ttft_ms": 764.4, "ttl_ms": 764.4, "token_count": 1, "response_len": 27}
+{"ts": "2026-05-01T06:05:49.871139+00:00", "tag": "06h", "run": 28, "metric": "llm", "api": "requesty", "model": "google/gemini-2.5-flash", "headers_ms": 822.4, "ttft_ms": 822.5, "ttl_ms": 822.5, "token_count": 1, "response_len": 27}
+{"ts": "2026-05-01T06:05:52.295062+00:00", "tag": "06h", "run": 29, "metric": "llm", "api": "requesty", "model": "google/gemini-2.5-flash", "headers_ms": 920.9, "ttft_ms": 921.0, "ttl_ms": 921.0, "token_count": 1, "response_len": 32}
+{"ts": "2026-05-01T06:05:54.483143+00:00", "tag": "06h", "run": 30, "metric": "llm", "api": "requesty", "model": "google/gemini-2.5-flash", "headers_ms": 685.1, "ttft_ms": 685.3, "ttl_ms": 685.3, "token_count": 1, "response_len": 32}
+{"ts": "2026-05-01T06:05:56.822362+00:00", "tag": "06h", "run": 31, "metric": "llm", "api": "requesty", "model": "google/gemini-2.5-flash", "headers_ms": 836.1, "ttft_ms": 836.3, "ttl_ms": 836.3, "token_count": 1, "response_len": 27}
+{"ts": "2026-05-01T06:05:59.252565+00:00", "tag": "06h", "run": 32, "metric": "llm", "api": "requesty", "model": "google/gemini-2.5-flash", "headers_ms": 927.3, "ttft_ms": 927.5, "ttl_ms": 927.5, "token_count": 1, "response_len": 32}
+{"ts": "2026-05-01T06:06:01.584164+00:00", "tag": "06h", "run": 33, "metric": "llm", "api": "requesty", "model": "google/gemini-2.5-flash", "headers_ms": 828.3, "ttft_ms": 828.4, "ttl_ms": 828.4, "token_count": 1, "response_len": 27}
+{"ts": "2026-05-01T06:06:04.040431+00:00", "tag": "06h", "run": 34, "metric": "llm", "api": "requesty", "model": "google/gemini-2.5-flash", "headers_ms": 953.3, "ttft_ms": 953.4, "ttl_ms": 953.4, "token_count": 1, "response_len": 10}
+{"ts": "2026-05-01T06:06:06.336987+00:00", "tag": "06h", "run": 35, "metric": "llm", "api": "requesty", "model": "google/gemini-2.5-flash", "headers_ms": 793.5, "ttft_ms": 793.7, "ttl_ms": 793.7, "token_count": 1, "response_len": 32}
+{"ts": "2026-05-01T06:06:08.736970+00:00", "tag": "06h", "run": 36, "metric": "llm", "api": "requesty", "model": "google/gemini-2.5-flash", "headers_ms": 897.0, "ttft_ms": 897.1, "ttl_ms": 897.1, "token_count": 1, "response_len": 19}
+{"ts": "2026-05-01T06:06:11.250464+00:00", "tag": "06h", "run": 37, "metric": "llm", "api": "requesty", "model": "google/gemini-2.5-flash", "headers_ms": 1010.3, "ttft_ms": 1010.5, "ttl_ms": 1010.5, "token_count": 1, "response_len": 19}
+{"ts": "2026-05-01T06:06:13.605950+00:00", "tag": "06h", "run": 38, "metric": "llm", "api": "requesty", "model": "google/gemini-2.5-flash", "headers_ms": 853.9, "ttft_ms": 854.2, "ttl_ms": 854.2, "token_count": 1, "response_len": 19}
+{"ts": "2026-05-01T06:06:15.909084+00:00", "tag": "06h", "run": 39, "metric": "llm", "api": "requesty", "model": "google/gemini-2.5-flash", "headers_ms": 800.2, "ttft_ms": 800.4, "ttl_ms": 800.4, "token_count": 1, "response_len": 13}
+{"ts": "2026-05-01T06:06:18.526007+00:00", "tag": "06h", "run": 40, "metric": "llm", "api": "requesty", "model": "google/gemini-2.5-flash", "headers_ms": 1113.9, "ttft_ms": 1114.1, "ttl_ms": 1114.1, "token_count": 1, "response_len": 13}
+{"ts": "2026-05-01T06:06:20.881864+00:00", "tag": "06h", "run": 41, "metric": "llm", "api": "requesty", "model": "google/gemini-2.5-flash", "headers_ms": 852.9, "ttft_ms": 853.0, "ttl_ms": 853.1, "token_count": 1, "response_len": 32}
+{"ts": "2026-05-01T06:06:23.598336+00:00", "tag": "06h", "run": 42, "metric": "llm", "api": "requesty", "model": "google/gemini-2.5-flash", "headers_ms": 1213.4, "ttft_ms": 1213.5, "ttl_ms": 1213.5, "token_count": 1, "response_len": 13}
+{"ts": "2026-05-01T06:06:25.963749+00:00", "tag": "06h", "run": 43, "metric": "llm", "api": "requesty", "model": "google/gemini-2.5-flash", "headers_ms": 862.5, "ttft_ms": 862.7, "ttl_ms": 862.7, "token_count": 1, "response_len": 10}
+{"ts": "2026-05-01T06:06:28.263648+00:00", "tag": "06h", "run": 44, "metric": "llm", "api": "requesty", "model": "google/gemini-2.5-flash", "headers_ms": 797.0, "ttft_ms": 797.2, "ttl_ms": 797.2, "token_count": 1, "response_len": 10}
+{"ts": "2026-05-01T06:06:30.608282+00:00", "tag": "06h", "run": 45, "metric": "llm", "api": "requesty", "model": "google/gemini-2.5-flash", "headers_ms": 841.6, "ttft_ms": 841.8, "ttl_ms": 841.8, "token_count": 1, "response_len": 27}
+{"ts": "2026-05-01T06:06:33.330396+00:00", "tag": "06h", "run": 46, "metric": "llm", "api": "requesty", "model": "google/gemini-2.5-flash", "headers_ms": 1219.0, "ttft_ms": 1219.2, "ttl_ms": 1219.2, "token_count": 1, "response_len": 3}
+{"ts": "2026-05-01T06:06:35.612362+00:00", "tag": "06h", "run": 47, "metric": "llm", "api": "requesty", "model": "google/gemini-2.5-flash", "headers_ms": 778.9, "ttft_ms": 779.1, "ttl_ms": 779.1, "token_count": 1, "response_len": 27}
+{"ts": "2026-05-01T06:06:37.987790+00:00", "tag": "06h", "run": 48, "metric": "llm", "api": "requesty", "model": "google/gemini-2.5-flash", "headers_ms": 872.3, "ttft_ms": 872.5, "ttl_ms": 872.5, "token_count": 1, "response_len": 19}
+{"ts": "2026-05-01T06:06:40.449993+00:00", "tag": "06h", "run": 49, "metric": "llm", "api": "requesty", "model": "google/gemini-2.5-flash", "headers_ms": 959.2, "ttft_ms": 959.4, "ttl_ms": 959.4, "token_count": 1, "response_len": 27}
+{"ts": "2026-05-01T06:06:42.788462+00:00", "tag": "06h", "run": 50, "metric": "llm", "api": "requesty", "model": "google/gemini-2.5-flash", "headers_ms": 835.5, "ttft_ms": 835.6, "ttl_ms": 835.6, "token_count": 1, "response_len": 3}
+{"ts": "2026-05-01T06:06:45.178183+00:00", "tag": "06h", "run": 51, "metric": "llm", "api": "requesty", "model": "google/gemini-2.5-flash", "headers_ms": 886.7, "ttft_ms": 886.8, "ttl_ms": 886.8, "token_count": 1, "response_len": 32}
+{"ts": "2026-05-01T06:06:47.594343+00:00", "tag": "06h", "run": 52, "metric": "llm", "api": "requesty", "model": "google/gemini-2.5-flash", "headers_ms": 913.2, "ttft_ms": 913.4, "ttl_ms": 913.4, "token_count": 1, "response_len": 3}
+{"ts": "2026-05-01T06:06:49.911134+00:00", "tag": "06h", "run": 53, "metric": "llm", "api": "requesty", "model": "google/gemini-2.5-flash", "headers_ms": 813.8, "ttft_ms": 813.9, "ttl_ms": 813.9, "token_count": 1, "response_len": 13}
+{"ts": "2026-05-01T06:06:52.643172+00:00", "tag": "06h", "run": 54, "metric": "llm", "api": "requesty", "model": "google/gemini-2.5-flash", "headers_ms": 1229.0, "ttft_ms": 1229.2, "ttl_ms": 1229.2, "token_count": 1, "response_len": 13}
+{"ts": "2026-05-01T06:06:54.999693+00:00", "tag": "06h", "run": 55, "metric": "llm", "api": "requesty", "model": "google/gemini-2.5-flash", "headers_ms": 853.6, "ttft_ms": 853.8, "ttl_ms": 853.8, "token_count": 1, "response_len": 3}
+{"ts": "2026-05-01T06:06:57.455797+00:00", "tag": "06h", "run": 56, "metric": "llm", "api": "requesty", "model": "google/gemini-2.5-flash", "headers_ms": 953.0, "ttft_ms": 953.1, "ttl_ms": 953.1, "token_count": 1, "response_len": 13}
+{"ts": "2026-05-01T06:06:59.951390+00:00", "tag": "06h", "run": 57, "metric": "llm", "api": "requesty", "model": "google/gemini-2.5-flash", "headers_ms": 992.6, "ttft_ms": 992.8, "ttl_ms": 992.8, "token_count": 1, "response_len": 27}
+{"ts": "2026-05-01T06:07:02.282880+00:00", "tag": "06h", "run": 58, "metric": "llm", "api": "requesty", "model": "google/gemini-2.5-flash", "headers_ms": 828.3, "ttft_ms": 828.5, "ttl_ms": 828.5, "token_count": 1, "response_len": 13}
+{"ts": "2026-05-01T06:07:04.702029+00:00", "tag": "06h", "run": 59, "metric": "llm", "api": "requesty", "model": "google/gemini-2.5-flash", "headers_ms": 916.2, "ttft_ms": 916.3, "ttl_ms": 916.3, "token_count": 1, "response_len": 27}
+{"ts": "2026-05-01T06:07:07.363185+00:00", "tag": "06h", "run": 60, "metric": "llm", "api": "requesty", "model": "google/gemini-2.5-flash", "headers_ms": 1158.2, "ttft_ms": 1158.3, "ttl_ms": 1158.3, "token_count": 1, "response_len": 27}
+{"ts": "2026-05-01T06:07:09.978390+00:00", "tag": "06h", "run": 61, "metric": "llm", "api": "requesty", "model": "google/gemini-2.5-flash", "headers_ms": 1112.2, "ttft_ms": 1112.4, "ttl_ms": 1112.4, "token_count": 1, "response_len": 13}
+{"ts": "2026-05-01T06:07:12.281458+00:00", "tag": "06h", "run": 62, "metric": "llm", "api": "requesty", "model": "google/gemini-2.5-flash", "headers_ms": 799.9, "ttft_ms": 800.0, "ttl_ms": 800.0, "token_count": 1, "response_len": 10}
+{"ts": "2026-05-01T06:07:14.555578+00:00", "tag": "06h", "run": 63, "metric": "llm", "api": "requesty", "model": "google/gemini-2.5-flash", "headers_ms": 771.2, "ttft_ms": 771.4, "ttl_ms": 771.4, "token_count": 1, "response_len": 19}
+{"ts": "2026-05-01T06:07:16.821063+00:00", "tag": "06h", "run": 64, "metric": "llm", "api": "requesty", "model": "google/gemini-2.5-flash", "headers_ms": 762.3, "ttft_ms": 762.5, "ttl_ms": 762.5, "token_count": 1, "response_len": 32}
+{"ts": "2026-05-01T06:07:19.294667+00:00", "tag": "06h", "run": 65, "metric": "llm", "api": "requesty", "model": "google/gemini-2.5-flash", "headers_ms": 970.7, "ttft_ms": 970.9, "ttl_ms": 970.9, "token_count": 1, "response_len": 32}
+{"ts": "2026-05-01T06:07:21.603322+00:00", "tag": "06h", "run": 66, "metric": "llm", "api": "requesty", "model": "google/gemini-2.5-flash", "headers_ms": 805.5, "ttft_ms": 805.7, "ttl_ms": 805.7, "token_count": 1, "response_len": 13}
+{"ts": "2026-05-01T06:07:23.908018+00:00", "tag": "06h", "run": 67, "metric": "llm", "api": "requesty", "model": "google/gemini-2.5-flash", "headers_ms": 801.7, "ttft_ms": 801.8, "ttl_ms": 801.8, "token_count": 1, "response_len": 13}
+{"ts": "2026-05-01T06:07:26.197786+00:00", "tag": "06h", "run": 68, "metric": "llm", "api": "requesty", "model": "google/gemini-2.5-flash", "headers_ms": 786.7, "ttft_ms": 786.9, "ttl_ms": 786.9, "token_count": 1, "response_len": 32}
+{"ts": "2026-05-01T06:07:28.567608+00:00", "tag": "06h", "run": 69, "metric": "llm", "api": "requesty", "model": "google/gemini-2.5-flash", "headers_ms": 866.9, "ttft_ms": 867.1, "ttl_ms": 867.1, "token_count": 1, "response_len": 27}
+{"ts": "2026-05-01T06:07:30.844506+00:00", "tag": "06h", "run": 70, "metric": "llm", "api": "requesty", "model": "google/gemini-2.5-flash", "headers_ms": 773.9, "ttft_ms": 774.1, "ttl_ms": 774.1, "token_count": 1, "response_len": 27}
+{"ts": "2026-05-01T06:07:33.265726+00:00", "tag": "06h", "run": 71, "metric": "llm", "api": "requesty", "model": "google/gemini-2.5-flash", "headers_ms": 918.1, "ttft_ms": 918.2, "ttl_ms": 918.2, "token_count": 1, "response_len": 19}
+{"ts": "2026-05-01T06:07:35.539396+00:00", "tag": "06h", "run": 72, "metric": "llm", "api": "requesty", "model": "google/gemini-2.5-flash", "headers_ms": 770.7, "ttft_ms": 770.9, "ttl_ms": 770.9, "token_count": 1, "response_len": 19}
+{"ts": "2026-05-01T06:07:37.844152+00:00", "tag": "06h", "run": 73, "metric": "llm", "api": "requesty", "model": "google/gemini-2.5-flash", "headers_ms": 801.8, "ttft_ms": 802.0, "ttl_ms": 802.0, "token_count": 1, "response_len": 27}
+{"ts": "2026-05-01T06:07:40.198383+00:00", "tag": "06h", "run": 74, "metric": "llm", "api": "requesty", "model": "google/gemini-2.5-flash", "headers_ms": 851.3, "ttft_ms": 851.5, "ttl_ms": 851.5, "token_count": 1, "response_len": 32}
+{"ts": "2026-05-01T06:07:42.505543+00:00", "tag": "06h", "run": 75, "metric": "llm", "api": "requesty", "model": "google/gemini-2.5-flash", "headers_ms": 804.0, "ttft_ms": 804.2, "ttl_ms": 804.2, "token_count": 1, "response_len": 27}
+{"ts": "2026-05-01T06:07:44.866718+00:00", "tag": "06h", "run": 76, "metric": "llm", "api": "requesty", "model": "google/gemini-2.5-flash", "headers_ms": 858.2, "ttft_ms": 858.4, "ttl_ms": 858.4, "token_count": 1, "response_len": 10}
+{"ts": "2026-05-01T06:07:47.436278+00:00", "tag": "06h", "run": 77, "metric": "llm", "api": "requesty", "model": "google/gemini-2.5-flash", "headers_ms": 1066.6, "ttft_ms": 1066.7, "ttl_ms": 1066.7, "token_count": 1, "response_len": 13}
+{"ts": "2026-05-01T06:07:50.150251+00:00", "tag": "06h", "run": 78, "metric": "llm", "api": "requesty", "model": "google/gemini-2.5-flash", "headers_ms": 1210.9, "ttft_ms": 1211.1, "ttl_ms": 1211.1, "token_count": 1, "response_len": 10}
+{"ts": "2026-05-01T06:07:52.471033+00:00", "tag": "06h", "run": 79, "metric": "llm", "api": "requesty", "model": "google/gemini-2.5-flash", "headers_ms": 817.8, "ttft_ms": 818.0, "ttl_ms": 818.0, "token_count": 1, "response_len": 27}
+{"ts": "2026-05-01T06:07:54.759801+00:00", "tag": "06h", "run": 80, "metric": "llm", "api": "requesty", "model": "google/gemini-2.5-flash", "headers_ms": 785.8, "ttft_ms": 785.9, "ttl_ms": 785.9, "token_count": 1, "response_len": 13}
+{"ts": "2026-05-01T06:07:57.077540+00:00", "tag": "06h", "run": 81, "metric": "llm", "api": "requesty", "model": "google/gemini-2.5-flash", "headers_ms": 814.5, "ttft_ms": 814.7, "ttl_ms": 814.7, "token_count": 1, "response_len": 32}
+{"ts": "2026-05-01T06:07:59.703601+00:00", "tag": "06h", "run": 82, "metric": "llm", "api": "requesty", "model": "google/gemini-2.5-flash", "headers_ms": 1123.1, "ttft_ms": 1123.3, "ttl_ms": 1123.3, "token_count": 1, "response_len": 27}
+{"ts": "2026-05-01T06:08:01.976252+00:00", "tag": "06h", "run": 83, "metric": "llm", "api": "requesty", "model": "google/gemini-2.5-flash", "headers_ms": 769.6, "ttft_ms": 769.8, "ttl_ms": 769.8, "token_count": 1, "response_len": 13}
+{"ts": "2026-05-01T06:08:04.271547+00:00", "tag": "06h", "run": 84, "metric": "llm", "api": "requesty", "model": "google/gemini-2.5-flash", "headers_ms": 792.2, "ttft_ms": 792.4, "ttl_ms": 792.4, "token_count": 1, "response_len": 33}
+{"ts": "2026-05-01T06:08:06.522691+00:00", "tag": "06h", "run": 85, "metric": "llm", "api": "requesty", "model": "google/gemini-2.5-flash", "headers_ms": 748.2, "ttft_ms": 748.4, "ttl_ms": 748.4, "token_count": 1, "response_len": 3}
+{"ts": "2026-05-01T06:08:08.842049+00:00", "tag": "06h", "run": 86, "metric": "llm", "api": "requesty", "model": "google/gemini-2.5-flash", "headers_ms": 816.4, "ttft_ms": 816.5, "ttl_ms": 816.5, "token_count": 1, "response_len": 19}
+{"ts": "2026-05-01T06:08:11.199967+00:00", "tag": "06h", "run": 87, "metric": "llm", "api": "requesty", "model": "google/gemini-2.5-flash", "headers_ms": 854.9, "ttft_ms": 855.0, "ttl_ms": 855.0, "token_count": 1, "response_len": 27}
+{"ts": "2026-05-01T06:08:13.897537+00:00", "tag": "06h", "run": 88, "metric": "llm", "api": "requesty", "model": "google/gemini-2.5-flash", "headers_ms": 1194.6, "ttft_ms": 1194.8, "ttl_ms": 1194.8, "token_count": 1, "response_len": 19}
+{"ts": "2026-05-01T06:08:16.377370+00:00", "tag": "06h", "run": 89, "metric": "llm", "api": "requesty", "model": "google/gemini-2.5-flash", "headers_ms": 976.7, "ttft_ms": 976.9, "ttl_ms": 976.9, "token_count": 1, "response_len": 32}
+{"ts": "2026-05-01T06:08:18.672690+00:00", "tag": "06h", "run": 90, "metric": "llm", "api": "requesty", "model": "google/gemini-2.5-flash", "headers_ms": 792.2, "ttft_ms": 792.4, "ttl_ms": 792.4, "token_count": 1, "response_len": 32}
+{"ts": "2026-05-01T06:08:20.990618+00:00", "tag": "06h", "run": 91, "metric": "llm", "api": "requesty", "model": "google/gemini-2.5-flash", "headers_ms": 815.0, "ttft_ms": 815.1, "ttl_ms": 815.1, "token_count": 1, "response_len": 27}
+{"ts": "2026-05-01T06:08:23.351693+00:00", "tag": "06h", "run": 92, "metric": "llm", "api": "requesty", "model": "google/gemini-2.5-flash", "headers_ms": 858.1, "ttft_ms": 858.3, "ttl_ms": 858.3, "token_count": 1, "response_len": 27}
+{"ts": "2026-05-01T06:08:25.806472+00:00", "tag": "06h", "run": 93, "metric": "llm", "api": "requesty", "model": "google/gemini-2.5-flash", "headers_ms": 951.7, "ttft_ms": 952.0, "ttl_ms": 952.0, "token_count": 1, "response_len": 13}
+{"ts": "2026-05-01T06:08:28.284781+00:00", "tag": "06h", "run": 94, "metric": "llm", "api": "requesty", "model": "google/gemini-2.5-flash", "headers_ms": 975.2, "ttft_ms": 975.3, "ttl_ms": 975.3, "token_count": 1, "response_len": 19}
+{"ts": "2026-05-01T06:08:30.565565+00:00", "tag": "06h", "run": 95, "metric": "llm", "api": "requesty", "model": "google/gemini-2.5-flash", "headers_ms": 777.7, "ttft_ms": 777.9, "ttl_ms": 777.9, "token_count": 1, "response_len": 27}
+{"ts": "2026-05-01T06:08:32.932194+00:00", "tag": "06h", "run": 96, "metric": "llm", "api": "requesty", "model": "google/gemini-2.5-flash", "headers_ms": 863.6, "ttft_ms": 863.7, "ttl_ms": 863.7, "token_count": 1, "response_len": 27}
+{"ts": "2026-05-01T06:08:35.512605+00:00", "tag": "06h", "run": 97, "metric": "llm", "api": "requesty", "model": "google/gemini-2.5-flash", "headers_ms": 1077.6, "ttft_ms": 1077.8, "ttl_ms": 1077.8, "token_count": 1, "response_len": 13}
+{"ts": "2026-05-01T06:08:37.779498+00:00", "tag": "06h", "run": 98, "metric": "llm", "api": "requesty", "model": "google/gemini-2.5-flash", "headers_ms": 763.7, "ttft_ms": 763.9, "ttl_ms": 763.9, "token_count": 1, "response_len": 10}
+{"ts": "2026-05-01T06:08:40.173095+00:00", "tag": "06h", "run": 99, "metric": "llm", "api": "requesty", "model": "google/gemini-2.5-flash", "headers_ms": 890.6, "ttft_ms": 890.7, "ttl_ms": 890.7, "token_count": 1, "response_len": 32}
+{"ts": "2026-05-01T06:08:40.173573+00:00", "tag": "06h", "api": "requesty", "metric": "llm_ttft", "n": 100, "errors": 0, "stats": {"mean": 883.7, "p50": 841.8, "p95": 1194.8, "p99": 1229.2, "stdev": 123.1, "min": 685.3, "max": 1229.2}}
+{"ts": "2026-05-01T06:08:40.173910+00:00", "tag": "06h", "api": "requesty", "metric": "llm_ttl", "n": 100, "errors": 0, "stats": {"mean": 883.7, "p50": 841.8, "p95": 1194.8, "p99": 1229.2, "stdev": 123.1, "min": 685.3, "max": 1229.2}}
+{"ts": "2026-05-01T06:08:40.239880+00:00", "tag": "06h", "run": 0, "metric": "tts_ttfa", "api": "elevenlabs", "error": "http_401"}
+{"ts": "2026-05-01T06:08:41.806361+00:00", "tag": "06h", "run": 1, "metric": "tts_ttfa", "api": "elevenlabs", "error": "http_401"}
+{"ts": "2026-05-01T06:08:43.369285+00:00", "tag": "06h", "run": 2, "metric": "tts_ttfa", "api": "elevenlabs", "error": "http_401"}
+{"ts": "2026-05-01T06:08:44.932290+00:00", "tag": "06h", "run": 3, "metric": "tts_ttfa", "api": "elevenlabs", "error": "http_401"}
+{"ts": "2026-05-01T06:08:46.510144+00:00", "tag": "06h", "run": 4, "metric": "tts_ttfa", "api": "elevenlabs", "error": "http_401"}
+{"ts": "2026-05-01T06:08:48.076090+00:00", "tag": "06h", "run": 5, "metric": "tts_ttfa", "api": "elevenlabs", "error": "http_401"}
+{"ts": "2026-05-01T06:08:49.642348+00:00", "tag": "06h", "run": 6, "metric": "tts_ttfa", "api": "elevenlabs", "error": "http_401"}
+{"ts": "2026-05-01T06:08:51.215843+00:00", "tag": "06h", "run": 7, "metric": "tts_ttfa", "api": "elevenlabs", "error": "http_401"}
+{"ts": "2026-05-01T06:08:52.784131+00:00", "tag": "06h", "run": 8, "metric": "tts_ttfa", "api": "elevenlabs", "error": "http_401"}
+{"ts": "2026-05-01T06:08:54.347407+00:00", "tag": "06h", "run": 9, "metric": "tts_ttfa", "api": "elevenlabs", "error": "http_401"}
+{"ts": "2026-05-01T06:08:55.909606+00:00", "tag": "06h", "run": 10, "metric": "tts_ttfa", "api": "elevenlabs", "error": "http_401"}
+{"ts": "2026-05-01T06:08:57.478008+00:00", "tag": "06h", "run": 11, "metric": "tts_ttfa", "api": "elevenlabs", "error": "http_401"}
+{"ts": "2026-05-01T06:08:59.048474+00:00", "tag": "06h", "run": 12, "metric": "tts_ttfa", "api": "elevenlabs", "error": "http_401"}
+{"ts": "2026-05-01T06:09:00.624991+00:00", "tag": "06h", "run": 13, "metric": "tts_ttfa", "api": "elevenlabs", "error": "http_401"}
+{"ts": "2026-05-01T06:09:02.191337+00:00", "tag": "06h", "run": 14, "metric": "tts_ttfa", "api": "elevenlabs", "error": "http_401"}
+{"ts": "2026-05-01T06:09:03.766539+00:00", "tag": "06h", "run": 15, "metric": "tts_ttfa", "api": "elevenlabs", "error": "http_401"}
+{"ts": "2026-05-01T06:09:05.331044+00:00", "tag": "06h", "run": 16, "metric": "tts_ttfa", "api": "elevenlabs", "error": "http_401"}
+{"ts": "2026-05-01T06:09:06.906341+00:00", "tag": "06h", "run": 17, "metric": "tts_ttfa", "api": "elevenlabs", "error": "http_401"}
+{"ts": "2026-05-01T06:09:08.472870+00:00", "tag": "06h", "run": 18, "metric": "tts_ttfa", "api": "elevenlabs", "error": "http_401"}
+{"ts": "2026-05-01T06:09:10.039004+00:00", "tag": "06h", "run": 19, "metric": "tts_ttfa", "api": "elevenlabs", "error": "http_401"}
+{"ts": "2026-05-01T06:09:11.603705+00:00", "tag": "06h", "run": 20, "metric": "tts_ttfa", "api": "elevenlabs", "error": "http_401"}
+{"ts": "2026-05-01T06:09:13.173672+00:00", "tag": "06h", "run": 21, "metric": "tts_ttfa", "api": "elevenlabs", "error": "http_401"}
+{"ts": "2026-05-01T06:09:14.752646+00:00", "tag": "06h", "run": 22, "metric": "tts_ttfa", "api": "elevenlabs", "error": "http_401"}
+{"ts": "2026-05-01T06:09:16.321837+00:00", "tag": "06h", "run": 23, "metric": "tts_ttfa", "api": "elevenlabs", "error": "http_401"}
+{"ts": "2026-05-01T06:09:17.895605+00:00", "tag": "06h", "run": 24, "metric": "tts_ttfa", "api": "elevenlabs", "error": "http_401"}
+{"ts": "2026-05-01T06:09:19.464015+00:00", "tag": "06h", "run": 25, "metric": "tts_ttfa", "api": "elevenlabs", "error": "http_401"}
+{"ts": "2026-05-01T06:09:21.034135+00:00", "tag": "06h", "run": 26, "metric": "tts_ttfa", "api": "elevenlabs", "error": "http_401"}
+{"ts": "2026-05-01T06:09:22.608547+00:00", "tag": "06h", "run": 27, "metric": "tts_ttfa", "api": "elevenlabs", "error": "http_401"}
+{"ts": "2026-05-01T06:09:24.181687+00:00", "tag": "06h", "run": 28, "metric": "tts_ttfa", "api": "elevenlabs", "error": "http_401"}
+{"ts": "2026-05-01T06:09:25.746973+00:00", "tag": "06h", "run": 29, "metric": "tts_ttfa", "api": "elevenlabs", "error": "http_401"}
+{"ts": "2026-05-01T06:09:27.310472+00:00", "tag": "06h", "run": 30, "metric": "tts_ttfa", "api": "elevenlabs", "error": "http_401"}
+{"ts": "2026-05-01T06:09:28.886238+00:00", "tag": "06h", "run": 31, "metric": "tts_ttfa", "api": "elevenlabs", "error": "http_401"}
+{"ts": "2026-05-01T06:09:30.454466+00:00", "tag": "06h", "run": 32, "metric": "tts_ttfa", "api": "elevenlabs", "error": "http_401"}
+{"ts": "2026-05-01T06:09:32.028501+00:00", "tag": "06h", "run": 33, "metric": "tts_ttfa", "api": "elevenlabs", "error": "http_401"}
+{"ts": "2026-05-01T06:09:33.596002+00:00", "tag": "06h", "run": 34, "metric": "tts_ttfa", "api": "elevenlabs", "error": "http_401"}
+{"ts": "2026-05-01T06:09:35.159105+00:00", "tag": "06h", "run": 35, "metric": "tts_ttfa", "api": "elevenlabs", "error": "http_401"}
+{"ts": "2026-05-01T06:09:36.722518+00:00", "tag": "06h", "run": 36, "metric": "tts_ttfa", "api": "elevenlabs", "error": "http_401"}
+{"ts": "2026-05-01T06:09:38.290126+00:00", "tag": "06h", "run": 37, "metric": "tts_ttfa", "api": "elevenlabs", "error": "http_401"}
+{"ts": "2026-05-01T06:09:39.858683+00:00", "tag": "06h", "run": 38, "metric": "tts_ttfa", "api": "elevenlabs", "error": "http_401"}
+{"ts": "2026-05-01T06:09:41.421384+00:00", "tag": "06h", "run": 39, "metric": "tts_ttfa", "api": "elevenlabs", "error": "http_401"}
+{"ts": "2026-05-01T06:09:43.008880+00:00", "tag": "06h", "run": 40, "metric": "tts_ttfa", "api": "elevenlabs", "error": "http_401"}
+{"ts": "2026-05-01T06:09:44.574574+00:00", "tag": "06h", "run": 41, "metric": "tts_ttfa", "api": "elevenlabs", "error": "http_401"}
+{"ts": "2026-05-01T06:09:46.139650+00:00", "tag": "06h", "run": 42, "metric": "tts_ttfa", "api": "elevenlabs", "error": "http_401"}
+{"ts": "2026-05-01T06:09:47.704017+00:00", "tag": "06h", "run": 43, "metric": "tts_ttfa", "api": "elevenlabs", "error": "http_401"}
+{"ts": "2026-05-01T06:09:49.273017+00:00", "tag": "06h", "run": 44, "metric": "tts_ttfa", "api": "elevenlabs", "error": "http_401"}
+{"ts": "2026-05-01T06:09:50.846435+00:00", "tag": "06h", "run": 45, "metric": "tts_ttfa", "api": "elevenlabs", "error": "http_401"}
+{"ts": "2026-05-01T06:09:52.413986+00:00", "tag": "06h", "run": 46, "metric": "tts_ttfa", "api": "elevenlabs", "error": "http_401"}
+{"ts": "2026-05-01T06:09:53.985984+00:00", "tag": "06h", "run": 47, "metric": "tts_ttfa", "api": "elevenlabs", "error": "http_401"}
+{"ts": "2026-05-01T06:09:55.554291+00:00", "tag": "06h", "run": 48, "metric": "tts_ttfa", "api": "elevenlabs", "error": "http_401"}
+{"ts": "2026-05-01T06:09:57.128797+00:00", "tag": "06h", "run": 49, "metric": "tts_ttfa", "api": "elevenlabs", "error": "http_401"}
+{"ts": "2026-05-01T06:09:58.698879+00:00", "tag": "06h", "run": 50, "metric": "tts_ttfa", "api": "elevenlabs", "error": "http_401"}
+{"ts": "2026-05-01T06:10:00.267422+00:00", "tag": "06h", "run": 51, "metric": "tts_ttfa", "api": "elevenlabs", "error": "http_401"}
+{"ts": "2026-05-01T06:10:02.013860+00:00", "tag": "06h", "run": 52, "metric": "tts_ttfa", "api": "elevenlabs", "error": "http_401"}
+{"ts": "2026-05-01T06:10:03.578537+00:00", "tag": "06h", "run": 53, "metric": "tts_ttfa", "api": "elevenlabs", "error": "http_401"}
+{"ts": "2026-05-01T06:10:05.144927+00:00", "tag": "06h", "run": 54, "metric": "tts_ttfa", "api": "elevenlabs", "error": "http_401"}
+{"ts": "2026-05-01T06:10:06.707741+00:00", "tag": "06h", "run": 55, "metric": "tts_ttfa", "api": "elevenlabs", "error": "http_401"}
+{"ts": "2026-05-01T06:10:08.271982+00:00", "tag": "06h", "run": 56, "metric": "tts_ttfa", "api": "elevenlabs", "error": "http_401"}
+{"ts": "2026-05-01T06:10:09.842129+00:00", "tag": "06h", "run": 57, "metric": "tts_ttfa", "api": "elevenlabs", "error": "http_401"}
+{"ts": "2026-05-01T06:10:11.422682+00:00", "tag": "06h", "run": 58, "metric": "tts_ttfa", "api": "elevenlabs", "error": "http_401"}
+{"ts": "2026-05-01T06:10:12.985381+00:00", "tag": "06h", "run": 59, "metric": "tts_ttfa", "api": "elevenlabs", "error": "http_401"}
+{"ts": "2026-05-01T06:10:14.549586+00:00", "tag": "06h", "run": 60, "metric": "tts_ttfa", "api": "elevenlabs", "error": "http_401"}
+{"ts": "2026-05-01T06:10:16.117641+00:00", "tag": "06h", "run": 61, "metric": "tts_ttfa", "api": "elevenlabs", "error": "http_401"}
+{"ts": "2026-05-01T06:10:17.681489+00:00", "tag": "06h", "run": 62, "metric": "tts_ttfa", "api": "elevenlabs", "error": "http_401"}
+{"ts": "2026-05-01T06:10:19.245742+00:00", "tag": "06h", "run": 63, "metric": "tts_ttfa", "api": "elevenlabs", "error": "http_401"}
+{"ts": "2026-05-01T06:10:20.811674+00:00", "tag": "06h", "run": 64, "metric": "tts_ttfa", "api": "elevenlabs", "error": "http_401"}
+{"ts": "2026-05-01T06:10:22.376639+00:00", "tag": "06h", "run": 65, "metric": "tts_ttfa", "api": "elevenlabs", "error": "http_401"}
+{"ts": "2026-05-01T06:10:23.942001+00:00", "tag": "06h", "run": 66, "metric": "tts_ttfa", "api": "elevenlabs", "error": "http_401"}
+{"ts": "2026-05-01T06:10:25.515307+00:00", "tag": "06h", "run": 67, "metric": "tts_ttfa", "api": "elevenlabs", "error": "http_401"}
+{"ts": "2026-05-01T06:10:27.082476+00:00", "tag": "06h", "run": 68, "metric": "tts_ttfa", "api": "elevenlabs", "error": "http_401"}
+{"ts": "2026-05-01T06:10:28.653293+00:00", "tag": "06h", "run": 69, "metric": "tts_ttfa", "api": "elevenlabs", "error": "http_401"}
+{"ts": "2026-05-01T06:10:30.217549+00:00", "tag": "06h", "run": 70, "metric": "tts_ttfa", "api": "elevenlabs", "error": "http_401"}
+{"ts": "2026-05-01T06:10:31.788171+00:00", "tag": "06h", "run": 71, "metric": "tts_ttfa", "api": "elevenlabs", "error": "http_401"}
+{"ts": "2026-05-01T06:10:33.353225+00:00", "tag": "06h", "run": 72, "metric": "tts_ttfa", "api": "elevenlabs", "error": "http_401"}
+{"ts": "2026-05-01T06:10:34.927235+00:00", "tag": "06h", "run": 73, "metric": "tts_ttfa", "api": "elevenlabs", "error": "http_401"}
+{"ts": "2026-05-01T06:10:36.495596+00:00", "tag": "06h", "run": 74, "metric": "tts_ttfa", "api": "elevenlabs", "error": "http_401"}
+{"ts": "2026-05-01T06:10:38.058478+00:00", "tag": "06h", "run": 75, "metric": "tts_ttfa", "api": "elevenlabs", "error": "http_401"}
+{"ts": "2026-05-01T06:10:39.637889+00:00", "tag": "06h", "run": 76, "metric": "tts_ttfa", "api": "elevenlabs", "error": "http_401"}
+{"ts": "2026-05-01T06:10:41.203092+00:00", "tag": "06h", "run": 77, "metric": "tts_ttfa", "api": "elevenlabs", "error": "http_401"}
+{"ts": "2026-05-01T06:10:42.768674+00:00", "tag": "06h", "run": 78, "metric": "tts_ttfa", "api": "elevenlabs", "error": "http_401"}
+{"ts": "2026-05-01T06:10:44.331792+00:00", "tag": "06h", "run": 79, "metric": "tts_ttfa", "api": "elevenlabs", "error": "http_401"}
+{"ts": "2026-05-01T06:10:45.896128+00:00", "tag": "06h", "run": 80, "metric": "tts_ttfa", "api": "elevenlabs", "error": "http_401"}
+{"ts": "2026-05-01T06:10:47.467252+00:00", "tag": "06h", "run": 81, "metric": "tts_ttfa", "api": "elevenlabs", "error": "http_401"}
+{"ts": "2026-05-01T06:10:49.035994+00:00", "tag": "06h", "run": 82, "metric": "tts_ttfa", "api": "elevenlabs", "error": "http_401"}
+{"ts": "2026-05-01T06:10:50.609978+00:00", "tag": "06h", "run": 83, "metric": "tts_ttfa", "api": "elevenlabs", "error": "http_401"}
+{"ts": "2026-05-01T06:10:52.174396+00:00", "tag": "06h", "run": 84, "metric": "tts_ttfa", "api": "elevenlabs", "error": "http_401"}
+{"ts": "2026-05-01T06:10:53.755267+00:00", "tag": "06h", "run": 85, "metric": "tts_ttfa", "api": "elevenlabs", "error": "http_401"}
+{"ts": "2026-05-01T06:10:55.321821+00:00", "tag": "06h", "run": 86, "metric": "tts_ttfa", "api": "elevenlabs", "error": "http_401"}
+{"ts": "2026-05-01T06:10:56.884872+00:00", "tag": "06h", "run": 87, "metric": "tts_ttfa", "api": "elevenlabs", "error": "http_401"}
+{"ts": "2026-05-01T06:10:58.448169+00:00", "tag": "06h", "run": 88, "metric": "tts_ttfa", "api": "elevenlabs", "error": "http_401"}
+{"ts": "2026-05-01T06:11:00.028180+00:00", "tag": "06h", "run": 89, "metric": "tts_ttfa", "api": "elevenlabs", "error": "http_401"}
+{"ts": "2026-05-01T06:11:01.631108+00:00", "tag": "06h", "run": 90, "metric": "tts_ttfa", "api": "elevenlabs", "error": "http_401"}
+{"ts": "2026-05-01T06:11:03.194097+00:00", "tag": "06h", "run": 91, "metric": "tts_ttfa", "api": "elevenlabs", "error": "http_401"}
+{"ts": "2026-05-01T06:11:04.757284+00:00", "tag": "06h", "run": 92, "metric": "tts_ttfa", "api": "elevenlabs", "error": "http_401"}
+{"ts": "2026-05-01T06:11:06.330001+00:00", "tag": "06h", "run": 93, "metric": "tts_ttfa", "api": "elevenlabs", "error": "http_401"}
+{"ts": "2026-05-01T06:11:07.905337+00:00", "tag": "06h", "run": 94, "metric": "tts_ttfa", "api": "elevenlabs", "error": "http_401"}
+{"ts": "2026-05-01T06:11:09.471277+00:00", "tag": "06h", "run": 95, "metric": "tts_ttfa", "api": "elevenlabs", "error": "http_401"}
+{"ts": "2026-05-01T06:11:11.038500+00:00", "tag": "06h", "run": 96, "metric": "tts_ttfa", "api": "elevenlabs", "error": "http_401"}
+{"ts": "2026-05-01T06:11:12.605912+00:00", "tag": "06h", "run": 97, "metric": "tts_ttfa", "api": "elevenlabs", "error": "http_401"}
+{"ts": "2026-05-01T06:11:14.170495+00:00", "tag": "06h", "run": 98, "metric": "tts_ttfa", "api": "elevenlabs", "error": "http_401"}
+{"ts": "2026-05-01T06:11:15.741601+00:00", "tag": "06h", "run": 99, "metric": "tts_ttfa", "api": "elevenlabs", "error": "http_401"}
+{"ts": "2026-05-01T06:11:17.924609+00:00", "tag": "06h", "run": 0, "metric": "e2e", "error": "stt=- llm=- tts=http_401"}
+{"ts": "2026-05-01T06:11:21.660461+00:00", "tag": "06h", "run": 1, "metric": "e2e", "error": "stt=- llm=- tts=http_401"}
+{"ts": "2026-05-01T06:11:25.350304+00:00", "tag": "06h", "run": 2, "metric": "e2e", "error": "stt=- llm=- tts=http_401"}
+{"ts": "2026-05-01T06:11:29.538365+00:00", "tag": "06h", "run": 3, "metric": "e2e", "error": "stt=- llm=- tts=http_401"}
+{"ts": "2026-05-01T06:11:32.931787+00:00", "tag": "06h", "run": 4, "metric": "e2e", "error": "stt=- llm=- tts=http_401"}
+{"ts": "2026-05-01T06:11:36.335048+00:00", "tag": "06h", "run": 5, "metric": "e2e", "error": "stt=- llm=- tts=http_401"}
+{"ts": "2026-05-01T06:11:40.022042+00:00", "tag": "06h", "run": 6, "metric": "e2e", "error": "stt=- llm=- tts=http_401"}
+{"ts": "2026-05-01T06:11:43.587138+00:00", "tag": "06h", "run": 7, "metric": "e2e", "error": "stt=- llm=- tts=http_401"}
+{"ts": "2026-05-01T06:11:47.306268+00:00", "tag": "06h", "run": 8, "metric": "e2e", "error": "stt=- llm=- tts=http_401"}
+{"ts": "2026-05-01T06:11:50.955816+00:00", "tag": "06h", "run": 9, "metric": "e2e", "error": "stt=- llm=- tts=http_401"}
+{"ts": "2026-05-01T06:11:54.746307+00:00", "tag": "06h", "run": 10, "metric": "e2e", "error": "stt=- llm=- tts=http_401"}
+{"ts": "2026-05-01T06:11:58.688661+00:00", "tag": "06h", "run": 11, "metric": "e2e", "error": "stt=- llm=- tts=http_401"}
+{"ts": "2026-05-01T06:12:02.972655+00:00", "tag": "06h", "run": 12, "metric": "e2e", "error": "stt=- llm=- tts=http_401"}
+{"ts": "2026-05-01T06:12:07.150678+00:00", "tag": "06h", "run": 13, "metric": "e2e", "error": "stt=- llm=- tts=http_401"}
+{"ts": "2026-05-01T06:12:11.261392+00:00", "tag": "06h", "run": 14, "metric": "e2e", "error": "stt=- llm=- tts=http_401"}
+{"ts": "2026-05-01T06:12:14.590029+00:00", "tag": "06h", "run": 15, "metric": "e2e", "error": "stt=- llm=- tts=http_401"}
+{"ts": "2026-05-01T06:12:18.167907+00:00", "tag": "06h", "run": 16, "metric": "e2e", "error": "stt=- llm=- tts=http_401"}
+{"ts": "2026-05-01T06:12:21.434565+00:00", "tag": "06h", "run": 17, "metric": "e2e", "error": "stt=- llm=- tts=http_401"}
+{"ts": "2026-05-01T06:12:25.032606+00:00", "tag": "06h", "run": 18, "metric": "e2e", "error": "stt=- llm=- tts=http_401"}
+{"ts": "2026-05-01T06:12:28.727711+00:00", "tag": "06h", "run": 19, "metric": "e2e", "error": "stt=- llm=- tts=http_401"}
+{"ts": "2026-05-01T06:12:32.521263+00:00", "tag": "06h", "run": 20, "metric": "e2e", "error": "stt=- llm=- tts=http_401"}
+{"ts": "2026-05-01T06:12:36.301363+00:00", "tag": "06h", "run": 21, "metric": "e2e", "error": "stt=- llm=- tts=http_401"}
+{"ts": "2026-05-01T06:12:39.994295+00:00", "tag": "06h", "run": 22, "metric": "e2e", "error": "stt=- llm=- tts=http_401"}
+{"ts": "2026-05-01T06:12:43.963113+00:00", "tag": "06h", "run": 23, "metric": "e2e", "error": "stt=- llm=- tts=http_401"}
+{"ts": "2026-05-01T06:12:47.622036+00:00", "tag": "06h", "run": 24, "metric": "e2e", "error": "stt=- llm=- tts=http_401"}
+{"ts": "2026-05-01T06:12:51.310534+00:00", "tag": "06h", "run": 25, "metric": "e2e", "error": "stt=- llm=- tts=http_401"}
+{"ts": "2026-05-01T06:12:54.965886+00:00", "tag": "06h", "run": 26, "metric": "e2e", "error": "stt=- llm=- tts=http_401"}
+{"ts": "2026-05-01T06:12:58.697328+00:00", "tag": "06h", "run": 27, "metric": "e2e", "error": "stt=- llm=- tts=http_401"}
+{"ts": "2026-05-01T06:13:02.164135+00:00", "tag": "06h", "run": 28, "metric": "e2e", "error": "stt=- llm=- tts=http_401"}
+{"ts": "2026-05-01T06:13:05.916683+00:00", "tag": "06h", "run": 29, "metric": "e2e", "error": "stt=- llm=- tts=http_401"}
+{"ts": "2026-05-01T06:13:09.754320+00:00", "tag": "06h", "run": 30, "metric": "e2e", "error": "stt=- llm=- tts=http_401"}
+{"ts": "2026-05-01T06:13:14.875661+00:00", "tag": "06h", "run": 31, "metric": "e2e", "error": "stt=- llm=- tts=http_401"}
+{"ts": "2026-05-01T06:13:19.140713+00:00", "tag": "06h", "run": 32, "metric": "e2e", "error": "stt=- llm=- tts=http_401"}
+{"ts": "2026-05-01T06:13:24.348243+00:00", "tag": "06h", "run": 33, "metric": "e2e", "error": "stt=- llm=- tts=http_401"}
+{"ts": "2026-05-01T06:13:27.772627+00:00", "tag": "06h", "run": 34, "metric": "e2e", "error": "stt=- llm=- tts=http_401"}
+{"ts": "2026-05-01T06:13:31.128114+00:00", "tag": "06h", "run": 35, "metric": "e2e", "error": "stt=- llm=- tts=http_401"}
+{"ts": "2026-05-01T06:13:34.478418+00:00", "tag": "06h", "run": 36, "metric": "e2e", "error": "stt=- llm=- tts=http_401"}
+{"ts": "2026-05-01T06:13:38.708565+00:00", "tag": "06h", "run": 37, "metric": "e2e", "error": "stt=- llm=- tts=http_401"}
+{"ts": "2026-05-01T06:13:42.953082+00:00", "tag": "06h", "run": 38, "metric": "e2e", "error": "stt=- llm=- tts=http_401"}
+{"ts": "2026-05-01T06:13:47.382636+00:00", "tag": "06h", "run": 39, "metric": "e2e", "error": "stt=- llm=- tts=http_401"}
+{"ts": "2026-05-01T06:13:51.409810+00:00", "tag": "06h", "run": 40, "metric": "e2e", "error": "stt=- llm=- tts=http_401"}
+{"ts": "2026-05-01T06:13:55.829957+00:00", "tag": "06h", "run": 41, "metric": "e2e", "error": "stt=- llm=- tts=http_401"}
+{"ts": "2026-05-01T06:14:00.025145+00:00", "tag": "06h", "run": 42, "metric": "e2e", "error": "stt=- llm=- tts=http_401"}
+{"ts": "2026-05-01T06:14:04.347110+00:00", "tag": "06h", "run": 43, "metric": "e2e", "error": "stt=- llm=- tts=http_401"}
+{"ts": "2026-05-01T06:14:08.157046+00:00", "tag": "06h", "run": 44, "metric": "e2e", "error": "stt=- llm=- tts=http_401"}
+{"ts": "2026-05-01T06:14:11.957145+00:00", "tag": "06h", "run": 45, "metric": "e2e", "error": "stt=- llm=- tts=http_401"}
+{"ts": "2026-05-01T06:14:15.808140+00:00", "tag": "06h", "run": 46, "metric": "e2e", "error": "stt=- llm=- tts=http_401"}
+{"ts": "2026-05-01T06:14:19.457102+00:00", "tag": "06h", "run": 47, "metric": "e2e", "error": "stt=- llm=- tts=http_401"}
+{"ts": "2026-05-01T06:14:23.191938+00:00", "tag": "06h", "run": 48, "metric": "e2e", "error": "stt=- llm=- tts=http_401"}
+{"ts": "2026-05-01T06:14:27.001438+00:00", "tag": "06h", "run": 49, "metric": "e2e", "error": "stt=- llm=- tts=http_401"}
+{"ts": "2026-05-01T06:14:31.406542+00:00", "tag": "06h", "run": 50, "metric": "e2e", "error": "stt=- llm=- tts=http_401"}
+{"ts": "2026-05-01T06:14:35.372437+00:00", "tag": "06h", "run": 51, "metric": "e2e", "error": "stt=- llm=- tts=http_401"}
+{"ts": "2026-05-01T06:14:39.782446+00:00", "tag": "06h", "run": 52, "metric": "e2e", "error": "stt=- llm=- tts=http_401"}
+{"ts": "2026-05-01T06:14:44.023638+00:00", "tag": "06h", "run": 53, "metric": "e2e", "error": "stt=- llm=- tts=http_401"}
+{"ts": "2026-05-01T06:14:48.128978+00:00", "tag": "06h", "run": 54, "metric": "e2e", "error": "stt=- llm=- tts=http_401"}
+{"ts": "2026-05-01T06:14:52.324453+00:00", "tag": "06h", "run": 55, "metric": "e2e", "error": "stt=- llm=- tts=http_401"}
+{"ts": "2026-05-01T06:14:55.847134+00:00", "tag": "06h", "run": 56, "metric": "e2e", "error": "stt=- llm=- tts=http_401"}
+{"ts": "2026-05-01T06:14:59.119552+00:00", "tag": "06h", "run": 57, "metric": "e2e", "error": "stt=- llm=- tts=http_401"}
+{"ts": "2026-05-01T06:15:02.587609+00:00", "tag": "06h", "run": 58, "metric": "e2e", "error": "stt=- llm=- tts=http_401"}
+{"ts": "2026-05-01T06:15:05.996487+00:00", "tag": "06h", "run": 59, "metric": "e2e", "error": "stt=- llm=- tts=http_401"}
+{"ts": "2026-05-01T06:15:09.270307+00:00", "tag": "06h", "run": 60, "metric": "e2e", "error": "stt=- llm=- tts=http_401"}
+{"ts": "2026-05-01T06:15:12.701287+00:00", "tag": "06h", "run": 61, "metric": "e2e", "error": "stt=- llm=- tts=http_401"}
+{"ts": "2026-05-01T06:15:16.814820+00:00", "tag": "06h", "run": 62, "metric": "e2e", "error": "stt=- llm=- tts=http_401"}
+{"ts": "2026-05-01T06:15:23.315217+00:00", "tag": "06h", "run": 63, "metric": "e2e", "error": "stt=- llm=- tts=http_401"}
+{"ts": "2026-05-01T06:15:27.767655+00:00", "tag": "06h", "run": 64, "metric": "e2e", "error": "stt=- llm=- tts=http_401"}
+{"ts": "2026-05-01T06:15:31.322721+00:00", "tag": "06h", "run": 65, "metric": "e2e", "error": "stt=- llm=- tts=http_401"}
+{"ts": "2026-05-01T06:15:34.917818+00:00", "tag": "06h", "run": 66, "metric": "e2e", "error": "stt=- llm=- tts=http_401"}
+{"ts": "2026-05-01T06:15:38.726156+00:00", "tag": "06h", "run": 67, "metric": "e2e", "error": "stt=- llm=- tts=http_401"}
+{"ts": "2026-05-01T06:15:42.002195+00:00", "tag": "06h", "run": 68, "metric": "e2e", "error": "stt=- llm=- tts=http_401"}
+{"ts": "2026-05-01T06:15:45.611403+00:00", "tag": "06h", "run": 69, "metric": "e2e", "error": "stt=- llm=- tts=http_401"}
+{"ts": "2026-05-01T06:15:49.264336+00:00", "tag": "06h", "run": 70, "metric": "e2e", "error": "stt=- llm=- tts=http_401"}
+{"ts": "2026-05-01T06:15:53.247969+00:00", "tag": "06h", "run": 71, "metric": "e2e", "error": "stt=- llm=- tts=http_401"}
+{"ts": "2026-05-01T06:15:57.324941+00:00", "tag": "06h", "run": 72, "metric": "e2e", "error": "stt=- llm=- tts=http_401"}
+{"ts": "2026-05-01T06:16:00.802824+00:00", "tag": "06h", "run": 73, "metric": "e2e", "error": "stt=- llm=- tts=http_401"}
+{"ts": "2026-05-01T06:16:04.027585+00:00", "tag": "06h", "run": 74, "metric": "e2e", "error": "stt=- llm=- tts=http_401"}
+{"ts": "2026-05-01T06:16:07.340848+00:00", "tag": "06h", "run": 75, "metric": "e2e", "error": "stt=- llm=- tts=http_401"}
+{"ts": "2026-05-01T06:16:11.524388+00:00", "tag": "06h", "run": 76, "metric": "e2e", "error": "stt=- llm=- tts=http_401"}
+{"ts": "2026-05-01T06:16:16.667742+00:00", "tag": "06h", "run": 77, "metric": "e2e", "error": "stt=- llm=- tts=http_401"}
+{"ts": "2026-05-01T06:16:20.362978+00:00", "tag": "06h", "run": 78, "metric": "e2e", "error": "stt=- llm=- tts=http_401"}
+{"ts": "2026-05-01T06:16:24.200569+00:00", "tag": "06h", "run": 79, "metric": "e2e", "error": "stt=- llm=- tts=http_401"}
+{"ts": "2026-05-01T06:16:28.033205+00:00", "tag": "06h", "run": 80, "metric": "e2e", "error": "stt=- llm=- tts=http_401"}
+{"ts": "2026-05-01T06:16:32.112366+00:00", "tag": "06h", "run": 81, "metric": "e2e", "error": "stt=- llm=- tts=http_401"}
+{"ts": "2026-05-01T06:16:36.432910+00:00", "tag": "06h", "run": 82, "metric": "e2e", "error": "stt=- llm=- tts=http_401"}
+{"ts": "2026-05-01T06:16:40.579294+00:00", "tag": "06h", "run": 83, "metric": "e2e", "error": "stt=- llm=- tts=http_401"}
+{"ts": "2026-05-01T06:16:44.874909+00:00", "tag": "06h", "run": 84, "metric": "e2e", "error": "stt=- llm=- tts=http_401"}
+{"ts": "2026-05-01T06:16:48.889704+00:00", "tag": "06h", "run": 85, "metric": "e2e", "error": "stt=- llm=- tts=http_401"}
+{"ts": "2026-05-01T06:16:52.590675+00:00", "tag": "06h", "run": 86, "metric": "e2e", "error": "stt=- llm=- tts=http_401"}
+{"ts": "2026-05-01T06:16:56.303002+00:00", "tag": "06h", "run": 87, "metric": "e2e", "error": "stt=- llm=- tts=http_401"}
+{"ts": "2026-05-01T06:16:59.982437+00:00", "tag": "06h", "run": 88, "metric": "e2e", "error": "stt=- llm=- tts=http_401"}
+{"ts": "2026-05-01T06:17:04.897212+00:00", "tag": "06h", "run": 89, "metric": "e2e", "error": "stt=- llm=- tts=http_401"}
+{"ts": "2026-05-01T06:17:09.135984+00:00", "tag": "06h", "run": 90, "metric": "e2e", "error": "stt=- llm=- tts=http_401"}
+{"ts": "2026-05-01T06:17:12.839201+00:00", "tag": "06h", "run": 91, "metric": "e2e", "error": "stt=- llm=- tts=http_401"}
+{"ts": "2026-05-01T06:17:16.087560+00:00", "tag": "06h", "run": 92, "metric": "e2e", "error": "stt=- llm=- tts=http_401"}
+{"ts": "2026-05-01T06:17:19.422741+00:00", "tag": "06h", "run": 93, "metric": "e2e", "error": "stt=- llm=- tts=http_401"}
+{"ts": "2026-05-01T06:17:23.453955+00:00", "tag": "06h", "run": 94, "metric": "e2e", "error": "stt=- llm=- tts=http_401"}
+{"ts": "2026-05-01T06:17:26.791309+00:00", "tag": "06h", "run": 95, "metric": "e2e", "error": "stt=- llm=- tts=http_401"}
+{"ts": "2026-05-01T06:17:30.112440+00:00", "tag": "06h", "run": 96, "metric": "e2e", "error": "stt=- llm=- tts=http_401"}
+{"ts": "2026-05-01T06:17:33.333247+00:00", "tag": "06h", "run": 97, "metric": "e2e", "error": "stt=- llm=- tts=http_401"}
+{"ts": "2026-05-01T06:17:36.722153+00:00", "tag": "06h", "run": 98, "metric": "e2e", "error": "stt=- llm=- tts=http_401"}
+{"ts": "2026-05-01T06:17:40.359221+00:00", "tag": "06h", "run": 99, "metric": "e2e", "error": "stt=- llm=- tts=http_401"}
