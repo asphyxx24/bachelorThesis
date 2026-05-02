@@ -83,7 +83,14 @@
       "Bash(git push *)",
       "Bash(git mv *)",
       "Bash(git rm *)",
-      "PowerShell(Get-ChildItem *)"
+      "PowerShell(Get-ChildItem *)",
+      "Bash(ffprobe *)",
+      "PowerShell(ffprobe *)",
+      "PowerShell(Copy-Item *)",
+      "PowerShell($files = Get-ChildItem \"C:\\\\Users\\\\anton\\\\Desktop\\\\bachelorThesis\\\\data\\\\layer3\" -File; Write-Output \"Anzahl: $\\($files.Count\\)\"; $files[0..4] | ForEach-Object { $_.Name }; Write-Output \"...\"; $files[\\($files.Count-5\\)..\\($files.Count-1\\)] | ForEach-Object { $_.Name })",
+      "PowerShell(New-Item *)",
+      "PowerShell(Remove-Item *)",
+      "PowerShell(git *)"
     ]
   }
 }

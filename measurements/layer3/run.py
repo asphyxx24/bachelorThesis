@@ -1,4 +1,4 @@
-"""Schicht 3 Runner: Tail-Latency-Messungen.
+"""Schicht 3 Runner: Latenz-Messungen fuer 9 Provider.
 
 Fuehrt Batch-Messungen fuer STT, LLM, TTS und die E2E-Kette durch.
 
@@ -7,7 +7,7 @@ Verwendung:
 
   --n       Anzahl Messungen pro API (default: 100)
   --tag     Tageszeit-Label fuer Dateiname (z.B. 09h, 12h)
-  --api     Nur bestimmte API messen (default: all)
+  --api     Nur bestimmte Kategorie messen (default: all)
   --dry-run n=3, keine Datei schreiben, Ergebnis auf stdout
 """
 
@@ -20,155 +20,158 @@ from pathlib import Path
 
 from dotenv import load_dotenv
 
-# Repo-Root zum Python-Path hinzufuegen
 sys.path.insert(0, str(Path(__file__).parent.parent.parent))
 
 from measurements.config import MEASUREMENT_DELAY_S
-from measurements.layer3 import stt_deepgram as stt, llm_openai as llm, tts_deepgram as tts, chain
 from measurements.lib.output import now_iso, output_path, write_jsonl
 from measurements.lib.stats import compute_stats
 
-# .env aus Repo-Root laden
 load_dotenv(Path(__file__).parent.parent.parent / ".env")
 
-FIXTURE_WAV = Path(__file__).parent.parent.parent / "fixtures" / "sample.wav"
+SAMPLE_WAV = Path(__file__).parent / "sample.wav"
+
+# Provider-Definitionen: (modul_name, api_label, env_keys)
+STT_PROVIDERS = [
+    ("stt_deepgram",   "deepgram",   ["DEEPGRAM_API_KEY"]),
+    ("stt_assemblyai", "assemblyai", ["ASSEMBLYAI_API_KEY"]),
+    ("stt_azure",      "azure_stt",  ["AZURE_SPEECH_KEY", "AZURE_SPEECH_REGION"]),
+]
+
+LLM_PROVIDERS = [
+    ("llm_openai",  "openai",  ["OPENAI_API_KEY"]),
+    ("llm_groq",    "groq",    ["GROQ_API_KEY"]),
+    ("llm_mistral", "mistral", ["MISTRAL_API_KEY"]),
+]
+
+TTS_PROVIDERS = [
+    ("tts_deepgram", "deepgram_tts", ["DEEPGRAM_API_KEY"]),
+    ("tts_openai",   "openai_tts",   ["OPENAI_API_KEY"]),
+    ("tts_azure",    "azure_tts",    ["AZURE_SPEECH_KEY", "AZURE_SPEECH_REGION"]),
+]
 
 
-# ── Batch-Runner pro API ─────────────────────────────────────────────────────
+def _load_module(name: str):
+    """Importiert ein Provider-Modul dynamisch."""
+    import importlib
+    return importlib.import_module(f"measurements.layer3.{name}")
 
-async def run_stt_batch(n: int, tag: str, dry_run: bool, out_path: Path) -> None:
-    api_key = os.environ["DEEPGRAM_API_KEY"]
-    pcm_data = stt.load_pcm(FIXTURE_WAV)
-    print(f"  STT: n={n}, fixture={FIXTURE_WAV.name} ({len(pcm_data) // 1000} KB)")
+
+def _check_env(keys: list[str]) -> list[str]:
+    return [k for k in keys if not os.environ.get(k)]
+
+
+# ── Generischer Batch-Runner ────────────────────────────────────────────────
+
+async def run_stt_batch(
+    module_name: str, api: str, env_keys: list[str],
+    n: int, tag: str, dry_run: bool, out_path: Path,
+) -> None:
+    missing = _check_env(env_keys)
+    if missing:
+        print(f"  SKIP {api}: fehlende ENV {missing}")
+        return
+
+    mod = _load_module(module_name)
+    pcm_data = mod.load_pcm(SAMPLE_WAV)
+    print(f"  STT [{api}]: n={n}, sample={SAMPLE_WAV.name} ({len(pcm_data) // 1000} KB)")
 
     results: list[float] = []
     errors = 0
 
     for i in range(n):
-        result = await stt.measure_once(api_key, pcm_data)
+        result = await mod.measure_once(os.environ[env_keys[0]], pcm_data)
         ts = now_iso()
 
         if "error" in result:
             errors += 1
-            print(f"  STT [{i + 1}/{n}] Fehler: {result['error']}")
+            print(f"    [{i + 1}/{n}] Fehler: {result['error']}")
         else:
             results.append(result["ttft_ms"])
             if i % 10 == 0:
-                print(f"  STT [{i + 1}/{n}] ttft={result['ttft_ms']:.0f} ms")
+                print(f"    [{i + 1}/{n}] ttft={result['ttft_ms']:.0f} ms, connect={result['connect_ms']:.0f} ms")
 
-        record = {"ts": ts, "tag": tag, "run": i, "metric": "stt_ttft", "api": "deepgram", **result}
+        record = {"ts": ts, "tag": tag, "run": i, "metric": "stt_ttft", "api": api, **result}
         _output(record, dry_run, out_path)
 
         if i < n - 1:
             await asyncio.sleep(MEASUREMENT_DELAY_S)
 
-    _write_summary("deepgram", "stt_ttft", results, errors, tag, dry_run, out_path)
+    _write_summary(api, "stt_ttft", results, errors, tag, dry_run, out_path)
 
 
-async def run_llm_batch(n: int, tag: str, dry_run: bool, out_path: Path) -> None:
-    api_key = os.environ["REQUESTY_API_KEY"]
-    base_url = os.environ.get("REQUESTY_BASE_URL", "https://router.requesty.ai/v1")
-    print(f"  LLM: n={n}, endpoint={base_url}")
+async def run_llm_batch(
+    module_name: str, api: str, env_keys: list[str],
+    n: int, tag: str, dry_run: bool, out_path: Path,
+) -> None:
+    missing = _check_env(env_keys)
+    if missing:
+        print(f"  SKIP {api}: fehlende ENV {missing}")
+        return
+
+    mod = _load_module(module_name)
+    print(f"  LLM [{api}]: n={n}")
 
     ttft_results: list[float] = []
     ttl_results: list[float] = []
     errors = 0
 
     for i in range(n):
-        result = await llm.measure_once(api_key, base_url)
+        result = await mod.measure_once(os.environ[env_keys[0]])
         ts = now_iso()
 
         if "error" in result:
             errors += 1
-            print(f"  LLM [{i + 1}/{n}] Fehler: {result['error']}")
+            print(f"    [{i + 1}/{n}] Fehler: {result['error']}")
         else:
             ttft_results.append(result["ttft_ms"])
             ttl_results.append(result["ttl_ms"])
             if i % 10 == 0:
-                print(f"  LLM [{i + 1}/{n}] ttft={result['ttft_ms']:.0f} ms, ttl={result['ttl_ms']:.0f} ms")
+                print(f"    [{i + 1}/{n}] ttft={result['ttft_ms']:.0f} ms, ttl={result['ttl_ms']:.0f} ms")
 
-        record = {"ts": ts, "tag": tag, "run": i, "metric": "llm", "api": "requesty", **result}
+        record = {"ts": ts, "tag": tag, "run": i, "metric": "llm", "api": api, **result}
         _output(record, dry_run, out_path)
 
         if i < n - 1:
             await asyncio.sleep(MEASUREMENT_DELAY_S)
 
-    _write_summary("requesty", "llm_ttft", ttft_results, errors, tag, dry_run, out_path)
-    _write_summary("requesty", "llm_ttl", ttl_results, errors, tag, dry_run, out_path)
+    _write_summary(api, "llm_ttft", ttft_results, errors, tag, dry_run, out_path)
+    _write_summary(api, "llm_ttl", ttl_results, errors, tag, dry_run, out_path)
 
 
-async def run_tts_batch(n: int, tag: str, dry_run: bool, out_path: Path) -> None:
-    api_key = os.environ["ELEVENLABS_API_KEY"]
-    voice_id = os.environ.get("ELEVENLABS_VOICE_ID", "P7vsEyTOpZ6YUTulin8m")
-    print(f"  TTS: n={n}, voice={voice_id}")
+async def run_tts_batch(
+    module_name: str, api: str, env_keys: list[str],
+    n: int, tag: str, dry_run: bool, out_path: Path,
+) -> None:
+    missing = _check_env(env_keys)
+    if missing:
+        print(f"  SKIP {api}: fehlende ENV {missing}")
+        return
+
+    mod = _load_module(module_name)
+    print(f"  TTS [{api}]: n={n}")
 
     results: list[float] = []
     errors = 0
 
     for i in range(n):
-        result = await tts.measure_once(api_key, voice_id)
+        result = await mod.measure_once(os.environ[env_keys[0]])
         ts = now_iso()
 
         if "error" in result:
             errors += 1
-            print(f"  TTS [{i + 1}/{n}] Fehler: {result['error']}")
+            print(f"    [{i + 1}/{n}] Fehler: {result['error']}")
         else:
             results.append(result["ttfa_ms"])
             if i % 10 == 0:
-                print(f"  TTS [{i + 1}/{n}] ttfa={result['ttfa_ms']:.0f} ms")
+                print(f"    [{i + 1}/{n}] ttfa={result['ttfa_ms']:.0f} ms, connect={result.get('connect_ms', 0):.0f} ms")
 
-        record = {"ts": ts, "tag": tag, "run": i, "metric": "tts_ttfa", "api": "elevenlabs", **result}
+        record = {"ts": ts, "tag": tag, "run": i, "metric": "tts_ttfa", "api": api, **result}
         _output(record, dry_run, out_path)
 
         if i < n - 1:
             await asyncio.sleep(MEASUREMENT_DELAY_S)
 
-    _write_summary("elevenlabs", "tts_ttfa", results, errors, tag, dry_run, out_path)
-
-
-async def run_e2e_batch(n: int, tag: str, dry_run: bool, out_path: Path) -> None:
-    stt_key = os.environ["DEEPGRAM_API_KEY"]
-    llm_key = os.environ["REQUESTY_API_KEY"]
-    llm_base = os.environ.get("REQUESTY_BASE_URL", "https://router.requesty.ai/v1")
-    tts_key = os.environ["ELEVENLABS_API_KEY"]
-    voice_id = os.environ.get("ELEVENLABS_VOICE_ID", "P7vsEyTOpZ6YUTulin8m")
-    pcm_data = stt.load_pcm(FIXTURE_WAV)
-    print(f"  E2E: n={n}, STT -> LLM -> TTS sequenziell")
-
-    chain_results: list[float] = []
-    errors = 0
-    budget_ok_count = 0
-
-    for i in range(n):
-        result = await chain.measure_once(stt_key, llm_key, llm_base, tts_key, voice_id, pcm_data)
-        ts = now_iso()
-
-        if "error" in result:
-            errors += 1
-        else:
-            chain_results.append(result["chain_ms"])
-            if result["budget_ok"]:
-                budget_ok_count += 1
-            if i % 10 == 0:
-                status = "OK" if result["budget_ok"] else "FAIL"
-                print(f"  E2E [{i + 1}/{n}] chain={result['chain_ms']:.0f} ms (budget={status})")
-
-        record = {"ts": ts, "tag": tag, "run": i, "metric": "e2e", **result}
-        _output(record, dry_run, out_path)
-
-        if i < n - 1:
-            await asyncio.sleep(MEASUREMENT_DELAY_S)
-
-    if chain_results:
-        stats = compute_stats(chain_results)
-        budget_compliance = round(budget_ok_count / len(chain_results), 3)
-        summary = {
-            "ts": now_iso(), "tag": tag, "api": "chain", "metric": "e2e",
-            "n": len(chain_results), "errors": errors, "stats": stats,
-            "budget_compliance": budget_compliance,
-        }
-        _output(summary, dry_run, out_path)
-        print(f"  E2E: p50={stats['p50']} ms, budget_ok={budget_compliance:.0%}, errors={errors}")
+    _write_summary(api, "tts_ttfa", results, errors, tag, dry_run, out_path)
 
 
 # ── Hilfsfunktionen ──────────────────────────────────────────────────────────
@@ -192,7 +195,7 @@ def _write_summary(
         "n": len(values), "errors": errors, "stats": stats,
     }
     _output(summary, dry_run, out_path)
-    print(f"  {metric}: p50={stats['p50']} ms, p95={stats['p95']} ms, errors={errors}")
+    print(f"    {metric}: p50={stats['p50']} ms, p95={stats['p95']} ms, errors={errors}")
 
 
 # ── Main ─────────────────────────────────────────────────────────────────────
@@ -201,52 +204,43 @@ async def main_async(args: argparse.Namespace) -> None:
     n = 3 if args.dry_run else args.n
     tag = args.tag or "manual"
 
-    # API-Keys pruefen
-    missing = [k for k in ["DEEPGRAM_API_KEY", "REQUESTY_API_KEY", "ELEVENLABS_API_KEY"]
-               if not os.environ.get(k)]
-    if missing:
-        print(f"FEHLER: Fehlende ENV-Variablen: {', '.join(missing)}")
-        print("Bitte .env im Repo-Root befuellen (siehe .env.example)")
-        sys.exit(1)
-
-    if not FIXTURE_WAV.exists() and args.api in ("stt", "e2e", "all"):
-        print(f"FEHLER: {FIXTURE_WAV} fehlt")
-        print("Bitte fixtures/create_sample.py ausfuehren oder sample.wav manuell bereitstellen")
+    if not SAMPLE_WAV.exists() and args.api in ("stt", "e2e", "all"):
+        print(f"FEHLER: {SAMPLE_WAV} fehlt")
+        print("Siehe measurements/layer3/SAMPLE_WAV.md")
         sys.exit(1)
 
     out_path = output_path("layer3", tag=tag)
-    print(f"=== Schicht 3: Tail-Latency === n={n}, tag={tag}, api={args.api}")
+    print(f"=== Schicht 3: Latenz-Messungen === n={n}, tag={tag}, api={args.api}")
     if not args.dry_run:
         print(f"Output: {out_path}")
 
     if args.api in ("stt", "all"):
-        print("\n[STT — Deepgram nova-3]")
-        await run_stt_batch(n, tag, args.dry_run, out_path)
+        for module_name, api, env_keys in STT_PROVIDERS:
+            print(f"\n[STT — {api}]")
+            await run_stt_batch(module_name, api, env_keys, n, tag, args.dry_run, out_path)
 
     if args.api in ("llm", "all"):
-        print("\n[LLM — Requesty / Gemini 2.5 Flash]")
-        await run_llm_batch(n, tag, args.dry_run, out_path)
+        for module_name, api, env_keys in LLM_PROVIDERS:
+            print(f"\n[LLM — {api}]")
+            await run_llm_batch(module_name, api, env_keys, n, tag, args.dry_run, out_path)
 
     if args.api in ("tts", "all"):
-        print("\n[TTS — ElevenLabs flash_v2_5]")
-        await run_tts_batch(n, tag, args.dry_run, out_path)
-
-    if args.api in ("e2e", "all"):
-        print("\n[E2E — STT -> LLM -> TTS]")
-        await run_e2e_batch(n, tag, args.dry_run, out_path)
+        for module_name, api, env_keys in TTS_PROVIDERS:
+            print(f"\n[TTS — {api}]")
+            await run_tts_batch(module_name, api, env_keys, n, tag, args.dry_run, out_path)
 
     print("\nFertig.")
 
 
 def main() -> None:
-    parser = argparse.ArgumentParser(description="Schicht 3: Tail-Latency-Messungen")
+    parser = argparse.ArgumentParser(description="Schicht 3: Latenz-Messungen (9 Provider)")
     parser.add_argument("--n", type=int, default=100,
-                        help="Anzahl Messungen pro API (default: 100)")
+                        help="Anzahl Messungen pro Provider (default: 100)")
     parser.add_argument("--tag", type=str, default="",
                         help="Tageszeit-Label z.B. 09h, 12h")
     parser.add_argument("--api", type=str, default="all",
-                        choices=["stt", "llm", "tts", "e2e", "all"],
-                        help="Nur bestimmte API messen (default: all)")
+                        choices=["stt", "llm", "tts", "all"],
+                        help="Nur bestimmte Kategorie messen (default: all)")
     parser.add_argument("--dry-run", action="store_true",
                         help="n=3, keine Datei schreiben, Ergebnis auf stdout")
     args = parser.parse_args()

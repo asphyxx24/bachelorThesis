@@ -43,9 +43,9 @@ Provider-Eigenschaften (Hosting-Region, Protokoll, AS-Pfad) erklären die Unters
 
 | Kategorie | Provider 1 | Provider 2 | Provider 3 |
 |-----------|-----------|-----------|-----------|
-| **STT** | Deepgram Nova-3 (USA, Anycast, WebSocket) | AssemblyAI Universal-2 (USA, WebSocket) | Azure STT (Deutschland, WebSocket) |
-| **LLM** | OpenAI gpt-4o-mini (USA, GPU, SSE) | Groq llama-3.1-8b-instant (USA, LPU, SSE) | Mistral mistral-small-3.2 (EU/FR, SSE) |
-| **TTS** | Deepgram TTS Aura-2 (USA, Anycast, HTTPS) | OpenAI TTS tts-1 (USA, HTTPS) | Azure TTS Neural (Deutschland, HTTPS) |
+| **STT** | Deepgram Nova-3 (USA, Anycast, WebSocket) | AssemblyAI Universal-2 (USA, WebSocket) | Azure STT (Italien/Italy North, WebSocket) |
+| **LLM** | OpenAI gpt-4o-mini (USA, GPU, SSE) | Groq llama-3.1-8b-instant (USA, LPU, SSE) | Mistral mistral-small-4 (EU/FR, SSE) |
+| **TTS** | Deepgram TTS Aura-2 (USA, Anycast, HTTPS) | OpenAI TTS tts-1 (USA, HTTPS) | Azure TTS Neural (Italien/Italy North, HTTPS) |
 
 Amazon Polly: Exkurs Intra-Cloud-Referenz (optional, nicht Hauptprovider).
 

@@ -25,13 +25,13 @@ sequenziellen Voice-Pipeline?
 |-----------|----------|--------|--------|-----------|
 | STT | Deepgram | Nova-3 | USA (Anycast) | WebSocket |
 | STT | AssemblyAI | Universal-2 | USA | WebSocket |
-| STT | Azure | Standard Neural | Deutschland (Germany West Central) | WebSocket |
+| STT | Azure | Standard Neural | Italien (Italy North) | WebSocket |
 | LLM | OpenAI | gpt-4o-mini | USA (GPU) | HTTPS+SSE |
 | LLM | Groq | llama-3.1-8b-instant | USA (LPU) | HTTPS+SSE |
-| LLM | Mistral | mistral-small-3.2 | EU/Frankreich | HTTPS+SSE |
+| LLM | Mistral | mistral-small-4 | EU/Frankreich | HTTPS+SSE |
 | TTS | Deepgram | Aura-2 | USA (Anycast) | HTTPS Streaming |
 | TTS | OpenAI | tts-1 | USA | HTTPS Streaming |
-| TTS | Azure | Standard Neural | Deutschland (Germany West Central) | HTTPS Streaming |
+| TTS | Azure | Standard Neural | Italien (Italy North) | HTTPS Streaming |
 
 Amazon Polly: optionaler Exkurs (Intra-Cloud-Referenz), nicht Hauptprovider.
 

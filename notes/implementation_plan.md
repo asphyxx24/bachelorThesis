@@ -29,7 +29,7 @@ bevor die Hauptmesskampagne starten kann.
 - [x] `data/archive/` erstellt
 - [x] Alle Import-Pfade angepasst
 - [x] `stt.py` → `stt_deepgram.py`, `tts.py` → `tts_deepgram.py`, `llm.py` → `llm_openai.py`
-- [ ] Alte Daten in `data/archive/` verschieben (Phase 5)
+- [x] Alte Daten in `data/archive/` verschoben (950 L1 + 228 L3 Dateien)
 
 ---
 
@@ -37,9 +37,9 @@ bevor die Hauptmesskampagne starten kann.
 
 - [x] `fixtures/` aufgelöst — Anleitung liegt in `measurements/layer3/SAMPLE_WAV.md`
 - [x] ElevenLabs und `create_sample.py` entfernt
-- [ ] **Anton:** Englische Sprachaufnahme machen (~5 Sekunden)
+- [x] **Anton:** Englische Sprachaufnahme machen (~5 Sekunden)
   - Text: *"Good morning. I would like to know the current weather forecast for Frankfurt."*
-  - `ffmpeg -i recording.wav -ar 16000 -ac 1 measurements/layer3/sample.wav`
+  - 16kHz, Mono, 16-bit PCM, ~4.8s
 - [ ] Validierung: Deepgram-Testlauf → `transcript_len > 0`
 
 ---
@@ -65,12 +65,12 @@ MISTRAL_API_KEY=
 
 | Provider | URL | Kosten | Status |
 |----------|-----|--------|--------|
-| Deepgram | account.deepgram.com | $0 ($200 Startguthaben) | [ ] |
-| AssemblyAI | assemblyai.com | $0 ($50 Startguthaben) | [ ] |
-| Groq | console.groq.com | $0 (Free Tier) | [ ] |
-| Azure | portal.azure.com | ~$10,74 (STT + TTS) | [ ] |
-| OpenAI | platform.openai.com | ~$10 aufladen | [ ] |
-| Mistral | console.mistral.ai | ~$5 aufladen | [ ] |
+| Deepgram | account.deepgram.com | $0 ($200 Startguthaben) | [x] |
+| AssemblyAI | assemblyai.com | $0 ($50 Startguthaben) | [x] |
+| Groq | console.groq.com | $0 (Free Tier) | [x] |
+| Azure | portal.azure.com | ~$10,74 (STT + TTS) | [x] |
+| OpenAI | platform.openai.com | ~$10 aufladen | [x] |
+| Mistral | console.mistral.ai | ~$5 aufladen | [x] |
 
 **Gesamtkosten: ~$25**
 
@@ -92,17 +92,18 @@ MISTRAL_API_KEY=
 
 | Datei | Was | Protokoll | Status |
 |-------|-----|-----------|--------|
-| `stt_deepgram.py` | Deepgram Nova-3 | WebSocket (raw) | bereinigen |
+| `stt_deepgram.py` | Deepgram Nova-3 | WebSocket (raw) | bereinigt (language=en) |
 | `stt_assemblyai.py` | AssemblyAI Universal-2 | WebSocket (raw) | neu |
-| `stt_azure.py` | Azure STT (DE) | WebSocket (raw, kein SDK) | neu |
-| `llm_openai.py` | OpenAI gpt-4o-mini | HTTPS+SSE | neu schreiben (alter Code war Requesty) |
+| `stt_azure.py` | Azure STT (IT) | WebSocket (raw, kein SDK) | neu |
+| `llm_openai.py` | OpenAI gpt-4o-mini | HTTPS+SSE | neu (alter Requesty-Code geloescht) |
 | `llm_groq.py` | Groq llama-3.1-8b-instant | HTTPS+SSE | neu |
-| `llm_mistral.py` | Mistral mistral-small-3.2 | HTTPS+SSE | neu |
-| `tts_deepgram.py` | Deepgram TTS Aura-2 | HTTPS Streaming | neu schreiben (alter Code war ElevenLabs) |
+| `llm_mistral.py` | Mistral mistral-small-4 | HTTPS+SSE | neu |
+| `tts_deepgram.py` | Deepgram TTS Aura-2 | HTTPS Streaming | neu (alter ElevenLabs-Code geloescht) |
 | `tts_openai.py` | OpenAI TTS tts-1 | HTTPS Streaming | neu |
-| `tts_azure.py` | Azure TTS Neural (DE) | HTTPS Streaming | neu |
+| `tts_azure.py` | Azure TTS Neural (IT) | HTTPS Streaming | neu |
 
-- [ ] `run.py` aktualisieren: alle 9 Module einbinden
+- [x] `run.py` aktualisiert: 9-Provider-Struktur, dynamische Imports
+- [ ] Technischer Modulplan: `measurements/layer3/MODULE_PLAN.md`
 
 ---
 

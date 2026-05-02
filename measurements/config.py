@@ -22,8 +22,8 @@ STT_ENDPOINTS = [
     },
     {
         "name": "azure_stt",
-        "host": "germanywestcentral.stt.speech.microsoft.com",
-        "url": "https://germanywestcentral.stt.speech.microsoft.com",
+        "host": "italynorth.stt.speech.microsoft.com",
+        "url": "https://italynorth.stt.speech.microsoft.com",
         "protocol": "WebSocket",
     },
 ]
@@ -68,8 +68,8 @@ TTS_ENDPOINTS = [
     },
     {
         "name": "azure_tts",
-        "host": "germanywestcentral.tts.speech.microsoft.com",
-        "url": "https://germanywestcentral.tts.speech.microsoft.com",
+        "host": "italynorth.tts.speech.microsoft.com",
+        "url": "https://italynorth.tts.speech.microsoft.com",
         "protocol": "HTTPS Streaming",
     },
 ]

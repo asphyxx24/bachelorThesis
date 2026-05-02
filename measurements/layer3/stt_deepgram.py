@@ -20,7 +20,7 @@ _SSL_CTX = ssl.create_default_context(cafile=certifi.where())
 
 DEEPGRAM_WS_URL = (
     "wss://api.deepgram.com/v1/listen"
-    "?model=nova-3&language=de&encoding=linear16"
+    "?model=nova-3&language=en&encoding=linear16"
     "&sample_rate=16000&punctuate=true&interim_results=false"
 )
 CHUNK_SIZE = 4096  # 4 KB PCM-Chunks
