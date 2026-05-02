@@ -40,7 +40,7 @@ Amazon Polly: optionaler Exkurs (Intra-Cloud-Referenz), nicht Hauptprovider.
 - **Cold-Start:** Jede Messung baut eine neue TCP+TLS-Verbindung auf (kein Connection Pooling)
 - **Raw WebSocket:** Alle STT-Provider werden ohne SDK gemessen (auch Azure) — direkte WebSocket-Verbindung
 - **Feste Inputs:** Identisch pro Kategorie für fairen Vergleich
-  - STT: `measurements/layer3/sample.wav` (~5s englische Sprache)
+  - STT: `measurements/layer3/sample.wav` — "Good morning. I would like to know the current weather forecast for Frankfurt." (~5s)
   - LLM: "Reply in one short sentence: What is the capital of Germany?"
   - TTS: "Good morning! How can I assist you today?"
 - **Kampagne:** n=100 pro Zeitschlitz, 8 Slots/Tag (alle 3h), 14 Tage

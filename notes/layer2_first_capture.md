@@ -1,7 +1,11 @@
 # Layer 2 — Erste Paket-Capture (Deepgram WebSocket)
 
 > Status: PROOF-OF-CONCEPT — aufgenommen am 2026-04-08
-> Ziel: Methodik validieren und Schicht-1-Messungen unabhaengig durch Schicht-2-Daten bestaetigen
+> Ziel: Methodik validieren und Layer-1-Messungen unabhaengig durch Layer-2-Daten bestaetigen
+>
+> **Hinweis (2026-05-02):** Dieses Dokument ist ein historischer POC-Bericht.
+> Die Provider-Matrix wurde seitdem geaendert (siehe `notes/migration_plan.md`).
+> Der Kernbefund (3-RTT-Overhead = ~31% des Latenzbudgets) bleibt gueltig.
 
 ---
 

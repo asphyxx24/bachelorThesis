@@ -103,12 +103,12 @@ Amazon Polly: Exkurs Intra-Cloud-Referenz (optional, nicht Hauptprovider).
 
 ---
 
-## Zeitplan (grob)
+## Phasen-Reihenfolge (kein festes Datum, Deadline flexibel)
 
-| Woche | Fokus |
-|-------|-------|
-| KW 19 (05.05–11.05) | EC2 aufsetzen, sample.wav aufnehmen, Keys beschaffen |
-| KW 20 (12.05–18.05) | Provider-Module implementieren, Cron live |
-| KW 21–23 (19.05–08.06) | Kampagne läuft automatisch, parallel Analyse beginnen |
-| KW 24–26 (09.06–28.06) | Alle Analyse-Notebooks, Thesis-Kapitel |
-| KW 27–30+ | Thesis fertigstellen, Review, Abgabe |
+| Phase | Dauer (geschätzt) | Fokus |
+|-------|-------------------|-------|
+| Setup | ~1 Woche | EC2 aufsetzen, sample.wav aufnehmen, Keys beschaffen |
+| Implementierung | ~1 Woche | Provider-Module schreiben, Cron einrichten |
+| Kampagne | 14 Tage | Läuft automatisch, parallel Analyse beginnen |
+| Analyse | ~2 Wochen | Alle Analyse-Notebooks, Ergebnisse auswerten |
+| Schreiben | ~3–4 Wochen | Thesis-Kapitel, Review, Abgabe |
