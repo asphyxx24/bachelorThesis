@@ -4,7 +4,7 @@
 
 **Titel:** Kommerzielle Cloud-AI-APIs unter der Lupe: Netzwerk-, Protokoll- und Latenzanalyse einer Echtzeit-Voice-Pipeline
 **Autor:** Anton Rusik | **Betreuer:** Prof. Dr. Matthias Wählisch, TU Dresden
-**Vantage Point:** AWS EC2 eu-central-1 (Frankfurt) | **Deadline:** ~2–4 Monate (ab April 2026)
+**Vantage Point:** AWS EC2 eu-central-1 (Frankfurt) | **Deadline:** flexibel
 
 ## Forschungsfrage
 
@@ -15,51 +15,48 @@ sequenziellen Voice-Pipeline?
 
 ## Drei-Schichten-Architektur
 
-- **Schicht 1 (Infrastruktur):** DNS, Ping, TLS, Traceroute — 9 Provider — 712+ Dateien in `data/layer1/`
-- **Schicht 2 (Streaming):** Paket-Captures — 1 POC-PCAP (Deepgram, `data/layer2/`) — kein vollständiger Datensatz
-- **Schicht 3 (Latenz):** connect_ms / ttft_ms / total_ms — 69k+ Records in `data/layer3/` (davon ~17k Requesty-Records deprecated, siehe `data/layer3/README.md`)
+- **Layer 1 (Infrastruktur):** DNS, Ping, TLS, Traceroute — Code in `measurements/layer1/`
+- **Layer 2 (Paketaufzeichnung):** tcpdump/PCAP — Code in `measurements/layer2/`, 1 POC-Capture vorhanden
+- **Layer 3 (API-Latenz):** Cold-Start connect_ms / ttft_ms / total_ms — Code in `measurements/layer3/`
 
-## Provider-Matrix (FINAL, Stand 2026-03-31)
+## Provider-Matrix (FINAL, Stand 2026-05-02)
 
-| Kategorie | Provider | Protokoll | Endpoint |
-|-----------|----------|-----------|---------|
-| STT | Deepgram | WebSocket | `api.deepgram.com` |
-| STT | AssemblyAI | WebSocket | `api.assemblyai.com` |
-| STT | Speechmatics | WebSocket | `eu2.rt.speechmatics.com` |
-| LLM | OpenAI | HTTPS + SSE | `api.openai.com` |
-| LLM | Groq | HTTPS + SSE | `api.groq.com` |
-| LLM | Anthropic | HTTPS + SSE | `api.anthropic.com` |
-| TTS | ElevenLabs | HTTPS Streaming | `api.elevenlabs.io` |
-| TTS | Cartesia | WebSocket | `api.cartesia.ai` |
-| TTS | Amazon Polly | AWS SDK (HTTPS) | `polly.eu-central-1.amazonaws.com` |
+| Kategorie | Provider | Modell | Region | Protokoll |
+|-----------|----------|--------|--------|-----------|
+| STT | Deepgram | Nova-3 | USA (Anycast) | WebSocket |
+| STT | AssemblyAI | Universal-2 | USA | WebSocket |
+| STT | Azure | Standard Neural | Deutschland (Germany West Central) | WebSocket |
+| LLM | OpenAI | gpt-4o-mini | USA (GPU) | HTTPS+SSE |
+| LLM | Groq | llama-3.1-8b-instant | USA (LPU) | HTTPS+SSE |
+| LLM | Mistral | mistral-small-3.2 | EU/Frankreich | HTTPS+SSE |
+| TTS | Deepgram | Aura-2 | USA (Anycast) | HTTPS Streaming |
+| TTS | OpenAI | tts-1 | USA | HTTPS Streaming |
+| TTS | Azure | Standard Neural | Deutschland (Germany West Central) | HTTPS Streaming |
 
-Alle 9 Provider in `measurements/config.py` konfiguriert. Detaillierte Begründung: `notes/anbieter_auswahl.md`.
+Amazon Polly: optionaler Exkurs (Intra-Cloud-Referenz), nicht Hauptprovider.
+
+## Messdesign
+
+- **Cold-Start:** Jede Messung baut eine neue TCP+TLS-Verbindung auf (kein Connection Pooling)
+- **Raw WebSocket:** Alle STT-Provider werden ohne SDK gemessen (auch Azure) — direkte WebSocket-Verbindung
+- **Feste Inputs:** Identisch pro Kategorie für fairen Vergleich
+  - STT: `measurements/layer3/sample.wav` (~5s englische Sprache)
+  - LLM: "Reply in one short sentence: What is the capital of Germany?"
+  - TTS: "Good morning! How can I assist you today?"
+- **Kampagne:** n=100 pro Zeitschlitz, 8 Slots/Tag (alle 3h), 14 Tage
 
 ## Aktueller Stand
 
-**Done:**
-- Layer 1: 28-Tage-Kampagne abgeschlossen (alle 9 Provider, DNS/Ping/TLS)
-- Layer 3: 28-Tage-Kampagne mit Deepgram (STT) + ElevenLabs (TTS), ~17.000 Messungen pro Provider (≈590/Tag × 29 Tage) — p99-Schätzungen statistisch belastbar. LLM-Daten vorhanden aber veraltet (siehe Bekannte Probleme)
-- Layer 2: 1 POC-Capture (Deepgram, 2026-04-08) — Methodik validiert, 3-RTT-Overhead dokumentiert
-
-**Bekannte Probleme (methodisch):**
-- `transcript_len=0` in allen STT-Daten — Timing-Werte (connect_ms, ttft_ms) sind trotzdem valide, aber angreifbar
-- Layer-3-LLM-Daten stammen von Requesty (API-Proxy → Gemini 2.5 Flash), nicht von den finalen Providern (OpenAI/Groq/Anthropic). Requesty wurde aus der Provider-Matrix entfernt. Diese Daten sind für die finale Thesis nicht verwendbar — LLM-Messungen müssen mit direkten Providern neu durchgeführt werden.
-- Layer 3 hat nur 2 von 9 finalen Providern mit validen Daten (AssemblyAI/Speechmatics/OpenAI/Groq/Anthropic/Cartesia/Polly fehlen noch)
-- Layer 2: 1 Capture ist kein statistischer Datensatz
-- Layer-1 TLS-Daten: `http_version` war bis 31.03. ein Format-Bug (`"%(http_version)s"` literal), ab 01.04. korrekt. Für Protokoll-Analysen nur Daten ab 2026-04-01 verwenden.
-
-**Offene TODOs:**
-- API-Keys für 6 neue Provider beschaffen (siehe `notes/anbieter_auswahl.md`)
-- Messcode für 6 neue Provider schreiben
-- `fixtures/sample.wav` mit echter englischer Sprache ersetzen (`fixtures/create_sample.py`)
-- AWS-Migration: Messinfrastruktur von Arbeits-Account auf eigenen Account (gleiche Region `eu-central-1`)
-- Weitere Analysis-Notebooks: Tageszeit-Trends, Cross-Layer, E2E-Pipeline, Layer-2-Protokoll
+Siehe `HANDOFF.md` für den aktuellen Session-Stand.
+Siehe `notes/implementation_plan.md` für die vollständige Checkliste.
+Siehe `notes/migration_plan.md` für Methodik, Kosten und Zeitplan.
 
 ## Betreuer-Feedback (2026-04-09, Prof. Wählisch)
 
 Hauptkritik: **"Methodik unklar"** — Was genau wird gemessen? Warum Cold-Start? Was ist die Contribution?
-Kernproblem: Das Framing fehlt, nicht die Daten selbst.
+Antwort: Cold-Start misst den Overhead jeder neuen Gesprächssession. Der Beitrag ist die
+Cross-Layer-Korrelation (Layer 1 Ping × 3 ≈ Layer 3 connect_ms) und die Zerlegung des
+1s-Latenzbudgets in Netzwerk vs. Verarbeitung.
 
 ## JSONL-Datenformat
 
