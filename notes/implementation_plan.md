@@ -24,7 +24,7 @@ bevor die Hauptmesskampagne starten kann. Der detaillierte Plan liegt unter
 ## 1. Repository-Struktur bereinigen
 
 - [ ] `measurements/layer1_infra/` → umbenennen in `measurements/layer1/`
-- [ ] `measurements/layer3_latency/` → umbenennen in `measurements/layer3/`
+- [ ] `measurements/layer3/` → umbenennen in `measurements/layer3/`
 - [ ] `measurements/layer2/` → neu erstellen (war bisher nicht vorhanden)
 - [ ] `scripts/` → Ordner löschen (`split_requesty.py` ist nicht mehr nötig)
 - [ ] `data/archive/` → erstellen für alte explorative Daten

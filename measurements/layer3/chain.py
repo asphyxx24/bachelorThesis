@@ -9,7 +9,7 @@ zu gewaehrleisten und variable Textlaenge als Confounding Variable auszuschliess
 
 import time
 
-from measurements.layer3_latency import stt, llm, tts
+from measurements.layer3 import stt_deepgram as stt, llm_openai as llm, tts_deepgram as tts
 
 
 async def measure_once(

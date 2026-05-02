@@ -3,7 +3,7 @@
 Fuehrt DNS, Ping, Traceroute und TLS-Analyse fuer alle 3 API-Endpoints durch.
 
 Verwendung:
-  python measurements/layer1_infra/run.py [--mode background|full] [--dry-run]
+  python measurements/layer1/run.py [--mode background|full] [--dry-run]
 
   --mode background  Nur DNS + Ping (stuendlicher Cron, ~15s)
   --mode full        + Traceroute + TLS (taeglicher Cron, ~3min)
@@ -19,7 +19,7 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).parent.parent.parent))
 
 from measurements.config import ENDPOINTS
-from measurements.layer1_infra import dns, ping, traceroute, tls
+from measurements.layer1 import dns, ping, traceroute, tls
 from measurements.lib.output import now_iso, output_path, write_jsonl
 
 

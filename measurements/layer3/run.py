@@ -3,7 +3,7 @@
 Fuehrt Batch-Messungen fuer STT, LLM, TTS und die E2E-Kette durch.
 
 Verwendung:
-  python measurements/layer3_latency/run.py [--n 100] [--tag 09h] [--api stt|llm|tts|e2e|all] [--dry-run]
+  python measurements/layer3/run.py [--n 100] [--tag 09h] [--api stt|llm|tts|e2e|all] [--dry-run]
 
   --n       Anzahl Messungen pro API (default: 100)
   --tag     Tageszeit-Label fuer Dateiname (z.B. 09h, 12h)
@@ -24,7 +24,7 @@ from dotenv import load_dotenv
 sys.path.insert(0, str(Path(__file__).parent.parent.parent))
 
 from measurements.config import MEASUREMENT_DELAY_S
-from measurements.layer3_latency import stt, llm, tts, chain
+from measurements.layer3 import stt_deepgram as stt, llm_openai as llm, tts_deepgram as tts, chain
 from measurements.lib.output import now_iso, output_path, write_jsonl
 from measurements.lib.stats import compute_stats
 
