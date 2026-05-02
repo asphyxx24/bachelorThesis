@@ -1,5 +1,8 @@
-# API Keys
+# API Keys & Credentials
 .env
+*_key.png
+*_credentials.*
+aws_key.*
 
 # Python
 __pycache__/
