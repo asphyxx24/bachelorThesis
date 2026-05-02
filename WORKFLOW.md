@@ -62,7 +62,7 @@ Der wichtigste Bereich. Wird am häufigsten übersprungen.
 /explain Cold-Start vs Warm-Start
 /explain TLS Handshake
 /explain Forschungsbeitrag vs Benchmarking
-/explain Warum ist Requesty methodisch problematisch?
+/explain Warum Cold-Start statt Warm-Start?
 /explain Was misst connect_ms genau?
 ```
 

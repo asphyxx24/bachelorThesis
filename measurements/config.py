@@ -1,8 +1,8 @@
 """Zentrale Konfiguration: Endpoints, Metriken, Konstanten.
 
 9 Cloud-AI-API-Endpoints, 3 pro Kategorie (STT, LLM, TTS).
-Alle Endpoints werden in Schicht 1 (Infrastruktur) gemessen.
-Schicht 3 (Latenz) nutzt die provider-spezifischen Module.
+Alle Endpoints werden in Layer 1 (Infrastruktur) gemessen.
+Layer 3 (Latenz) nutzt die provider-spezifischen Module.
 """
 
 # ── STT-Endpoints ────────────────────────────────────────────────────────────
@@ -21,9 +21,9 @@ STT_ENDPOINTS = [
         "protocol": "WebSocket",
     },
     {
-        "name": "speechmatics",
-        "host": "eu2.rt.speechmatics.com",
-        "url": "https://eu2.rt.speechmatics.com",
+        "name": "azure_stt",
+        "host": "germanywestcentral.stt.speech.microsoft.com",
+        "url": "https://germanywestcentral.stt.speech.microsoft.com",
         "protocol": "WebSocket",
     },
 ]
@@ -44,9 +44,9 @@ LLM_ENDPOINTS = [
         "protocol": "HTTPS + SSE",
     },
     {
-        "name": "anthropic",
-        "host": "api.anthropic.com",
-        "url": "https://api.anthropic.com",
+        "name": "mistral",
+        "host": "api.mistral.ai",
+        "url": "https://api.mistral.ai",
         "protocol": "HTTPS + SSE",
     },
 ]
@@ -55,31 +55,31 @@ LLM_ENDPOINTS = [
 
 TTS_ENDPOINTS = [
     {
-        "name": "elevenlabs",
-        "host": "api.elevenlabs.io",
-        "url": "https://api.elevenlabs.io",
+        "name": "deepgram_tts",
+        "host": "api.deepgram.com",
+        "url": "https://api.deepgram.com",
         "protocol": "HTTPS Streaming",
     },
     {
-        "name": "cartesia",
-        "host": "api.cartesia.ai",
-        "url": "https://api.cartesia.ai",
-        "protocol": "WebSocket",
+        "name": "openai_tts",
+        "host": "api.openai.com",
+        "url": "https://api.openai.com",
+        "protocol": "HTTPS Streaming",
     },
     {
-        "name": "polly",
-        "host": "polly.eu-central-1.amazonaws.com",
-        "url": "https://polly.eu-central-1.amazonaws.com",
-        "protocol": "AWS SDK (HTTPS)",
+        "name": "azure_tts",
+        "host": "germanywestcentral.tts.speech.microsoft.com",
+        "url": "https://germanywestcentral.tts.speech.microsoft.com",
+        "protocol": "HTTPS Streaming",
     },
 ]
 
-# ── Alle Endpoints (fuer Schicht 1: Infrastruktur-Messungen) ─────────────────
+# ── Alle Endpoints (fuer Layer 1: Infrastruktur-Messungen) ───────────────────
 
 ENDPOINTS = STT_ENDPOINTS + LLM_ENDPOINTS + TTS_ENDPOINTS
 
-# DNS-Resolver fuer Multi-Resolver-Vergleich (Schicht 1)
+# DNS-Resolver fuer Multi-Resolver-Vergleich (Layer 1)
 DNS_RESOLVERS = ["8.8.8.8", "1.1.1.1", "9.9.9.9"]
 
-# Delay zwischen einzelnen Messungen in Schicht 3 (Rate-Limit-Schutz)
+# Delay zwischen einzelnen Messungen in Layer 3 (Rate-Limit-Schutz)
 MEASUREMENT_DELAY_S = 1.5
