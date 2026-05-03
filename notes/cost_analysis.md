@@ -28,10 +28,10 @@
 
 | | Wert |
 |---|---|
-| Preis | $0.005/min ($0.30/h), Streaming |
-| Volumen | 11.200 x 15s (Minimum) = 46.7h abgerechnet |
-| **Kosten** | **~$14** |
-| Deckung | $1 Free Tier, danach Prepaid |
+| Preis | $0.003/min, Streaming (15s Minimum pro Session) |
+| Volumen | 11.200 x 15s = 2.800 Minuten |
+| **Kosten** | **~$8.40** |
+| Deckung | $0.99 Free + $9.99 (3.000 Min Paket) = $10.98 |
 | Hinweis | 15s Minimum pro Session; ersetzt AssemblyAI (Grund: Echtzeit-Pacing-Anforderung) |
 | Quelle | rev.ai/pricing |
 

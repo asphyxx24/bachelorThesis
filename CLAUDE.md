@@ -39,6 +39,10 @@ wie Deepgram und Azure.
 
 Amazon Polly: optionaler Exkurs (Intra-Cloud-Referenz), nicht Hauptprovider.
 
+**ACHTUNG vor Kampagnenstart:** Rev.ai hat nur $1 Free Tier (~800 Messungen).
+Für die volle 14-Tage-Kampagne (11.200 Messungen) müssen ~$13 nachgeladen werden.
+→ rev.ai Dashboard → Billing → Add Funds
+
 ## Messdesign
 
 - **Cold-Start:** Jede Messung baut eine neue TCP+TLS-Verbindung auf (kein Connection Pooling)

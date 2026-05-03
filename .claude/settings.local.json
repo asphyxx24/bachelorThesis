@@ -125,7 +125,14 @@
       "PowerShell(ssh -i \"$env:USERPROFILE\\\\.ssh\\\\thesis-key.pem\" ubuntu@35.159.112.40 \"cd ~/thesis && python3 -m venv .venv && source .venv/bin/activate && pip install -q websockets httpx python-dotenv certifi 2>&1 | tail -3\")",
       "PowerShell(scp -i \"$env:USERPROFILE\\\\.ssh\\\\thesis-key.pem\" \"C:\\\\Users\\\\anton\\\\Desktop\\\\bachelorThesis\\\\.env\" ubuntu@35.159.112.40:~/thesis/.env 2>&1)",
       "PowerShell(ssh -i \"$env:USERPROFILE\\\\.ssh\\\\thesis-key.pem\" ubuntu@35.159.112.40 \"wc -l ~/thesis/.env && head -1 ~/thesis/.env\")",
-      "PowerShell(ssh -i \"$env:USERPROFILE\\\\.ssh\\\\thesis-key.pem\" ubuntu@35.159.112.40 \"cd ~/thesis && source .venv/bin/activate && python measurements/layer3/run.py --dry-run --api llm 2>&1\")"
+      "PowerShell(ssh -i \"$env:USERPROFILE\\\\.ssh\\\\thesis-key.pem\" ubuntu@35.159.112.40 \"cd ~/thesis && source .venv/bin/activate && python measurements/layer3/run.py --dry-run --api llm 2>&1\")",
+      "PowerShell(ssh -i \"$env:USERPROFILE\\\\.ssh\\\\thesis-key.pem\" ubuntu@35.159.112.40 \"cd ~/thesis && git pull && source .venv/bin/activate && python measurements/layer3/run.py --dry-run --api llm 2>&1\")",
+      "PowerShell(ssh -i \"$env:USERPROFILE\\\\.ssh\\\\thesis-key.pem\" ubuntu@35.159.112.40 \"cd ~/thesis && source .venv/bin/activate && python measurements/layer3/run.py --dry-run --api stt 2>&1\")",
+      "PowerShell(ssh -i \"$env:USERPROFILE\\\\.ssh\\\\thesis-key.pem\" ubuntu@35.159.112.40 \"cd ~/thesis && source .venv/bin/activate && python measurements/layer3/run.py --dry-run --api tts 2>&1\")",
+      "PowerShell(ssh -i \"$env:USERPROFILE\\\\.ssh\\\\thesis-key.pem\" ubuntu@35.159.112.40 \"cd ~/thesis && git pull -q && source .venv/bin/activate && python measurements/layer3/run.py --dry-run --api stt 2>&1\")",
+      "PowerShell(ssh -i \"$env:USERPROFILE\\\\.ssh\\\\thesis-key.pem\" ubuntu@35.159.112.40 \"cd ~/thesis && source .venv/bin/activate && python measurements/layer1/run.py --dry-run 2>&1\")",
+      "PowerShell(ssh -i \"$env:USERPROFILE\\\\.ssh\\\\thesis-key.pem\" ubuntu@35.159.112.40 \"cd ~/thesis && source .venv/bin/activate && python measurements/layer3/run.py --n 1 --api llm --tag test 2>&1 && echo '---' && ls -la data/layer3/ 2>&1\")",
+      "PowerShell(ssh -i \"$env:USERPROFILE\\\\.ssh\\\\thesis-key.pem\" ubuntu@35.159.112.40 \"ssh-keygen -t ed25519 -f ~/.ssh/github_deploy -N '' -q && cat ~/.ssh/github_deploy.pub\")"
     ]
   }
 }
