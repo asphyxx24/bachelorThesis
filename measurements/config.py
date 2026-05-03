@@ -15,9 +15,9 @@ STT_ENDPOINTS = [
         "protocol": "WebSocket",
     },
     {
-        "name": "assemblyai",
-        "host": "api.assemblyai.com",
-        "url": "https://api.assemblyai.com",
+        "name": "revai",
+        "host": "api.rev.ai",
+        "url": "https://api.rev.ai",
         "protocol": "WebSocket",
     },
     {

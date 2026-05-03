@@ -33,7 +33,7 @@ SAMPLE_WAV = Path(__file__).parent / "sample.wav"
 # Provider-Definitionen: (modul_name, api_label, env_keys)
 STT_PROVIDERS = [
     ("stt_deepgram",   "deepgram",   ["DEEPGRAM_API_KEY"]),
-    ("stt_assemblyai", "assemblyai", ["ASSEMBLYAI_API_KEY"]),
+    ("stt_revai",      "revai",      ["REVAI_API_KEY"]),
     ("stt_azure",      "azure_stt",  ["AZURE_SPEECH_KEY", "AZURE_SPEECH_REGION"]),
 ]
 

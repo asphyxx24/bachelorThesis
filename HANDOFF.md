@@ -1,13 +1,12 @@
 # Handoff — Aktueller Arbeitsstand
 
-> Letzte Aktualisierung: 2026-05-02, 23:00 (Session: Keys, Kosten, Cleanup)
+> Letzte Aktualisierung: 2026-05-03, 11:30 (Session: Alle 9 Module implementiert)
 
 ## Letzter Stand
 
-Phase 0–5 abgeschlossen. Alle API-Keys eingetragen, Kostenanalyse fertig,
-alte Daten archiviert, Layer-3-Code bereinigt, run.py für 9 Provider aktualisiert,
-technischer Modulplan geschrieben. Code für die 8 neuen Provider-Module ist noch
-NICHT geschrieben (nur stt_deepgram.py existiert als Referenzimplementation).
+Phase 6 abgeschlossen: Alle 9 Provider-Module sind implementiert und getestet.
+AssemblyAI wurde durch Rev.ai ersetzt (Grund: methodische Konsistenz).
+OpenAI $10 Prepaid aufgeladen, alle Keys funktionsfähig.
 
 **Erledigte Phasen:**
 - [x] Phase 0: GitHub — `asphyxx24` ist primärer Remote
@@ -17,67 +16,91 @@ NICHT geschrieben (nur stt_deepgram.py existiert als Referenzimplementation).
 - [x] Phase 4: Kostenanalyse — dokumentiert in `notes/cost_analysis.md`
 - [x] Phase 5: Alte Daten archiviert — 950 L1 + 228 L3 Dateien nach `data/archive/`
 - [x] Phase 5b: Layer-3-Code bereinigt — falsche Module gelöscht, run.py aktualisiert
+- [x] Phase 6: Alle 9 Provider-Module implementiert und per Dry-Run verifiziert
 
 ## Aktuelle Fokus-Aufgabe
 
-**Phase 6: 8 Provider-Module implementieren** (stt_deepgram.py existiert bereits)
+**Phase 6: AWS EC2 aufsetzen** (eu-central-1, t3.small)
 
-Technischer Plan liegt in `measurements/layer3/MODULE_PLAN.md` — dort steht für jedes
-Modul Endpoint, Auth, Protokoll und Ablauf. Empfohlene Reihenfolge:
-1. LLM-Module (einfachstes Pattern, alle OpenAI-kompatibel)
-2. TTS-Module (HTTP Streaming)
-3. STT-Module (WebSocket, am komplexesten: AssemblyAI Base64, Azure Binärprotokoll)
-4. chain.py neu schreiben
-5. Testläufe
-
-## Provider-Matrix (FINAL)
+## Provider-Matrix (FINAL, Stand 2026-05-03)
 
 | Kategorie | Provider 1 | Provider 2 | Provider 3 |
 |-----------|-----------|-----------|-----------|
-| STT | Deepgram Nova-3 (USA, WS) | AssemblyAI Universal-2 (USA, WS) | Azure STT (Italien/Italy North, WS) |
+| STT | Deepgram Nova-3 (USA, WS) | Rev.ai English (USA, WS) | Azure STT (Italien/Italy North, WS) |
 | LLM | OpenAI gpt-4o-mini (USA, SSE) | Groq llama-3.1-8b (USA/LPU, SSE) | Mistral Small 4 (EU/FR, SSE) |
 | TTS | Deepgram Aura-2 (USA, HTTPS) | OpenAI tts-1 (USA, HTTPS) | Azure TTS (Italien/Italy North, HTTPS) |
 
-## Entscheidungen dieser Session (2026-05-02 abends)
+## Entscheidungen dieser Session (2026-05-03)
 
-- **Azure Region:** Italy North statt Germany West Central (Student-Abo Policy-Einschränkung)
-- **Azure Tarif:** S0 (Standard), weil F0 nur 5h STT/Monat erlaubt (wir brauchen 15.6h)
-- **Mistral Modell:** Small 4 (`mistral-small-2603`) statt Small 3.2 (Deprecation umgehen)
-- **Kosten:** ~$43-48 Gesamtkosten, davon $10 out-of-pocket (OpenAI Prepaid), Rest über Free Tiers und Startguthaben
-- **OpenAI:** $10 Prepaid nötig (kein Free Tier), noch NICHT aufgeladen
-- **Alte Kampagne:** läuft noch auf ops.papagei.ai — Anton stoppt am Montag auf Arbeit
+- **AssemblyAI → Rev.ai:** AssemblyAIs Streaming-API erfordert Echtzeit-Pacing (Audio muss so langsam
+  gesendet werden wie es aufgenommen wurde). Das machte die TTFT-Messung inkonsistent mit Deepgram
+  und Azure, die Audio-Dump akzeptieren. Rev.ai akzeptiert ebenfalls Audio-Dump → konsistente Methodik.
+- **OpenAI Prepaid:** $10 aufgeladen, LLM und TTS Module funktionieren
+- **Deepgram TTS Modell:** `aura-2-asteria-en` (nicht `aura-2-en` — Modellname braucht Voice-Suffix)
+- **SSL-Fix:** `_measure_connect()` fängt SSLError beim Close ab (Deepgram sendet Daten nach Close-Notify)
+- **Rev.ai Free Tier:** $1 Startguthaben (reicht für Entwicklung/Tests)
+
+## Erste Messergebnisse (Dry-Run, n=3, lokal Windows, nicht AWS)
+
+**STT (WebSocket, Audio-Dump):**
+| Provider | connect_ms | TTFT p50 | Region |
+|----------|-----------|----------|--------|
+| Deepgram | ~810ms | 752ms | USA (Anycast) |
+| Rev.ai | ~858ms | 1687ms | USA |
+| Azure | ~290ms | 1758ms | Italien |
+
+**LLM (HTTPS+SSE):**
+| Provider | connect_ms | TTFT p50 | TTL p50 |
+|----------|-----------|----------|---------|
+| Groq | ~60ms | 137ms | 143ms |
+| Mistral | ~46ms | 276ms | 307ms |
+| OpenAI | ~62ms | 827ms | 940ms |
+
+**TTS (HTTPS Streaming):**
+| Provider | connect_ms | TTFA p50 | total_ms |
+|----------|-----------|----------|----------|
+| Azure | ~99ms | 196ms | 820ms |
+| OpenAI | ~42ms | 1105ms | 2048ms |
+| Deepgram | ~271ms | 1455ms | 2333ms |
 
 ## Was in Layer 3 aktuell liegt
 
 ```
 measurements/layer3/
-  stt_deepgram.py    ← existiert, bereinigt (language=en), Referenzimplementation
-  run.py             ← aktualisiert für 9 Provider (dynamische Imports)
+  stt_deepgram.py    ← STT Deepgram Nova-3 (WebSocket)
+  stt_revai.py       ← STT Rev.ai (WebSocket) — NEU, ersetzt AssemblyAI
+  stt_azure.py       ← STT Azure Italy North (WebSocket, Binärprotokoll)
+  llm_openai.py      ← LLM OpenAI gpt-4o-mini (HTTPS+SSE)
+  llm_groq.py        ← LLM Groq Llama-3.1-8b (HTTPS+SSE)
+  llm_mistral.py     ← LLM Mistral Small 4 (HTTPS+SSE)
+  tts_deepgram.py    ← TTS Deepgram Aura-2 (HTTPS Streaming)
+  tts_openai.py      ← TTS OpenAI tts-1 (HTTPS Streaming)
+  tts_azure.py       ← TTS Azure Neural Voice (HTTPS Streaming, SSML)
+  run.py             ← Batch-Runner für alle 9 Provider
   sample.wav         ← Testdatei (16kHz, Mono, PCM, 4.8s)
-  MODULE_PLAN.md     ← technischer Plan für alle 9 Module
+  MODULE_PLAN.md     ← Technischer Plan (alle 9 Module, aktualisiert)
   SAMPLE_WAV.md      ← Doku zur sample.wav
   __init__.py
 ```
 
-Gelöscht (falscher Inhalt): `llm_openai.py` (war Requesty), `tts_deepgram.py` (war ElevenLabs), `chain.py` (alte Imports)
+Gelöscht: `stt_assemblyai.py` (durch `stt_revai.py` ersetzt)
 
 ## Offene Schritte
 
-1. **OpenAI Prepaid aufladen** ($10) — manuell durch Anton
-2. **8 Provider-Module schreiben** — siehe MODULE_PLAN.md
-3. **chain.py neu schreiben** — E2E-Pipeline mit allen Providern
-4. **Alte Kampagne stoppen** (ops.papagei.ai) — Anton, Montag
-5. **AWS EC2 aufsetzen** — eu-central-1, t3.small
-6. **Cron-Jobs + Kampagne starten**
+1. **Alte Kampagne stoppen** (ops.papagei.ai) — Anton, Montag
+2. **AWS EC2 aufsetzen** — eu-central-1, t3.small
+3. **Cron-Jobs + Kampagne starten** (14 Tage)
+4. **Layer-2 Captures** (manuell auf EC2, waehrend Kampagne)
+5. **E2E-Validierung** (nach Analyse, ein paar manuelle Pipeline-Runs)
 
 ## Relevante Dateien
 
 | Datei | Inhalt |
 |-------|--------|
 | `CLAUDE.md` | Projektkontext, Forschungsfrage, Messdesign |
+| `HANDOFF.md` | Dieser Arbeitsstand |
 | `notes/implementation_plan.md` | Vollständige Checkliste mit Status |
 | `notes/cost_analysis.md` | Detaillierte Kostenanalyse pro Provider |
-| `notes/migration_plan.md` | Methodik, Provider-Begründung |
 | `measurements/layer3/MODULE_PLAN.md` | Technischer Plan für 9 Module |
 | `measurements/config.py` | Endpoints aller 9 Provider (Layer 1) |
 | `.env.example` | Benötigte Umgebungsvariablen |

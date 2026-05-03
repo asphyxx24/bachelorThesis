@@ -91,20 +91,23 @@ TEST_TEXT = "Good morning! How can I assist you today?"
 - Sprache: `language=en` (korrigiert von `de`)
 - Status: **Bereit** (nur language-Fix angewendet)
 
-#### 2. `stt_assemblyai.py` — NEU
+#### 2. `stt_revai.py` — IMPLEMENTIERT (ersetzt AssemblyAI)
 
-- Endpoint: `wss://api.assemblyai.com/realtime/ws/v2`
-- Auth: `?token={key}` Query-Parameter
-- Protokoll: WebSocket, Audio-Streaming
+- Endpoint: `wss://api.rev.ai/speechtotext/v1/stream`
+- Auth: `?access_token={key}` Query-Parameter
+- Query-Params: `&content_type=audio/x-raw;layout=interleaved;rate=16000;format=S16LE;channels=1`
+- Protokoll: WebSocket, Audio-Dump (raw binary, kein Pacing noetig)
 - Ablauf:
-  1. WS oeffnen mit `?sample_rate=16000&token={key}`
-  2. Audio in Base64-Chunks senden: `{"audio_data": "<base64>"}`
-  3. Auf `message_type: "FinalTranscript"` warten
-  4. `{"terminate_session": true}` senden
-- Besonderheit: Audio muss Base64-kodiert gesendet werden (nicht raw binary)
-- Billing: Session-basiert (Verbindung immer sauber schliessen!)
+  1. WS oeffnen, auf `{"type": "connected"}` warten
+  2. PCM-Chunks als binary Frames senden (kein Base64)
+  3. `"EOS"` als Text-Message senden
+  4. Auf `{"type": "final"}` warten
+- Hinweis: AssemblyAI wurde ersetzt, weil dessen Streaming-API Echtzeit-Pacing
+  erfordert — Audio muss so langsam gesendet werden wie es aufgenommen wurde.
+  Das machte die TTFT-Messung inkonsistent mit Deepgram/Azure (Audio-Dump).
+  Rev.ai akzeptiert Audio-Dump wie Deepgram und Azure.
 
-#### 3. `stt_azure.py` — NEU
+#### 3. `stt_azure.py` — IMPLEMENTIERT
 
 - Endpoint: `wss://italynorth.stt.speech.microsoft.com/speech/recognition/conversation/cognitiveservices/v1`
 - Auth: `Ocp-Apim-Subscription-Key: {key}` Header
@@ -130,20 +133,20 @@ async def measure_once(api_key: str, base_url: str, model: str) -> dict:
     # 4. Zeitmessung: headers_ms, ttft_ms (erster content), ttl_ms ([DONE])
 ```
 
-#### 4. `llm_openai.py` — NEU (alter Code war Requesty)
+#### 4. `llm_openai.py` — IMPLEMENTIERT
 
 - Base URL: `https://api.openai.com/v1`
 - Model: `gpt-4o-mini`
 - Auth: `Authorization: Bearer {key}`
 
-#### 5. `llm_groq.py` — NEU
+#### 5. `llm_groq.py` — IMPLEMENTIERT
 
 - Base URL: `https://api.groq.com/openai/v1`
 - Model: `llama-3.1-8b-instant`
 - Auth: `Authorization: Bearer {key}`
 - Hinweis: Groq ist OpenAI-kompatibel, gleiche SSE-Struktur
 
-#### 6. `llm_mistral.py` — NEU
+#### 6. `llm_mistral.py` — IMPLEMENTIERT
 
 - Base URL: `https://api.mistral.ai/v1`
 - Model: `mistral-small-2603`
@@ -152,22 +155,22 @@ async def measure_once(api_key: str, base_url: str, model: str) -> dict:
 
 ### TTS (HTTPS Streaming)
 
-#### 7. `tts_deepgram.py` — NEU (alter Code war ElevenLabs)
+#### 7. `tts_deepgram.py` — IMPLEMENTIERT
 
-- Endpoint: `https://api.deepgram.com/v1/speak?model=aura-2-en&encoding=mp3`
+- Endpoint: `https://api.deepgram.com/v1/speak?model=aura-2-asteria-en&encoding=mp3`
 - Auth: `Authorization: Token {key}`
 - Method: POST, Body = Raw Text (Content-Type: text/plain)
 - Response: Audio-Stream (chunked)
 - connect_ms: Bis HTTP-Response-Header empfangen
 
-#### 8. `tts_openai.py` — NEU
+#### 8. `tts_openai.py` — IMPLEMENTIERT
 
 - Endpoint: `https://api.openai.com/v1/audio/speech`
 - Auth: `Authorization: Bearer {key}`
 - Method: POST, Body = JSON `{"model": "tts-1", "voice": "alloy", "input": "..."}`
 - Response: Audio-Stream (chunked)
 
-#### 9. `tts_azure.py` — NEU
+#### 9. `tts_azure.py` — IMPLEMENTIERT
 
 - Endpoint: `https://italynorth.tts.speech.microsoft.com/cognitiveservices/v1`
 - Auth: `Ocp-Apim-Subscription-Key: {key}`
@@ -205,7 +208,7 @@ Pruefen ob `websockets` und `httpx` in requirements.txt stehen.
    - tts_deepgram.py → tts_openai.py → tts_azure.py (SSML)
 3. **STT-Module** (WebSocket, hoechste Komplexitaet)
    - stt_deepgram.py existiert schon
-   - stt_assemblyai.py (Base64-Encoding)
+   - stt_revai.py (Audio-Dump, gleiche Methodik wie Deepgram)
    - stt_azure.py (proprietaeres Binaerprotokoll, am komplexesten)
 4. **chain.py** neu schreiben (nachdem alle Module fertig sind)
 5. **run.py** finalisieren (Testlaeufe)

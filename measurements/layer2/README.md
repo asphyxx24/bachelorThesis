@@ -12,13 +12,13 @@ Erfordert root + SSH auf der EC2-Instanz.
 sudo tcpdump -i eth0 -w capture_deepgram_$(date +%Y%m%d_%H%M).pcap \
   host api.deepgram.com -s 0 -c 10000
 
-# STT: AssemblyAI (WebSocket)
-sudo tcpdump -i eth0 -w capture_assemblyai_$(date +%Y%m%d_%H%M).pcap \
-  host api.assemblyai.com -s 0 -c 10000
+# STT: Rev.ai (WebSocket)
+sudo tcpdump -i eth0 -w capture_revai_$(date +%Y%m%d_%H%M).pcap \
+  host api.rev.ai -s 0 -c 10000
 
-# STT: Azure (WebSocket, Germany West Central)
+# STT: Azure (WebSocket, Italy North)
 sudo tcpdump -i eth0 -w capture_azure_stt_$(date +%Y%m%d_%H%M).pcap \
-  host germanywestcentral.stt.speech.microsoft.com -s 0 -c 10000
+  host italynorth.stt.speech.microsoft.com -s 0 -c 10000
 
 # LLM: OpenAI (HTTPS+SSE)
 sudo tcpdump -i eth0 -w capture_openai_$(date +%Y%m%d_%H%M).pcap \
@@ -28,7 +28,7 @@ sudo tcpdump -i eth0 -w capture_openai_$(date +%Y%m%d_%H%M).pcap \
 sudo tcpdump -i eth0 -w capture_groq_$(date +%Y%m%d_%H%M).pcap \
   host api.groq.com -s 0 -c 10000
 
-# LLM: Mistral (HTTPS+SSE, EU/Frankreich)
+# LLM: Mistral (HTTPS+SSE)
 sudo tcpdump -i eth0 -w capture_mistral_$(date +%Y%m%d_%H%M).pcap \
   host api.mistral.ai -s 0 -c 10000
 ```
@@ -57,11 +57,11 @@ tshark -r capture_deepgram.pcap -T fields \
 | Kategorie | Provider | Protokoll | Zweck |
 |-----------|----------|-----------|-------|
 | STT | Deepgram | WebSocket | Audio-Upload + Transkript |
-| STT | AssemblyAI | WebSocket | Vergleich: gleiche Kategorie, anderer Provider |
-| STT | Azure | WebSocket | EU-Endpoint, kuerzerer Pfad |
+| STT | Rev.ai | WebSocket | Vergleich: gleiche Kategorie, anderer Provider |
+| STT | Azure | WebSocket | EU-Endpoint (Italy North), kuerzerer Pfad |
 | LLM | OpenAI | HTTPS+SSE | Token-Delivery-Muster |
 | LLM | Groq | HTTPS+SSE | LPU-Hardware: anderes Streaming-Verhalten? |
-| LLM | Mistral | HTTPS+SSE | EU-Endpoint: weniger RTTs |
+| LLM | Mistral | HTTPS+SSE | EU-Endpoint (Frankreich): weniger RTTs |
 
 TTS-Captures optional (HTTPS Streaming zeigt weniger Protokoll-Details als WebSocket/SSE).
 

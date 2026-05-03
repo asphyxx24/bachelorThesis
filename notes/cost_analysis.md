@@ -1,6 +1,7 @@
 # Kostenanalyse — Messkampagne
 
-> Stand: 2026-05-02. Basiert auf aktuellen Preisen der Provider-Webseiten.
+> Stand: 2026-05-03. Basiert auf aktuellen Preisen der Provider-Webseiten.
+> AssemblyAI durch Rev.ai ersetzt (Grund: methodische Konsistenz).
 
 ## Kampagnen-Parameter
 
@@ -23,17 +24,16 @@
 | Deckung | $200 Startguthaben (kein Ablauf, keine Kreditkarte nötig) |
 | Quelle | deepgram.com/pricing |
 
-### AssemblyAI Universal-2 (WebSocket Streaming)
+### Rev.ai English (WebSocket Streaming)
 
 | | Wert |
 |---|---|
-| Preis | $0.0025/min ($0.15/h), Session-basiert |
-| Volumen | ~31h Session-Dauer (Connect + 5s Audio + Response + Close) |
-| **Kosten** | **$2.33–$4.67** |
-| Deckung | $50 Startguthaben (keine Kreditkarte nötig) |
-| Hinweis | Streaming wird nach WebSocket-Session-Dauer abgerechnet, nicht Audiodauer |
-| Rate-Limit (Free) | 5 neue Streams/Minute — kein Problem bei sequenziellem Cold-Start |
-| Quelle | assemblyai.com/pricing |
+| Preis | $0.005/min ($0.30/h), Streaming |
+| Volumen | 11.200 x 15s (Minimum) = 46.7h abgerechnet |
+| **Kosten** | **~$14** |
+| Deckung | $1 Free Tier, danach Prepaid |
+| Hinweis | 15s Minimum pro Session; ersetzt AssemblyAI (Grund: Echtzeit-Pacing-Anforderung) |
+| Quelle | rev.ai/pricing |
 
 ### Azure STT (WebSocket, Italy North)
 
@@ -80,7 +80,7 @@
 | **Kosten** | **$0.06–$0.09** (Free Tier ausreichend) |
 | Deckung | Free "Experiment" Tier (~1 Mrd. Tokens/Monat, keine Kreditkarte) |
 | Rate-Limit (Free) | ~1 RPS — 100 Calls pro Slot dauern ~2 min, akzeptabel |
-| Hinweis | Nachfolger von mistral-small-3.2, gleicher Free Tier |
+| Hinweis | Modell-ID: mistral-small-2603, gleicher Free Tier |
 | Quelle | mistral.ai/pricing |
 
 ---
@@ -125,12 +125,12 @@
 | Provider | STT | LLM | TTS | Gesamt |
 |----------|-----|-----|-----|--------|
 | Deepgram | $4.48–$7.19 | — | $12.77 | **$17.25–$19.96** |
-| AssemblyAI | $2.33–$4.67 | — | — | **$2.33–$4.67** |
+| Rev.ai | ~$14 | — | — | **~$14** |
 | Azure | $15.60 | — | $0.006 | **$15.61** |
 | OpenAI | — | $0.13 | $7.06 | **$7.19** |
 | Groq | — | $0.02 | — | **$0.02** |
 | Mistral | — | $0.06 | — | **$0.06** |
-| **Summe** | | | | **$42.46–$47.51** |
+| **Summe** | | | | **~$54–$59** |
 
 ---
 
@@ -139,8 +139,9 @@
 | Aktion | Betrag |
 |--------|--------|
 | OpenAI Prepaid aufladen | **$10** |
+| Rev.ai Prepaid (nach $1 Free) | **~$13** |
 | Alles andere | $0 (Startguthaben / Free Tier / Azure for Students) |
-| **Total** | **$10** |
+| **Total** | **~$23** |
 
 ---
 
@@ -149,7 +150,7 @@
 | Quelle | Verfuegbar | Verbraucht | Rest |
 |--------|-----------|------------|------|
 | Deepgram Startguthaben | $200 | ~$18–20 | ~$180 |
-| AssemblyAI Startguthaben | $50 | ~$3–5 | ~$45 |
+| Rev.ai Free Tier | $1 | $1 | $0 (danach Prepaid ~$13) |
 | Azure for Students | $100 | ~$15.61 | ~$84 |
 | OpenAI Prepaid | $10 | ~$7.19 | ~$3 |
 | Groq Free Tier | unbegrenzt* | $0.02 | — |
@@ -163,7 +164,7 @@
 
 1. **Azure STT braucht S0** — F0 (5h/Monat) reicht nicht fuer 15.6h Audio. Bereits umgestellt.
 2. **OpenAI braucht Prepaid** — ohne Guthaben HTTP 429. Minimum $5, empfohlen $10.
-3. **AssemblyAI Session-Billing** — WebSocket-Verbindung immer sauber schliessen, sonst laeuft die Session bis zu 3h weiter und wird abgerechnet.
+3. **Rev.ai 15s-Minimum** — Jede Streaming-Session wird mit mindestens 15s abgerechnet (unser Audio ist ~5s).
 4. **Azure TTS Rate-Limit** — S0 erlaubt 200 TPS (kein Problem). F0 waere 20/60s gewesen.
 5. **Mistral Rate-Limit (Free)** — ~1 RPS, d.h. 100 Calls pro Slot brauchen ~2 Minuten.
 6. **Groq Rate-Limit (Free)** — 30 RPM, d.h. 100 Calls pro Slot brauchen ~3-4 Minuten.

@@ -1,42 +1,19 @@
-# Layer 3 — Latency Data
+# Layer 3 — Archivierte Latency Data (vor 2026-05-02)
 
-## Datenstruktur
+> **ACHTUNG:** Diese Daten stammen aus der explorativen Phase mit anderen Providern
+> (Requesty, ElevenLabs). Sie sind NICHT Teil der finalen Messkampagne.
+> Die aktuelle Provider-Matrix steht in `CLAUDE.md`.
 
-Jede JSONL-Datei (`YYYY-MM-DD_HHh.jsonl`) enthält Records **mehrerer Provider** gemischt.
-Das `api`-Feld im Record identifiziert den Provider.
+## Historische Provider in diesen Daten
 
-Beispiel:
-```json
-{"ts": "...", "api": "deepgram",   "metric": "stt_ttft", "connect_ms": 472.0, ...}
-{"ts": "...", "api": "elevenlabs", "metric": "tts_ttfa", ...}
-{"ts": "...", "api": "requesty",   "metric": "llm",      ...}  ← DEPRECATED
-{"ts": "...", "api": "chain",      "metric": "e2e",      ...}
-```
+| `api` | Kategorie | Status |
+|-------|-----------|--------|
+| `deepgram` | STT | historisch (gleicher Provider, andere Methodik) |
+| `elevenlabs` | TTS | **VERALTET** — durch Deepgram/OpenAI/Azure TTS ersetzt |
+| `requesty` | LLM | **VERALTET** — API-Proxy (Gemini), durch OpenAI/Groq/Mistral ersetzt |
+| `chain` | E2E | **VERALTET** — alte Pipeline-Komposition |
 
-## ⚠️ Deprecated: `api="requesty"`
+## Aktuelle Provider (Stand 2026-05-03)
 
-**Records mit `api="requesty"` sind für die finale Thesis NICHT zu verwenden.**
-
-- Requesty ist ein API-Proxy (→ Gemini 2.5 Flash), nicht der tatsächlich gemessene Provider.
-- Die LLM-Provider-Matrix wurde auf OpenAI / Groq / Anthropic umgestellt (siehe `CLAUDE.md`).
-- Die Requesty-Records (≈17.446 Stück) bleiben im Datensatz als historischer Kontext,
-  müssen aber in jeder Analyse ausgefiltert werden:
-
-```python
-df = df[df["api"] != "requesty"]
-```
-
-## Aktuell valide Provider (Stand 2026-04-23)
-
-| `api`        | Kategorie | Status                      |
-|--------------|-----------|-----------------------------|
-| `deepgram`   | STT       | valide (29 Tage, ~17k Records) |
-| `elevenlabs` | TTS       | valide (29 Tage, ~17k Records) |
-| `chain`      | E2E       | valide (sequenzielle Pipeline)  |
-| `requesty`   | LLM       | **DEPRECATED** — nicht nutzen   |
-
-## TODO (Phase 1 Roadmap)
-
-- [ ] `run.py`: Requesty-Measurement deaktivieren
-- [ ] Messcode für OpenAI / Groq / Anthropic hinzufügen
-- [ ] Messcode für AssemblyAI / Speechmatics / Cartesia / Polly hinzufügen
+Siehe `CLAUDE.md` und `HANDOFF.md` fuer die aktuelle 9-Provider-Matrix:
+STT: Deepgram, Rev.ai, Azure | LLM: OpenAI, Groq, Mistral | TTS: Deepgram, OpenAI, Azure

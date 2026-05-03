@@ -182,8 +182,8 @@ tshark -r deepgram_capture.pcap -Y 'websocket'           # WebSocket-Frames
 
 - [ ] `transcript_len: 0` Problem fixen (Fixture neu generieren)
 - [ ] Capture mit **laengerer Audio-Datei** (>10s) — partielle Transkripte sichtbar machen
-- [ ] Analoger Capture fuer **ElevenLabs TTS** (HTTP Streaming, EU-hosted) — Kontrast US/EU
-- [ ] Analoger Capture fuer **OpenAI LLM** (SSE) — drittes Streaming-Pattern
+- [ ] Analoger Capture fuer **Azure TTS** (HTTPS Streaming, Italy North) — Kontrast US/EU
+- [ ] Analoger Capture fuer **OpenAI LLM** (HTTPS+SSE) — drittes Streaming-Pattern
 - [ ] Bei der grossen Messkampagne: tcpdump im **Ring-Buffer-Modus** parallel laufen lassen
   (`tcpdump -G 3600 -W 24 -w 'capture_%H.pcap'`) — 24h Rolling Window
 - [ ] Layer-1-Messung mit **TCP-Connect-RTT** statt ICMP-Ping ergaenzen (Vergleich der Methoden)

@@ -1,34 +1,38 @@
 Lies den aktuellen Projektstand:
-- CLAUDE.md
-- HANDOFF.md (falls vorhanden)
-- analysis/ — welche Notebooks gibt es, was wurde zuletzt analysiert?
-- git log --oneline -5 (die letzten Commits)
+- HANDOFF.md
+- `git log --oneline -5` (die letzten Commits)
+- `git diff --stat` (uncommitted Änderungen)
+- analysis/ — welche Notebooks gibt es?
+- data/ — gibt es neue Daten seit dem letzten Handoff?
 
-Schreibe dann einen Handoff-Eintrag in HANDOFF.md. Ersetze den Inhalt vollständig mit einem aktuellen Stand.
+Frag mich dann: "Was war der Fokus dieser Session und was ist als nächstes geplant?"
+
+Schreibe erst nach meiner Antwort einen neuen HANDOFF.md. Ersetze den Inhalt vollständig.
 
 Format:
 
 ```markdown
 # Handoff — Aktueller Arbeitsstand
 
-> Diese Datei wird von `/handoff` am Session-Ende aktualisiert.
-> Sie wird automatisch in jeden neuen Chat geladen (via CLAUDE.md).
+> Letzte Aktualisierung: [Datum, Uhrzeit] (Session: [Kurztitel])
 
 ## Letzter Stand
 
-[Datum + 2–3 Sätze: Was wurde in dieser Session gemacht?]
+[2-3 Sätze: Was wurde in dieser Session gemacht?]
 
 ## Aktuelle Fokus-Aufgabe
 
 [Was ist konkret als nächstes dran — eine Aufgabe, nicht eine Liste]
 
-## Letzte Entscheidungen
+## Entscheidungen dieser Session
 
-[Entscheidungen aus dieser oder der letzten Session, die den Kurs beeinflussen]
+[Nur wenn es welche gab — Entscheidungen die den Kurs beeinflussen]
 
-## Offene Fragen / Blockaden
+## Offene Schritte
 
-[Was ist unklar, was wartet auf externe Faktoren, was muss noch geklärt werden]
+[Nummerierte Liste der nächsten konkreten Schritte]
+
+## Relevante Dateien
+
+[Tabelle der wichtigsten Dateien für den nächsten Einstieg]
 ```
-
-Frag mich vor dem Schreiben kurz: "Was war der Fokus dieser Session und was ist als nächstes geplant?" — damit der Eintrag stimmt und nichts Wichtiges fehlt.
