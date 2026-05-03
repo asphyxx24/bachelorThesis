@@ -9,33 +9,33 @@ Erfordert root + SSH auf der EC2-Instanz.
 # Auf der EC2-Instanz (root erforderlich):
 
 # STT: Deepgram (WebSocket)
-sudo tcpdump -i eth0 -w capture_deepgram_$(date +%Y%m%d_%H%M).pcap \
+sudo tcpdump -i ens5 -w capture_deepgram_$(date +%Y%m%d_%H%M).pcap \
   host api.deepgram.com -s 0 -c 10000
 
 # STT: Rev.ai (WebSocket)
-sudo tcpdump -i eth0 -w capture_revai_$(date +%Y%m%d_%H%M).pcap \
+sudo tcpdump -i ens5 -w capture_revai_$(date +%Y%m%d_%H%M).pcap \
   host api.rev.ai -s 0 -c 10000
 
 # STT: Azure (WebSocket, Italy North)
-sudo tcpdump -i eth0 -w capture_azure_stt_$(date +%Y%m%d_%H%M).pcap \
+sudo tcpdump -i ens5 -w capture_azure_stt_$(date +%Y%m%d_%H%M).pcap \
   host italynorth.stt.speech.microsoft.com -s 0 -c 10000
 
 # LLM: OpenAI (HTTPS+SSE)
-sudo tcpdump -i eth0 -w capture_openai_$(date +%Y%m%d_%H%M).pcap \
+sudo tcpdump -i ens5 -w capture_openai_$(date +%Y%m%d_%H%M).pcap \
   host api.openai.com -s 0 -c 10000
 
 # LLM: Groq (HTTPS+SSE)
-sudo tcpdump -i eth0 -w capture_groq_$(date +%Y%m%d_%H%M).pcap \
+sudo tcpdump -i ens5 -w capture_groq_$(date +%Y%m%d_%H%M).pcap \
   host api.groq.com -s 0 -c 10000
 
 # LLM: Mistral (HTTPS+SSE)
-sudo tcpdump -i eth0 -w capture_mistral_$(date +%Y%m%d_%H%M).pcap \
+sudo tcpdump -i ens5 -w capture_mistral_$(date +%Y%m%d_%H%M).pcap \
   host api.mistral.ai -s 0 -c 10000
 ```
 
 Waehrend tcpdump laeuft, parallel einen Layer-3-Messlauf starten:
 ```bash
-python measurements/layer3/run.py --n 1 --api stt --dry-run
+python measurements/layer3/run.py --n 1 --api stt
 ```
 
 ## Analyse mit tshark
