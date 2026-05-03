@@ -63,10 +63,10 @@ async def measure_once(api_key: str, pcm_data: bytes) -> dict:
                 await ws.send(chunk)
 
             await ws.send(json.dumps({"type": "Finalize"}))
+            await ws.send(json.dumps({"type": "CloseStream"}))
             t_send_done = time.perf_counter()
             send_ms = (t_send_done - (t_first_chunk or t_send_done)) * 1000
 
-            # Auf is_final=true warten
             t_first_final = None
             t_last_final = None
             segments = []
@@ -83,12 +83,11 @@ async def measure_once(api_key: str, pcm_data: bytes) -> dict:
                         text = alts[0].get("transcript", "") if alts else ""
                         if text:
                             segments.append(text)
-                    elif msg.get("type") == "Metadata":
-                        return
 
-            await asyncio.wait_for(_recv_finals(), timeout=20)
-
-            await ws.send(json.dumps({"type": "CloseStream"}))
+            try:
+                await asyncio.wait_for(_recv_finals(), timeout=20)
+            except Exception:
+                pass
 
             if t_first_final is None or t_first_chunk is None:
                 return {"error": "no_final_result"}
