@@ -50,7 +50,7 @@ def _build_speech_config(request_id: str) -> str:
     body = json.dumps({
         "context": {
             "system": {"version": "1.0.00000"},
-            "os": {"platform": "Python", "name": "Python", "version": "3.12"},
+            "os": {"platform": "Python", "name": "Python", "version": "3.10"},
             "audio": {
                 "source": {
                     "bitspersample": 16,

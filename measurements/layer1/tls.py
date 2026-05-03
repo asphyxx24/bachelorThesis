@@ -4,6 +4,7 @@ Zerlegt den Verbindungsaufbau in DNS, TCP, TLS-Handshake und TTFB.
 Erkennt HTTP-Version (1.1, 2, 3).
 """
 
+import os
 import subprocess
 
 
@@ -24,7 +25,7 @@ def measure(url: str) -> dict:
     )
     try:
         out = subprocess.check_output(
-            ["curl", "-s", "-o", "/dev/null", "-w", fmt, "--connect-timeout", "10", url],
+            ["curl", "-s", "-o", os.devnull, "-w", fmt, "--connect-timeout", "10", url],
             timeout=15, text=True, stderr=subprocess.DEVNULL,
         )
     except subprocess.TimeoutExpired:

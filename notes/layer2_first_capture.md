@@ -180,7 +180,7 @@ tshark -r deepgram_capture.pcap -Y 'websocket'           # WebSocket-Frames
 
 ## Naechste Schritte
 
-- [ ] `transcript_len: 0` Problem fixen (Fixture neu generieren)
+- [x] `transcript_len: 0` Problem gefixt (sample.wav neu aufgenommen, 2026-05-03)
 - [ ] Capture mit **laengerer Audio-Datei** (>10s) — partielle Transkripte sichtbar machen
 - [ ] Analoger Capture fuer **Azure TTS** (HTTPS Streaming, Italy North) — Kontrast US/EU
 - [ ] Analoger Capture fuer **OpenAI LLM** (HTTPS+SSE) — drittes Streaming-Pattern
@@ -190,7 +190,7 @@ tshark -r deepgram_capture.pcap -Y 'websocket'           # WebSocket-Frames
 
 ---
 
-## Fuer das Betreuungstreffen am 2026-04-09
+## Fuer das Betreuungstreffen am 2026-04-09 (HISTORISCH — Treffen war am 09.04.)
 
 **Was zeige ich dem Prof:**
 

@@ -86,15 +86,15 @@ Alle 9 Provider-Module implementiert und per `--dry-run` getestet (2026-05-03).
 
 ---
 
-## Phase 6: AWS EC2 aufsetzen
+## Phase 6: AWS EC2 aufsetzen (ERLEDIGT)
 
-- [ ] EC2 t3.small in eu-central-1 (Frankfurt) erstellen
-- [ ] Security Group: SSH (Port 22) von eigenem IP
-- [ ] Repo klonen von `github.com/asphyxx24/bachelorThesis`
-- [ ] Python venv + Dependencies installieren
-- [ ] `.env` anlegen und alle 7 Keys eintragen
-- [ ] Testlauf: `python measurements/layer3/run.py --dry-run`
-- [ ] Testlauf: `python measurements/layer1/run.py --dry-run`
+- [x] EC2 t3.small in eu-central-1 (Frankfurt) erstellt — `i-045a2d0eeb338b290`
+- [x] Security Group: SSH (Port 22) — `sg-0f8d6248567378773`
+- [x] Repo geklont von `github.com/asphyxx24/bachelorThesis`
+- [x] Python 3.10 venv + Dependencies installiert
+- [x] `.env` per scp kopiert, alle 7 Keys funktionsfaehig
+- [x] Testlauf Layer 3: alle 9 Provider, 0 Errors
+- [x] Testlauf Layer 1: alle 9 Endpoints, DNS+Ping OK
 
 ---
 
@@ -112,8 +112,8 @@ Alle 9 Provider-Module implementiert und per `--dry-run` getestet (2026-05-03).
 15 1 * * * cd ~/thesis && git add data/ && git commit -m "data: sync $(date +%Y-%m-%d_%H%M)" && git push
 ```
 
-- [ ] Cron-Jobs auf EC2 einrichten
-- [ ] Testlauf: Manuell Layer 1 + Layer 3 einmal starten
+- [x] Cron-Jobs auf EC2 eingerichtet (2026-05-03)
+- [x] Testlauf: Manuell alle 9 Provider, 0 Errors
 - [ ] Logs pruefen nach erstem automatischen Lauf
 
 ---
@@ -124,8 +124,8 @@ Alle 9 Provider-Module implementiert und per `--dry-run` getestet (2026-05-03).
 - [x] `sample.wav` aufgenommen und validiert
 - [x] Alle API-Keys in `.env` eingetragen
 - [x] Alle 9 Layer-3-Module implementiert und getestet
-- [ ] EC2 laeuft, SSH-Zugang funktioniert
-- [ ] Cron-Jobs aktiv
+- [x] EC2 laeuft, SSH-Zugang funktioniert (IP: 35.159.112.40)
+- [x] Cron-Jobs aktiv (seit 2026-05-03)
 
 **Kampagne laeuft automatisch** — taeglich Git-Sync pruefen ob Daten ankommen.
 

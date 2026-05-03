@@ -125,12 +125,12 @@
 | Provider | STT | LLM | TTS | Gesamt |
 |----------|-----|-----|-----|--------|
 | Deepgram | $4.48–$7.19 | — | $12.77 | **$17.25–$19.96** |
-| Rev.ai | ~$14 | — | — | **~$14** |
+| Rev.ai | ~$8.40 | — | — | **~$8.40** |
 | Azure | $15.60 | — | $0.006 | **$15.61** |
 | OpenAI | — | $0.13 | $7.06 | **$7.19** |
 | Groq | — | $0.02 | — | **$0.02** |
 | Mistral | — | $0.06 | — | **$0.06** |
-| **Summe** | | | | **~$54–$59** |
+| **Summe** | | | | **~$49–$53** |
 
 ---
 
@@ -139,9 +139,9 @@
 | Aktion | Betrag |
 |--------|--------|
 | OpenAI Prepaid aufladen | **$10** |
-| Rev.ai Prepaid (nach $1 Free) | **~$13** |
+| Rev.ai Prepaid (3000 Min) | **$9.99** |
 | Alles andere | $0 (Startguthaben / Free Tier / Azure for Students) |
-| **Total** | **~$23** |
+| **Total** | **~$20** |
 
 ---
 
@@ -150,7 +150,7 @@
 | Quelle | Verfuegbar | Verbraucht | Rest |
 |--------|-----------|------------|------|
 | Deepgram Startguthaben | $200 | ~$18–20 | ~$180 |
-| Rev.ai Free Tier | $1 | $1 | $0 (danach Prepaid ~$13) |
+| Rev.ai Free + Prepaid | $10.98 | ~$8.40 | ~$2.58 |
 | Azure for Students | $100 | ~$15.61 | ~$84 |
 | OpenAI Prepaid | $10 | ~$7.19 | ~$3 |
 | Groq Free Tier | unbegrenzt* | $0.02 | — |
