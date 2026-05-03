@@ -111,7 +111,9 @@ async def measure_once(api_key: str, pcm_data: bytes) -> dict:
 
             t_final = None
             transcript = ""
-            async with asyncio.timeout(20):
+
+            async def _recv_final():
+                nonlocal t_final, transcript
                 async for raw in ws:
                     if isinstance(raw, bytes):
                         continue
@@ -123,7 +125,9 @@ async def measure_once(api_key: str, pcm_data: bytes) -> dict:
                         if body.get("RecognitionStatus") == "Success":
                             t_final = time.perf_counter()
                             transcript = body.get("DisplayText", "")
-                            break
+                            return
+
+            await asyncio.wait_for(_recv_final(), timeout=20)
 
             if t_final is None or t_first_chunk is None:
                 return {"error": "no_final_result"}

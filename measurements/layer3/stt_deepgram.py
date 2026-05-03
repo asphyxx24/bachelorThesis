@@ -55,7 +55,7 @@ async def measure_once(api_key: str, pcm_data: bytes) -> dict:
             connect_ms = (t_ws_connected - t_ws_start) * 1000
 
             # Audio in Chunks senden
-            t_first_chunk: float | None = None
+            t_first_chunk = None
             chunks = [pcm_data[i:i + CHUNK_SIZE] for i in range(0, len(pcm_data), CHUNK_SIZE)]
             for chunk in chunks:
                 if t_first_chunk is None:
@@ -67,16 +67,20 @@ async def measure_once(api_key: str, pcm_data: bytes) -> dict:
             send_ms = (t_send_done - (t_first_chunk or t_send_done)) * 1000
 
             # Auf is_final=true warten
-            t_final: float | None = None
+            t_final = None
             transcript = ""
-            async with asyncio.timeout(20):
+
+            async def _recv_final():
+                nonlocal t_final, transcript
                 async for raw in ws:
                     msg = json.loads(raw)
                     if msg.get("type") == "Results" and msg.get("is_final"):
                         t_final = time.perf_counter()
                         alts = msg.get("channel", {}).get("alternatives", [{}])
                         transcript = alts[0].get("transcript", "") if alts else ""
-                        break
+                        return
+
+            await asyncio.wait_for(_recv_final(), timeout=20)
 
             await ws.send(json.dumps({"type": "CloseStream"}))
 
