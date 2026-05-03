@@ -67,31 +67,38 @@ async def measure_once(api_key: str, pcm_data: bytes) -> dict:
             send_ms = (t_send_done - (t_first_chunk or t_send_done)) * 1000
 
             # Auf is_final=true warten
-            t_final = None
-            transcript = ""
+            t_first_final = None
+            t_last_final = None
+            segments = []
 
-            async def _recv_final():
-                nonlocal t_final, transcript
+            async def _recv_finals():
+                nonlocal t_first_final, t_last_final
                 async for raw in ws:
                     msg = json.loads(raw)
                     if msg.get("type") == "Results" and msg.get("is_final"):
-                        t_final = time.perf_counter()
+                        t_last_final = time.perf_counter()
+                        if t_first_final is None:
+                            t_first_final = t_last_final
                         alts = msg.get("channel", {}).get("alternatives", [{}])
-                        transcript = alts[0].get("transcript", "") if alts else ""
+                        text = alts[0].get("transcript", "") if alts else ""
+                        if text:
+                            segments.append(text)
+                    elif msg.get("type") == "Metadata":
                         return
 
-            await asyncio.wait_for(_recv_final(), timeout=20)
+            await asyncio.wait_for(_recv_finals(), timeout=20)
 
             await ws.send(json.dumps({"type": "CloseStream"}))
 
-            if t_final is None or t_first_chunk is None:
+            if t_first_final is None or t_first_chunk is None:
                 return {"error": "no_final_result"}
 
+            transcript = " ".join(segments)
             return {
                 "connect_ms": round(connect_ms, 1),
                 "send_ms": round(send_ms, 1),
-                "ttft_ms": round((t_final - t_first_chunk) * 1000, 1),
-                "total_ms": round((t_final - t_total_start) * 1000, 1),
+                "ttft_ms": round((t_first_final - t_first_chunk) * 1000, 1),
+                "total_ms": round((t_last_final - t_total_start) * 1000, 1),
                 "transcript_len": len(transcript),
             }
 
