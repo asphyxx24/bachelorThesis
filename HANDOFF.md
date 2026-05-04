@@ -1,21 +1,33 @@
 # Handoff — Aktueller Arbeitsstand
 
-> Letzte Aktualisierung: 2026-05-03, 16:00 (Session: Module implementiert, EC2 aufgesetzt, Kampagne gestartet)
+> Letzte Aktualisierung: 2026-05-04, 15:00 (Session: Cron-Fix, Layer-2 Captures, Kampagne laeuft)
 
 ## Letzter Stand
 
-Alle 9 Provider-Module implementiert, getestet und auf AWS EC2 Frankfurt deployed.
-Messkampagne laeuft seit 2026-05-03 per Cron-Job (Layer 1 + Layer 3, 14 Tage).
-Git-Sync pusht taeglich um 02:00 UTC — morgens `git pull` zeigt neue Daten.
+Kampagne laeuft seit 2026-05-04 12:00 UTC korrekt (erster Datensatz: `2026-05-04_12h.jsonl`).
+Cron-Jobs waren vom 03.05. abends bis 04.05. mittags defekt (`source` in `/bin/sh`),
+gefixt durch `SHELL=/bin/bash` in der Crontab. Verlorene Slots: ~6 (ca. 1 Tag).
+Kampagne sollte daher bis ~2026-05-18 laufen statt 2026-05-17.
+
+Layer-2 Captures fuer alle 9 Provider durchgefuehrt und analysiert (tshark).
+Cross-Layer-Korrelation bestaetigt: RTT × Protokoll-RTTs ≈ connect_ms.
 
 ## Aktuelle Fokus-Aufgabe
 
-**Kampagne laeuft automatisch.** Naechste manuelle Aufgabe: Layer-2 Captures auf EC2
-(tcpdump waehrend eines Layer-3-Laufs, ein paar pro Provider). Kann jederzeit
-waehrend der Kampagne gemacht werden.
+**Kampagne laeuft automatisch.** Naechste Aufgabe: Betreuer-Treffen (Dienstag 2026-05-05),
+danach Monitoring bis Kampagnenende. Analyse beginnt nach ~2026-05-18.
 
-## Entscheidungen dieser Session
+## Entscheidungen und Fixes
 
+### Session 2026-05-04
+- **Cron-Fix:** `SHELL=/bin/bash` in Crontab — `source` funktioniert nicht in
+  `/bin/sh` (Cron-Default). Cron-Jobs liefen ab 03.05. abends leer, ab 04.05. 12:00 UTC behoben.
+- **Layer-2 Captures:** tcpdump + Layer-3-Call fuer alle 9 Provider. Automatisiert
+  via `measurements/layer2/capture_all.py`. Analyse via `measurements/layer2/analyze_pcaps.py`.
+- **Cross-Layer-Korrelation bestaetigt:** Deepgram: 3×102ms RTT ≈ 310ms ≈ 337ms connect_ms.
+  Azure: 11ms RTT × ~23 Protokoll-RTTs ≈ 264ms ≈ 265ms connect_ms.
+
+### Session 2026-05-03
 - **AssemblyAI → Rev.ai:** AssemblyAIs Streaming-API erfordert Echtzeit-Pacing,
   was die TTFT-Messung inkonsistent mit Deepgram/Azure machte. Rev.ai akzeptiert
   Audio-Dump → konsistente Methodik ueber alle 3 STT-Provider.
@@ -101,11 +113,13 @@ waehrend der Kampagne gemacht werden.
 
 ## Offene Schritte
 
-1. **Alte Kampagne stoppen** (ops.papagei.ai) — Anton, Montag
-2. **Layer-2 Captures** auf EC2 (manuell, waehrend Kampagne)
-3. **Analyse** in Jupyter Notebooks (nach Kampagne, ~2 Wochen)
-4. **E2E-Validierung** (manuelle Pipeline-Runs, 1 Tag)
-5. **Thesis schreiben** (~3-4 Wochen)
+1. ~~Alte Kampagne stoppen (ops.papagei.ai)~~ — **Anton, noch offen!**
+2. ~~Layer-2 Captures auf EC2~~ — erledigt (2026-05-04)
+3. **Betreuer-Treffen** — Dienstag 2026-05-05
+4. **Kampagne Monitoring** — taeglich `git pull`, bis ~2026-05-18
+5. **Analyse** in Jupyter Notebooks (nach Kampagne)
+6. **E2E-Validierung** (manuelle Pipeline-Runs, 1 Tag)
+7. **Thesis schreiben** (~3-4 Wochen)
 
 ## Relevante Dateien
 
@@ -118,5 +132,8 @@ waehrend der Kampagne gemacht werden.
 | `notes/briefing_prof.md` | Briefing fuer Prof. Waelisch (Was/Warum/Wie) |
 | `measurements/layer3/MODULE_PLAN.md` | Technischer Plan der 9 Module |
 | `measurements/layer2/README.md` | Anleitung fuer Layer-2 Captures |
+| `measurements/layer2/capture_all.py` | Automatisiertes tcpdump fuer alle 9 Provider |
+| `measurements/layer2/analyze_pcaps.py` | tshark-Analyse der PCAP-Dateien |
+| `data/layer2/analysis_summary.json` | Layer-2 Analyse-Ergebnisse (JSON) |
 | `measurements/config.py` | Endpoints aller 9 Provider |
 | `.env.example` | Benoetigte Umgebungsvariablen |

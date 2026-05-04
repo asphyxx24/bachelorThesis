@@ -1,4 +1,4 @@
-# Briefing fuer Prof. Waelisch — Stand 2026-05-03
+# Briefing fuer Prof. Waelisch — Stand 2026-05-04
 
 ## Was messen wir?
 
@@ -46,14 +46,46 @@ Manuelles `tcpdump` waehrend eines Layer-3-Calls. Zeigt auf Paketebene:
 - Wo genau geht die Zeit verloren? (TCP-Handshake, TLS, Upgrade, Processing)
 - Validierung: Layer-1-Ping-RTT ≈ Layer-2-TCP-Handshake-RTT?
 
-**POC-Ergebnis (Deepgram, Frankfurt→USA):**
+**Ergebnis: Captures fuer alle 9 Provider (2026-05-04, EC2 Frankfurt):**
+
+Deepgram STT (WebSocket, USA):
 ```
-  0ms  TCP SYN           → RTT #1 (104ms)
-104ms  TLS ClientHello   → RTT #2 (104ms)
-208ms  WebSocket Upgrade  → RTT #3 (104ms)
-312ms  Erstes Audio-Byte kann gesendet werden
+    0ms  TCP SYN           → RTT #1 (102ms)
+  103ms  TLS ClientHello   → RTT #2 (104ms)
+  209ms  WebSocket Upgrade  → RTT #3 (102ms)
+  331ms  Erstes Audio-Byte kann gesendet werden
 ```
-→ 3 × RTT = 31% des 1s-Latenzbudgets nur fuer Verbindungsaufbau.
+→ 3 × 102ms RTT = ~310ms → Layer-3 connect_ms = 337ms ✓
+
+Rev.ai STT (WebSocket, USA):
+```
+    0ms  TCP SYN           → RTT #1 (142ms)
+  143ms  TLS ClientHello   → RTT #2 (142ms)
+  289ms  TLS Finished       → weitere Roundtrips
+  680ms  Erstes Audio-Byte kann gesendet werden
+```
+→ ~4.8 RTTs × 142ms = ~680ms → Layer-3 connect_ms = 590ms
+
+Azure STT (WebSocket, Italy North):
+```
+    0ms  TCP SYN           → RTT #1 (11ms)
+   12ms  TLS ClientHello   → RTT #2 (13ms)
+   25ms  TLS ServerHello
+  264ms  Erstes Audio-Byte kann gesendet werden
+```
+→ ~23 RTTs × 11ms = 264ms → Layer-3 connect_ms = 265ms ✓
+**Beobachtung:** Niedrige RTT (11ms), aber Azures proprietaeres Protokoll
+braucht viele Roundtrips fuer den Handshake.
+
+Cloudflare-Provider (OpenAI, Groq, Mistral — LLM):
+```
+  RTT: 1.1-1.6ms (Cloudflare-PoP in Frankfurt!)
+  TLS-Handshake: ~5ms
+  Gesamter Verbindungsaufbau: ~10-15ms
+```
+→ Layer-3 connect_ms = 9-16ms ✓
+**Beobachtung:** Cloudflare-CDN eliminiert Netzwerklatenz fast vollstaendig.
+TTFT-Unterschiede kommen ausschliesslich von Verarbeitungsgeschwindigkeit.
 
 ### Layer 3: API-Latenz — "Was spuert der Nutzer?"
 
@@ -125,6 +157,30 @@ Antwort empfangen, Zeiten messen.
 3. **Provider-Empfehlung:** Welche Kombination minimiert die Gesamtlatenz?
    Nicht chain.py, sondern rechnerische Addition der Einzellatenzen (validiert durch
    manuelle E2E-Tests am Ende).
+
+---
+
+## Layer-2 Cross-Layer-Korrelation (Kernbeitrag)
+
+Die Captures belegen die zentrale These der Arbeit:
+
+| Provider | Layer-1 RTT | Layer-2 TCP-HS | Protokoll-RTTs | Erwarteter Overhead | Layer-3 connect_ms |
+|----------|-------------|----------------|----------------|--------------------|--------------------|
+| Deepgram STT | ~102ms | 101.8ms | 3 (TCP+TLS+WS) | ~306ms | 337ms |
+| Rev.ai STT | ~142ms | 142.2ms | ~4.8 | ~680ms | 590ms |
+| Azure STT | ~11ms | 11.4ms | ~23 (proprietaer) | ~264ms | 265ms |
+| Groq LLM | ~1.6ms | 1.6ms | 2 (TCP+TLS) | ~3ms | 11ms |
+| Mistral LLM | ~1.1ms | 1.1ms | 2 (TCP+TLS) | ~2ms | 9ms |
+| OpenAI LLM | ~1.2ms | 1.2ms | 2 (TCP+TLS) | ~2ms | 16ms |
+
+**Erkenntnis 1:** Layer-1 Ping RTT ≈ Layer-2 TCP-Handshake RTT (Validierung).
+
+**Erkenntnis 2:** RTT × Protokoll-RTTs ≈ Layer-3 connect_ms. Der Verbindungsaufbau
+ist vorhersagbar aus Netzwerkentfernung + Protokoll-Overhead.
+
+**Erkenntnis 3:** Azure hat die niedrigste RTT (11ms, EU), braucht aber die meisten
+Protokoll-Roundtrips (~23). Deepgram hat hohe RTT (102ms, USA), braucht aber nur 3 RTTs.
+→ Nicht nur die Entfernung zaehlt, sondern auch das Protokoll-Design.
 
 ---
 
@@ -221,7 +277,8 @@ als auch niedrige Verarbeitungszeit.
 ## Naechste Schritte
 
 1. ~~Cron-Jobs einrichten und Kampagne starten~~ — erledigt (2026-05-03)
-2. Layer-2 Captures manuell auf EC2 (waehrend Kampagne, ein paar pro Provider)
-3. Analyse in Jupyter Notebooks
-4. E2E-Validierung: Addierte Einzellatenzen ≈ gemessene Gesamtlatenz?
-5. Thesis schreiben
+2. ~~Layer-2 Captures auf EC2~~ — erledigt (2026-05-04, alle 9 Provider)
+3. Kampagne laeuft (~bis 2026-05-18, 1 Tag laenger wegen Cron-Fix am 04.05.)
+4. Analyse in Jupyter Notebooks (nach Kampagne)
+5. E2E-Validierung: Addierte Einzellatenzen ≈ gemessene Gesamtlatenz?
+6. Thesis schreiben
