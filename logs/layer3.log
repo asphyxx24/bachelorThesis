@@ -1,0 +1,52 @@
+=== Schicht 3: Latenz-Messungen === n=1, tag=cron_fix_test, api=all
+Output: /home/ubuntu/thesis/data/layer3/2026-05-04_cron_fix_test.jsonl
+
+[STT — deepgram]
+  STT [deepgram]: n=1, sample=sample.wav (154 KB)
+    [1/1] ttft=654 ms, connect=476 ms
+    stt_ttft: p50=654.1 ms, p95=654.1 ms, errors=0
+
+[STT — revai]
+  STT [revai]: n=1, sample=sample.wav (154 KB)
+    [1/1] ttft=4486 ms, connect=585 ms
+    stt_ttft: p50=4485.6 ms, p95=4485.6 ms, errors=0
+
+[STT — azure_stt]
+  STT [azure_stt]: n=1, sample=sample.wav (154 KB)
+    [1/1] ttft=1718 ms, connect=52 ms
+    stt_ttft: p50=1717.9 ms, p95=1717.9 ms, errors=0
+
+[LLM — openai]
+  LLM [openai]: n=1
+    [1/1] ttft=1311 ms, ttl=1395 ms
+    llm_ttft: p50=1311.2 ms, p95=1311.2 ms, errors=0
+    llm_ttl: p50=1394.8 ms, p95=1394.8 ms, errors=0
+
+[LLM — groq]
+  LLM [groq]: n=1
+    [1/1] ttft=49 ms, ttl=56 ms
+    llm_ttft: p50=49.2 ms, p95=49.2 ms, errors=0
+    llm_ttl: p50=55.7 ms, p95=55.7 ms, errors=0
+
+[LLM — mistral]
+  LLM [mistral]: n=1
+    [1/1] ttft=226 ms, ttl=251 ms
+    llm_ttft: p50=226.3 ms, p95=226.3 ms, errors=0
+    llm_ttl: p50=251.4 ms, p95=251.4 ms, errors=0
+
+[TTS — deepgram_tts]
+  TTS [deepgram_tts]: n=1
+    [1/1] ttfa=580 ms, connect=306 ms
+    tts_ttfa: p50=580.5 ms, p95=580.5 ms, errors=0
+
+[TTS — openai_tts]
+  TTS [openai_tts]: n=1
+    [1/1] ttfa=928 ms, connect=8 ms
+    tts_ttfa: p50=928.3 ms, p95=928.3 ms, errors=0
+
+[TTS — azure_tts]
+  TTS [azure_tts]: n=1
+    [1/1] ttfa=112 ms, connect=41 ms
+    tts_ttfa: p50=112.1 ms, p95=112.1 ms, errors=0
+
+Fertig.
