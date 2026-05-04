@@ -16,7 +16,7 @@ sequenziellen Voice-Pipeline?
 ## Drei-Schichten-Architektur
 
 - **Layer 1 (Infrastruktur):** DNS, Ping, TLS, Traceroute — Code in `measurements/layer1/`
-- **Layer 2 (Paketaufzeichnung):** tcpdump/PCAP — Code in `measurements/layer2/`, 1 POC-Capture vorhanden
+- **Layer 2 (Paketaufzeichnung):** tcpdump/PCAP — Code in `measurements/layer2/`, Captures fuer alle 9 Provider
 - **Layer 3 (API-Latenz):** Cold-Start connect_ms / ttft_ms / total_ms — Code in `measurements/layer3/`
 
 ## Provider-Matrix (FINAL, Stand 2026-05-03)
@@ -65,6 +65,34 @@ Hauptkritik: **"Methodik unklar"** — Was genau wird gemessen? Warum Cold-Start
 Antwort: Cold-Start misst den Overhead jeder neuen Gesprächssession. Der Beitrag ist die
 Cross-Layer-Korrelation (Layer 1 Ping × 3 ≈ Layer 3 connect_ms) und die Zerlegung des
 1s-Latenzbudgets in Netzwerk vs. Verarbeitung.
+
+## Metrik-Definitionen
+
+### connect_ms — Zerlegung in Submetriken
+
+`connect_ms` misst die Zeit von TCP SYN bis "Applikation kann Daten senden".
+Seit der Layer-2-Analyse (2026-05-04) wird connect_ms in drei Submetriken zerlegt:
+
+| Submetrik | Was sie misst | Quelle | Beispiel Deepgram | Beispiel Azure |
+|-----------|--------------|--------|-------------------|----------------|
+| `tcp_hs_ms` | TCP SYN → SYN-ACK (1 RTT) | Layer 2 | 102ms | 11ms |
+| `tls_hs_ms` | TLS ClientHello → Finished | Layer 2 | 106ms (1 RTT) | 16ms (1 RTT) |
+| `proto_setup_ms` | WebSocket/HTTP + Session-Init | Layer 2 | 123ms (1 RTT) | 237ms (~224ms Server) |
+| **connect_ms** | **Summe** | **Layer 3** | **337ms (~3 RTTs)** | **265ms (3 RTTs + Server)** |
+
+Referenz: "Layered Performance Analysis of TLS 1.3 Handshakes" (arXiv 2603.11006)
+verwendet die gleiche Zerlegungslogik (TCP → TLS → TLS-to-Application Delay).
+
+### Weitere Layer-3-Metriken
+
+| Metrik | Kategorie | Bedeutung |
+|--------|-----------|-----------|
+| `ttft_ms` | STT, LLM | Time to First Token — connect + Verarbeitung |
+| `ttfa_ms` | TTS | Time to First Audio — connect + Verarbeitung |
+| `total_ms` | alle | Gesamtdauer bis Antwort vollstaendig |
+| `ttl_ms` | LLM | Time to Last Token (nur LLM) |
+
+Siehe `notes/literature.md` fuer die vollstaendige Literatursammlung.
 
 ## JSONL-Datenformat
 

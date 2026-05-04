@@ -73,9 +73,12 @@ Azure STT (WebSocket, Italy North):
    25ms  TLS ServerHello
   264ms  Erstes Audio-Byte kann gesendet werden
 ```
-→ ~23 RTTs × 11ms = 264ms → Layer-3 connect_ms = 265ms ✓
-**Beobachtung:** Niedrige RTT (11ms), aber Azures proprietaeres Protokoll
-braucht viele Roundtrips fuer den Handshake.
+→ 3 RTTs (TCP+TLS+WS) ≈ 33ms, aber dann ~224ms Server-Session-Setup
+→ Layer-3 connect_ms = 265ms ✓
+**Beobachtung:** Die "23 RTTs" (264ms ÷ 11ms) sind eine Vereinfachung.
+Praeziser: 3 RTTs Protokoll-Overhead + ~224ms serverseitiges Session-Setup
+(speech.config Verarbeitung, Sprachmodell-Laden). connect_ms enthaelt hier
+also NICHT nur Netzwerk, sondern auch Server-Verarbeitung.
 
 Cloudflare-Provider (OpenAI, Groq, Mistral — LLM):
 ```
@@ -104,10 +107,24 @@ Antwort empfangen, Zeiten messen.
 
 | Metrik | Bedeutung |
 |--------|-----------|
-| `connect_ms` | TCP+TLS(+WebSocket) Verbindungsaufbau — reiner Netzwerk-Overhead |
-| `ttft_ms` (STT/LLM) | Time to First Token — wie schnell kommt die erste Antwort? |
-| `ttfa_ms` (TTS) | Time to First Audio — wie schnell kommt das erste Audio-Byte? |
+| `connect_ms` | Zeit von TCP SYN bis "Applikation kann Daten senden" |
+| `ttft_ms` (STT/LLM) | Time to First Token — connect + Verarbeitung |
+| `ttfa_ms` (TTS) | Time to First Audio — connect + Verarbeitung |
 | `total_ms` | Gesamtdauer bis Antwort vollstaendig |
+
+**Zerlegung von connect_ms (aus Layer-2-Captures):**
+
+| Submetrik | Was | Deepgram (USA) | Azure (Italien) |
+|-----------|-----|----------------|-----------------|
+| `tcp_hs_ms` | TCP SYN → SYN-ACK (1 RTT, Physik) | 102ms | 11ms |
+| `tls_hs_ms` | TLS ClientHello → Finished (Crypto) | 106ms | 16ms |
+| `proto_setup_ms` | WebSocket + Session-Init | 123ms | 237ms (davon ~224ms Server) |
+| **connect_ms** | **Summe** | **337ms** | **265ms** |
+
+**Erkenntnis:** connect_ms ist KEINE reine Netzwerkmetrik — bei Azure steckt
+serverseitiges Session-Setup drin. Die Zerlegung in Submetriken macht das sichtbar.
+Referenz: "Layered Performance Analysis of TLS 1.3 Handshakes" (arXiv 2603.11006)
+verwendet die gleiche Logik.
 
 **Automatisiert:** 100 Messungen pro Provider, alle 3 Stunden, 14 Tage lang.
 
