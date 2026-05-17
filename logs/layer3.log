@@ -15273,3 +15273,1300 @@ Output: /home/ubuntu/thesis/data/layer3/2026-05-16_00h.jsonl
     tts_ttfa: p50=65.9 ms, p95=113.1 ms, errors=0
 
 Fertig.
+=== Schicht 3: Latenz-Messungen === n=100, tag=03h, api=all
+Output: /home/ubuntu/thesis/data/layer3/2026-05-16_03h.jsonl
+
+[STT — deepgram]
+  STT [deepgram]: n=100, sample=sample.wav (154 KB)
+    [1/100] ttft=564 ms, connect=465 ms
+    [11/100] ttft=563 ms, connect=438 ms
+    [21/100] ttft=581 ms, connect=458 ms
+    [31/100] ttft=453 ms, connect=340 ms
+    [41/100] ttft=644 ms, connect=483 ms
+    [51/100] ttft=472 ms, connect=339 ms
+    [61/100] ttft=606 ms, connect=435 ms
+    [71/100] ttft=626 ms, connect=461 ms
+    [81/100] ttft=603 ms, connect=476 ms
+    [91/100] ttft=607 ms, connect=436 ms
+    stt_ttft: p50=579.8 ms, p95=647.2 ms, errors=0
+
+[STT — revai]
+  STT [revai]: n=100, sample=sample.wav (154 KB)
+    [1/100] ttft=1326 ms, connect=604 ms
+    [11/100] ttft=1309 ms, connect=583 ms
+    [21/100] ttft=1428 ms, connect=589 ms
+    [31/100] ttft=1441 ms, connect=588 ms
+    [41/100] ttft=1352 ms, connect=572 ms
+    [51/100] ttft=1205 ms, connect=612 ms
+    [61/100] ttft=1420 ms, connect=604 ms
+    [71/100] ttft=1319 ms, connect=582 ms
+    [81/100] ttft=1349 ms, connect=580 ms
+    [91/100] ttft=1397 ms, connect=580 ms
+    stt_ttft: p50=1373.4 ms, p95=1472.4 ms, errors=0
+
+[STT — azure_stt]
+  STT [azure_stt]: n=100, sample=sample.wav (154 KB)
+    [1/100] ttft=1727 ms, connect=778 ms
+    [11/100] ttft=1720 ms, connect=46 ms
+    [21/100] ttft=1718 ms, connect=48 ms
+    [31/100] ttft=1716 ms, connect=45 ms
+    [41/100] ttft=1719 ms, connect=46 ms
+    [51/100] ttft=1719 ms, connect=47 ms
+    [61/100] ttft=1719 ms, connect=46 ms
+    [71/100] ttft=1719 ms, connect=46 ms
+    [81/100] ttft=1721 ms, connect=64 ms
+    [91/100] ttft=1718 ms, connect=47 ms
+    stt_ttft: p50=1718.5 ms, p95=1724.1 ms, errors=0
+
+[LLM — openai]
+  LLM [openai]: n=100
+    [1/100] ttft=2089 ms, ttl=2243 ms
+    [11/100] ttft=370 ms, ttl=449 ms
+    [21/100] ttft=493 ms, ttl=585 ms
+    [31/100] ttft=435 ms, ttl=536 ms
+    [41/100] ttft=400 ms, ttl=484 ms
+    [51/100] ttft=564 ms, ttl=613 ms
+    [61/100] ttft=428 ms, ttl=568 ms
+    [71/100] ttft=476 ms, ttl=631 ms
+    [81/100] ttft=499 ms, ttl=576 ms
+    [91/100] ttft=425 ms, ttl=533 ms
+    llm_ttft: p50=431.6 ms, p95=1218.2 ms, errors=0
+    llm_ttl: p50=534.2 ms, p95=1418.3 ms, errors=0
+
+[LLM — groq]
+  LLM [groq]: n=100
+    [1/100] ttft=45 ms, ttl=52 ms
+    [11/100] ttft=121 ms, ttl=130 ms
+    [21/100] ttft=72 ms, ttl=78 ms
+    [31/100] Fehler: HTTP 429: {"error":{"message":"Rate limit reached for model `llama-3.1-8b-instant` in organization `org_01kqn0cd0vefjb3jyt1q4mcmjs` service tier `on_demand` on requests per minute (RPM): Limit 30, Used 30, Requ
+    [33/100] Fehler: HTTP 429: {"error":{"message":"Rate limit reached for model `llama-3.1-8b-instant` in organization `org_01kqn0cd0vefjb3jyt1q4mcmjs` service tier `on_demand` on requests per minute (RPM): Limit 30, Used 30, Requ
+    [35/100] Fehler: HTTP 429: {"error":{"message":"Rate limit reached for model `llama-3.1-8b-instant` in organization `org_01kqn0cd0vefjb3jyt1q4mcmjs` service tier `on_demand` on requests per minute (RPM): Limit 30, Used 30, Requ
+    [37/100] Fehler: HTTP 429: {"error":{"message":"Rate limit reached for model `llama-3.1-8b-instant` in organization `org_01kqn0cd0vefjb3jyt1q4mcmjs` service tier `on_demand` on requests per minute (RPM): Limit 30, Used 30, Requ
+    [39/100] Fehler: HTTP 429: {"error":{"message":"Rate limit reached for model `llama-3.1-8b-instant` in organization `org_01kqn0cd0vefjb3jyt1q4mcmjs` service tier `on_demand` on requests per minute (RPM): Limit 30, Used 30, Requ
+    [41/100] Fehler: HTTP 429: {"error":{"message":"Rate limit reached for model `llama-3.1-8b-instant` in organization `org_01kqn0cd0vefjb3jyt1q4mcmjs` service tier `on_demand` on requests per minute (RPM): Limit 30, Used 30, Requ
+    [43/100] Fehler: HTTP 429: {"error":{"message":"Rate limit reached for model `llama-3.1-8b-instant` in organization `org_01kqn0cd0vefjb3jyt1q4mcmjs` service tier `on_demand` on requests per minute (RPM): Limit 30, Used 30, Requ
+    [45/100] Fehler: HTTP 429: {"error":{"message":"Rate limit reached for model `llama-3.1-8b-instant` in organization `org_01kqn0cd0vefjb3jyt1q4mcmjs` service tier `on_demand` on requests per minute (RPM): Limit 30, Used 30, Requ
+    [47/100] Fehler: HTTP 429: {"error":{"message":"Rate limit reached for model `llama-3.1-8b-instant` in organization `org_01kqn0cd0vefjb3jyt1q4mcmjs` service tier `on_demand` on requests per minute (RPM): Limit 30, Used 30, Requ
+    [49/100] Fehler: HTTP 429: {"error":{"message":"Rate limit reached for model `llama-3.1-8b-instant` in organization `org_01kqn0cd0vefjb3jyt1q4mcmjs` service tier `on_demand` on requests per minute (RPM): Limit 30, Used 30, Requ
+    [51/100] Fehler: HTTP 429: {"error":{"message":"Rate limit reached for model `llama-3.1-8b-instant` in organization `org_01kqn0cd0vefjb3jyt1q4mcmjs` service tier `on_demand` on requests per minute (RPM): Limit 30, Used 30, Requ
+    [53/100] Fehler: HTTP 429: {"error":{"message":"Rate limit reached for model `llama-3.1-8b-instant` in organization `org_01kqn0cd0vefjb3jyt1q4mcmjs` service tier `on_demand` on requests per minute (RPM): Limit 30, Used 30, Requ
+    [55/100] Fehler: HTTP 429: {"error":{"message":"Rate limit reached for model `llama-3.1-8b-instant` in organization `org_01kqn0cd0vefjb3jyt1q4mcmjs` service tier `on_demand` on requests per minute (RPM): Limit 30, Used 30, Requ
+    [57/100] Fehler: HTTP 429: {"error":{"message":"Rate limit reached for model `llama-3.1-8b-instant` in organization `org_01kqn0cd0vefjb3jyt1q4mcmjs` service tier `on_demand` on requests per minute (RPM): Limit 30, Used 30, Requ
+    [59/100] Fehler: HTTP 429: {"error":{"message":"Rate limit reached for model `llama-3.1-8b-instant` in organization `org_01kqn0cd0vefjb3jyt1q4mcmjs` service tier `on_demand` on requests per minute (RPM): Limit 30, Used 30, Requ
+    [61/100] Fehler: HTTP 429: {"error":{"message":"Rate limit reached for model `llama-3.1-8b-instant` in organization `org_01kqn0cd0vefjb3jyt1q4mcmjs` service tier `on_demand` on requests per minute (RPM): Limit 30, Used 30, Requ
+    [63/100] Fehler: HTTP 429: {"error":{"message":"Rate limit reached for model `llama-3.1-8b-instant` in organization `org_01kqn0cd0vefjb3jyt1q4mcmjs` service tier `on_demand` on requests per minute (RPM): Limit 30, Used 30, Requ
+    [65/100] Fehler: HTTP 429: {"error":{"message":"Rate limit reached for model `llama-3.1-8b-instant` in organization `org_01kqn0cd0vefjb3jyt1q4mcmjs` service tier `on_demand` on requests per minute (RPM): Limit 30, Used 30, Requ
+    [67/100] Fehler: HTTP 429: {"error":{"message":"Rate limit reached for model `llama-3.1-8b-instant` in organization `org_01kqn0cd0vefjb3jyt1q4mcmjs` service tier `on_demand` on requests per minute (RPM): Limit 30, Used 30, Requ
+    [69/100] Fehler: HTTP 429: {"error":{"message":"Rate limit reached for model `llama-3.1-8b-instant` in organization `org_01kqn0cd0vefjb3jyt1q4mcmjs` service tier `on_demand` on requests per minute (RPM): Limit 30, Used 30, Requ
+    [71/100] Fehler: HTTP 429: {"error":{"message":"Rate limit reached for model `llama-3.1-8b-instant` in organization `org_01kqn0cd0vefjb3jyt1q4mcmjs` service tier `on_demand` on requests per minute (RPM): Limit 30, Used 30, Requ
+    [73/100] Fehler: HTTP 429: {"error":{"message":"Rate limit reached for model `llama-3.1-8b-instant` in organization `org_01kqn0cd0vefjb3jyt1q4mcmjs` service tier `on_demand` on requests per minute (RPM): Limit 30, Used 30, Requ
+    [75/100] Fehler: HTTP 429: {"error":{"message":"Rate limit reached for model `llama-3.1-8b-instant` in organization `org_01kqn0cd0vefjb3jyt1q4mcmjs` service tier `on_demand` on requests per minute (RPM): Limit 30, Used 30, Requ
+    [77/100] Fehler: HTTP 429: {"error":{"message":"Rate limit reached for model `llama-3.1-8b-instant` in organization `org_01kqn0cd0vefjb3jyt1q4mcmjs` service tier `on_demand` on requests per minute (RPM): Limit 30, Used 30, Requ
+    [79/100] Fehler: HTTP 429: {"error":{"message":"Rate limit reached for model `llama-3.1-8b-instant` in organization `org_01kqn0cd0vefjb3jyt1q4mcmjs` service tier `on_demand` on requests per minute (RPM): Limit 30, Used 30, Requ
+    [81/100] Fehler: HTTP 429: {"error":{"message":"Rate limit reached for model `llama-3.1-8b-instant` in organization `org_01kqn0cd0vefjb3jyt1q4mcmjs` service tier `on_demand` on requests per minute (RPM): Limit 30, Used 30, Requ
+    [83/100] Fehler: HTTP 429: {"error":{"message":"Rate limit reached for model `llama-3.1-8b-instant` in organization `org_01kqn0cd0vefjb3jyt1q4mcmjs` service tier `on_demand` on requests per minute (RPM): Limit 30, Used 30, Requ
+    [85/100] Fehler: HTTP 429: {"error":{"message":"Rate limit reached for model `llama-3.1-8b-instant` in organization `org_01kqn0cd0vefjb3jyt1q4mcmjs` service tier `on_demand` on requests per minute (RPM): Limit 30, Used 30, Requ
+    [87/100] Fehler: HTTP 429: {"error":{"message":"Rate limit reached for model `llama-3.1-8b-instant` in organization `org_01kqn0cd0vefjb3jyt1q4mcmjs` service tier `on_demand` on requests per minute (RPM): Limit 30, Used 30, Requ
+    [89/100] Fehler: HTTP 429: {"error":{"message":"Rate limit reached for model `llama-3.1-8b-instant` in organization `org_01kqn0cd0vefjb3jyt1q4mcmjs` service tier `on_demand` on requests per minute (RPM): Limit 30, Used 30, Requ
+    [91/100] ttft=45 ms, ttl=53 ms
+    [92/100] Fehler: HTTP 429: {"error":{"message":"Rate limit reached for model `llama-3.1-8b-instant` in organization `org_01kqn0cd0vefjb3jyt1q4mcmjs` service tier `on_demand` on requests per minute (RPM): Limit 30, Used 30, Requ
+    [94/100] Fehler: HTTP 429: {"error":{"message":"Rate limit reached for model `llama-3.1-8b-instant` in organization `org_01kqn0cd0vefjb3jyt1q4mcmjs` service tier `on_demand` on requests per minute (RPM): Limit 30, Used 30, Requ
+    [96/100] Fehler: HTTP 429: {"error":{"message":"Rate limit reached for model `llama-3.1-8b-instant` in organization `org_01kqn0cd0vefjb3jyt1q4mcmjs` service tier `on_demand` on requests per minute (RPM): Limit 30, Used 30, Requ
+    [98/100] Fehler: HTTP 429: {"error":{"message":"Rate limit reached for model `llama-3.1-8b-instant` in organization `org_01kqn0cd0vefjb3jyt1q4mcmjs` service tier `on_demand` on requests per minute (RPM): Limit 30, Used 30, Requ
+    [100/100] Fehler: HTTP 429: {"error":{"message":"Rate limit reached for model `llama-3.1-8b-instant` in organization `org_01kqn0cd0vefjb3jyt1q4mcmjs` service tier `on_demand` on requests per minute (RPM): Limit 30, Used 30, Requ
+    llm_ttft: p50=65.7 ms, p95=113.2 ms, errors=35
+    llm_ttl: p50=69.0 ms, p95=124.9 ms, errors=35
+
+[LLM — mistral]
+  LLM [mistral]: n=100
+    [1/100] ttft=172 ms, ttl=202 ms
+    [11/100] ttft=190 ms, ttl=216 ms
+    [21/100] ttft=191 ms, ttl=222 ms
+    [31/100] ttft=238 ms, ttl=272 ms
+    [41/100] ttft=178 ms, ttl=218 ms
+    [51/100] ttft=201 ms, ttl=231 ms
+    [61/100] ttft=197 ms, ttl=231 ms
+    [71/100] ttft=203 ms, ttl=231 ms
+    [81/100] ttft=203 ms, ttl=234 ms
+    [91/100] ttft=194 ms, ttl=224 ms
+    llm_ttft: p50=196.9 ms, p95=343.5 ms, errors=0
+    llm_ttl: p50=227.2 ms, p95=378.4 ms, errors=0
+
+[TTS — deepgram_tts]
+  TTS [deepgram_tts]: n=100
+    [1/100] ttfa=598 ms, connect=284 ms
+    [11/100] ttfa=560 ms, connect=284 ms
+    [21/100] ttfa=551 ms, connect=285 ms
+    [31/100] ttfa=416 ms, connect=210 ms
+    [41/100] ttfa=543 ms, connect=284 ms
+    [51/100] ttfa=560 ms, connect=292 ms
+    [61/100] ttfa=568 ms, connect=293 ms
+    [71/100] ttfa=547 ms, connect=282 ms
+    [81/100] ttfa=557 ms, connect=292 ms
+    [91/100] ttfa=562 ms, connect=308 ms
+    tts_ttfa: p50=550.2 ms, p95=594.6 ms, errors=0
+
+[TTS — openai_tts]
+  TTS [openai_tts]: n=100
+    [1/100] ttfa=1417 ms, connect=12 ms
+    [11/100] ttfa=667 ms, connect=8 ms
+    [21/100] ttfa=669 ms, connect=10 ms
+    [31/100] ttfa=580 ms, connect=9 ms
+    [41/100] ttfa=841 ms, connect=10 ms
+    [51/100] ttfa=1020 ms, connect=8 ms
+    [61/100] ttfa=1403 ms, connect=11 ms
+    [71/100] ttfa=770 ms, connect=12 ms
+    [81/100] ttfa=664 ms, connect=10 ms
+    [91/100] ttfa=1214 ms, connect=10 ms
+    tts_ttfa: p50=1003.0 ms, p95=1931.7 ms, errors=0
+
+[TTS — azure_tts]
+  TTS [azure_tts]: n=100
+    [1/100] ttfa=842 ms, connect=40 ms
+    [11/100] ttfa=65 ms, connect=40 ms
+    [21/100] ttfa=65 ms, connect=32 ms
+    [31/100] ttfa=63 ms, connect=34 ms
+    [41/100] ttfa=96 ms, connect=33 ms
+    [51/100] ttfa=59 ms, connect=32 ms
+    [61/100] ttfa=91 ms, connect=147 ms
+    [71/100] ttfa=67 ms, connect=39 ms
+    [81/100] ttfa=70 ms, connect=32 ms
+    [91/100] ttfa=67 ms, connect=39 ms
+    tts_ttfa: p50=65.8 ms, p95=96.4 ms, errors=0
+
+Fertig.
+=== Schicht 3: Latenz-Messungen === n=100, tag=06h, api=all
+Output: /home/ubuntu/thesis/data/layer3/2026-05-16_06h.jsonl
+
+[STT — deepgram]
+  STT [deepgram]: n=100, sample=sample.wav (154 KB)
+    [1/100] ttft=568 ms, connect=463 ms
+    [11/100] ttft=576 ms, connect=456 ms
+    [21/100] ttft=475 ms, connect=335 ms
+    [31/100] ttft=704 ms, connect=478 ms
+    [41/100] ttft=586 ms, connect=461 ms
+    [51/100] ttft=464 ms, connect=337 ms
+    [61/100] ttft=563 ms, connect=442 ms
+    [71/100] ttft=477 ms, connect=341 ms
+    [81/100] ttft=569 ms, connect=436 ms
+    [91/100] ttft=564 ms, connect=435 ms
+    stt_ttft: p50=567.8 ms, p95=657.6 ms, errors=0
+
+[STT — revai]
+  STT [revai]: n=100, sample=sample.wav (154 KB)
+    [1/100] ttft=1397 ms, connect=611 ms
+    [11/100] ttft=1348 ms, connect=580 ms
+    [21/100] ttft=1374 ms, connect=600 ms
+    [31/100] ttft=1317 ms, connect=606 ms
+    [41/100] ttft=1308 ms, connect=576 ms
+    [51/100] ttft=1392 ms, connect=615 ms
+    [61/100] ttft=1402 ms, connect=594 ms
+    [71/100] ttft=1345 ms, connect=572 ms
+    [81/100] ttft=1345 ms, connect=574 ms
+    [91/100] ttft=1374 ms, connect=583 ms
+    stt_ttft: p50=1352.8 ms, p95=1465.1 ms, errors=0
+
+[STT — azure_stt]
+  STT [azure_stt]: n=100, sample=sample.wav (154 KB)
+    [1/100] ttft=1727 ms, connect=272 ms
+    [11/100] ttft=1718 ms, connect=80 ms
+    [21/100] ttft=1718 ms, connect=50 ms
+    [31/100] ttft=1719 ms, connect=48 ms
+    [41/100] ttft=1719 ms, connect=49 ms
+    [51/100] ttft=1718 ms, connect=48 ms
+    [61/100] ttft=1716 ms, connect=46 ms
+    [71/100] ttft=1716 ms, connect=45 ms
+    [81/100] ttft=1723 ms, connect=47 ms
+    [91/100] ttft=1721 ms, connect=46 ms
+    stt_ttft: p50=1718.2 ms, p95=1723.8 ms, errors=0
+
+[LLM — openai]
+  LLM [openai]: n=100
+    [1/100] ttft=1761 ms, ttl=1903 ms
+    [11/100] ttft=403 ms, ttl=476 ms
+    [21/100] ttft=495 ms, ttl=604 ms
+    [31/100] ttft=479 ms, ttl=573 ms
+    [40/100] Fehler: 
+    [41/100] ttft=604 ms, ttl=713 ms
+    [51/100] ttft=364 ms, ttl=447 ms
+    [61/100] ttft=353 ms, ttl=408 ms
+    [71/100] ttft=455 ms, ttl=581 ms
+    [81/100] ttft=389 ms, ttl=472 ms
+    [91/100] ttft=368 ms, ttl=433 ms
+    llm_ttft: p50=434.6 ms, p95=1238.7 ms, errors=1
+    llm_ttl: p50=522.1 ms, p95=1347.9 ms, errors=1
+
+[LLM — groq]
+  LLM [groq]: n=100
+    [1/100] ttft=51 ms, ttl=58 ms
+    [11/100] ttft=66 ms, ttl=73 ms
+    [21/100] ttft=73 ms, ttl=83 ms
+    [31/100] Fehler: HTTP 429: {"error":{"message":"Rate limit reached for model `llama-3.1-8b-instant` in organization `org_01kqn0cd0vefjb3jyt1q4mcmjs` service tier `on_demand` on requests per minute (RPM): Limit 30, Used 30, Requ
+    [33/100] Fehler: HTTP 429: {"error":{"message":"Rate limit reached for model `llama-3.1-8b-instant` in organization `org_01kqn0cd0vefjb3jyt1q4mcmjs` service tier `on_demand` on requests per minute (RPM): Limit 30, Used 30, Requ
+    [35/100] Fehler: HTTP 429: {"error":{"message":"Rate limit reached for model `llama-3.1-8b-instant` in organization `org_01kqn0cd0vefjb3jyt1q4mcmjs` service tier `on_demand` on requests per minute (RPM): Limit 30, Used 30, Requ
+    [37/100] Fehler: HTTP 429: {"error":{"message":"Rate limit reached for model `llama-3.1-8b-instant` in organization `org_01kqn0cd0vefjb3jyt1q4mcmjs` service tier `on_demand` on requests per minute (RPM): Limit 30, Used 30, Requ
+    [39/100] Fehler: HTTP 429: {"error":{"message":"Rate limit reached for model `llama-3.1-8b-instant` in organization `org_01kqn0cd0vefjb3jyt1q4mcmjs` service tier `on_demand` on requests per minute (RPM): Limit 30, Used 30, Requ
+    [41/100] Fehler: HTTP 429: {"error":{"message":"Rate limit reached for model `llama-3.1-8b-instant` in organization `org_01kqn0cd0vefjb3jyt1q4mcmjs` service tier `on_demand` on requests per minute (RPM): Limit 30, Used 30, Requ
+    [43/100] Fehler: HTTP 429: {"error":{"message":"Rate limit reached for model `llama-3.1-8b-instant` in organization `org_01kqn0cd0vefjb3jyt1q4mcmjs` service tier `on_demand` on requests per minute (RPM): Limit 30, Used 30, Requ
+    [45/100] Fehler: HTTP 429: {"error":{"message":"Rate limit reached for model `llama-3.1-8b-instant` in organization `org_01kqn0cd0vefjb3jyt1q4mcmjs` service tier `on_demand` on requests per minute (RPM): Limit 30, Used 30, Requ
+    [47/100] Fehler: HTTP 429: {"error":{"message":"Rate limit reached for model `llama-3.1-8b-instant` in organization `org_01kqn0cd0vefjb3jyt1q4mcmjs` service tier `on_demand` on requests per minute (RPM): Limit 30, Used 30, Requ
+    [49/100] Fehler: HTTP 429: {"error":{"message":"Rate limit reached for model `llama-3.1-8b-instant` in organization `org_01kqn0cd0vefjb3jyt1q4mcmjs` service tier `on_demand` on requests per minute (RPM): Limit 30, Used 30, Requ
+    [51/100] Fehler: HTTP 429: {"error":{"message":"Rate limit reached for model `llama-3.1-8b-instant` in organization `org_01kqn0cd0vefjb3jyt1q4mcmjs` service tier `on_demand` on requests per minute (RPM): Limit 30, Used 30, Requ
+    [53/100] Fehler: HTTP 429: {"error":{"message":"Rate limit reached for model `llama-3.1-8b-instant` in organization `org_01kqn0cd0vefjb3jyt1q4mcmjs` service tier `on_demand` on requests per minute (RPM): Limit 30, Used 30, Requ
+    [55/100] Fehler: HTTP 429: {"error":{"message":"Rate limit reached for model `llama-3.1-8b-instant` in organization `org_01kqn0cd0vefjb3jyt1q4mcmjs` service tier `on_demand` on requests per minute (RPM): Limit 30, Used 30, Requ
+    [57/100] Fehler: HTTP 429: {"error":{"message":"Rate limit reached for model `llama-3.1-8b-instant` in organization `org_01kqn0cd0vefjb3jyt1q4mcmjs` service tier `on_demand` on requests per minute (RPM): Limit 30, Used 30, Requ
+    [59/100] Fehler: HTTP 429: {"error":{"message":"Rate limit reached for model `llama-3.1-8b-instant` in organization `org_01kqn0cd0vefjb3jyt1q4mcmjs` service tier `on_demand` on requests per minute (RPM): Limit 30, Used 30, Requ
+    [61/100] Fehler: HTTP 429: {"error":{"message":"Rate limit reached for model `llama-3.1-8b-instant` in organization `org_01kqn0cd0vefjb3jyt1q4mcmjs` service tier `on_demand` on requests per minute (RPM): Limit 30, Used 30, Requ
+    [63/100] Fehler: HTTP 429: {"error":{"message":"Rate limit reached for model `llama-3.1-8b-instant` in organization `org_01kqn0cd0vefjb3jyt1q4mcmjs` service tier `on_demand` on requests per minute (RPM): Limit 30, Used 30, Requ
+    [65/100] Fehler: HTTP 429: {"error":{"message":"Rate limit reached for model `llama-3.1-8b-instant` in organization `org_01kqn0cd0vefjb3jyt1q4mcmjs` service tier `on_demand` on requests per minute (RPM): Limit 30, Used 30, Requ
+    [67/100] Fehler: HTTP 429: {"error":{"message":"Rate limit reached for model `llama-3.1-8b-instant` in organization `org_01kqn0cd0vefjb3jyt1q4mcmjs` service tier `on_demand` on requests per minute (RPM): Limit 30, Used 30, Requ
+    [69/100] Fehler: HTTP 429: {"error":{"message":"Rate limit reached for model `llama-3.1-8b-instant` in organization `org_01kqn0cd0vefjb3jyt1q4mcmjs` service tier `on_demand` on requests per minute (RPM): Limit 30, Used 30, Requ
+    [71/100] Fehler: HTTP 429: {"error":{"message":"Rate limit reached for model `llama-3.1-8b-instant` in organization `org_01kqn0cd0vefjb3jyt1q4mcmjs` service tier `on_demand` on requests per minute (RPM): Limit 30, Used 30, Requ
+    [73/100] Fehler: HTTP 429: {"error":{"message":"Rate limit reached for model `llama-3.1-8b-instant` in organization `org_01kqn0cd0vefjb3jyt1q4mcmjs` service tier `on_demand` on requests per minute (RPM): Limit 30, Used 30, Requ
+    [75/100] Fehler: HTTP 429: {"error":{"message":"Rate limit reached for model `llama-3.1-8b-instant` in organization `org_01kqn0cd0vefjb3jyt1q4mcmjs` service tier `on_demand` on requests per minute (RPM): Limit 30, Used 30, Requ
+    [77/100] Fehler: HTTP 429: {"error":{"message":"Rate limit reached for model `llama-3.1-8b-instant` in organization `org_01kqn0cd0vefjb3jyt1q4mcmjs` service tier `on_demand` on requests per minute (RPM): Limit 30, Used 30, Requ
+    [79/100] Fehler: HTTP 429: {"error":{"message":"Rate limit reached for model `llama-3.1-8b-instant` in organization `org_01kqn0cd0vefjb3jyt1q4mcmjs` service tier `on_demand` on requests per minute (RPM): Limit 30, Used 30, Requ
+    [81/100] Fehler: HTTP 429: {"error":{"message":"Rate limit reached for model `llama-3.1-8b-instant` in organization `org_01kqn0cd0vefjb3jyt1q4mcmjs` service tier `on_demand` on requests per minute (RPM): Limit 30, Used 30, Requ
+    [83/100] Fehler: HTTP 429: {"error":{"message":"Rate limit reached for model `llama-3.1-8b-instant` in organization `org_01kqn0cd0vefjb3jyt1q4mcmjs` service tier `on_demand` on requests per minute (RPM): Limit 30, Used 30, Requ
+    [85/100] Fehler: HTTP 429: {"error":{"message":"Rate limit reached for model `llama-3.1-8b-instant` in organization `org_01kqn0cd0vefjb3jyt1q4mcmjs` service tier `on_demand` on requests per minute (RPM): Limit 30, Used 30, Requ
+    [87/100] Fehler: HTTP 429: {"error":{"message":"Rate limit reached for model `llama-3.1-8b-instant` in organization `org_01kqn0cd0vefjb3jyt1q4mcmjs` service tier `on_demand` on requests per minute (RPM): Limit 30, Used 30, Requ
+    [89/100] Fehler: HTTP 429: {"error":{"message":"Rate limit reached for model `llama-3.1-8b-instant` in organization `org_01kqn0cd0vefjb3jyt1q4mcmjs` service tier `on_demand` on requests per minute (RPM): Limit 30, Used 30, Requ
+    [91/100] Fehler: HTTP 429: {"error":{"message":"Rate limit reached for model `llama-3.1-8b-instant` in organization `org_01kqn0cd0vefjb3jyt1q4mcmjs` service tier `on_demand` on requests per minute (RPM): Limit 30, Used 30, Requ
+    [93/100] Fehler: HTTP 429: {"error":{"message":"Rate limit reached for model `llama-3.1-8b-instant` in organization `org_01kqn0cd0vefjb3jyt1q4mcmjs` service tier `on_demand` on requests per minute (RPM): Limit 30, Used 30, Requ
+    [95/100] Fehler: HTTP 429: {"error":{"message":"Rate limit reached for model `llama-3.1-8b-instant` in organization `org_01kqn0cd0vefjb3jyt1q4mcmjs` service tier `on_demand` on requests per minute (RPM): Limit 30, Used 30, Requ
+    [97/100] Fehler: HTTP 429: {"error":{"message":"Rate limit reached for model `llama-3.1-8b-instant` in organization `org_01kqn0cd0vefjb3jyt1q4mcmjs` service tier `on_demand` on requests per minute (RPM): Limit 30, Used 30, Requ
+    [99/100] Fehler: HTTP 429: {"error":{"message":"Rate limit reached for model `llama-3.1-8b-instant` in organization `org_01kqn0cd0vefjb3jyt1q4mcmjs` service tier `on_demand` on requests per minute (RPM): Limit 30, Used 30, Requ
+    llm_ttft: p50=67.0 ms, p95=93.5 ms, errors=35
+    llm_ttl: p50=73.2 ms, p95=101.0 ms, errors=35
+
+[LLM — mistral]
+  LLM [mistral]: n=100
+    [1/100] ttft=190 ms, ttl=218 ms
+    [11/100] ttft=189 ms, ttl=223 ms
+    [21/100] ttft=328 ms, ttl=432 ms
+    [31/100] ttft=193 ms, ttl=226 ms
+    [41/100] ttft=947 ms, ttl=983 ms
+    [51/100] ttft=208 ms, ttl=237 ms
+    [61/100] ttft=201 ms, ttl=234 ms
+    [71/100] ttft=300 ms, ttl=519 ms
+    [81/100] ttft=202 ms, ttl=251 ms
+    [91/100] ttft=202 ms, ttl=240 ms
+    llm_ttft: p50=205.6 ms, p95=426.6 ms, errors=0
+    llm_ttl: p50=239.0 ms, p95=518.7 ms, errors=0
+
+[TTS — deepgram_tts]
+  TTS [deepgram_tts]: n=100
+    [1/100] ttfa=554 ms, connect=287 ms
+    [11/100] ttfa=418 ms, connect=289 ms
+    [21/100] ttfa=418 ms, connect=209 ms
+    [31/100] ttfa=418 ms, connect=212 ms
+    [41/100] ttfa=605 ms, connect=296 ms
+    [51/100] ttfa=543 ms, connect=283 ms
+    [61/100] ttfa=421 ms, connect=210 ms
+    [71/100] ttfa=418 ms, connect=216 ms
+    [81/100] ttfa=554 ms, connect=281 ms
+    [91/100] ttfa=543 ms, connect=285 ms
+    tts_ttfa: p50=551.1 ms, p95=582.4 ms, errors=0
+
+[TTS — openai_tts]
+  TTS [openai_tts]: n=100
+    [1/100] ttfa=634 ms, connect=11 ms
+    [11/100] ttfa=1453 ms, connect=9 ms
+    [21/100] ttfa=1235 ms, connect=13 ms
+    [31/100] ttfa=747 ms, connect=10 ms
+    [41/100] ttfa=963 ms, connect=9 ms
+    [51/100] ttfa=650 ms, connect=8 ms
+    [61/100] ttfa=717 ms, connect=8 ms
+    [71/100] ttfa=766 ms, connect=10 ms
+    [81/100] ttfa=742 ms, connect=10 ms
+    [91/100] ttfa=604 ms, connect=9 ms
+    tts_ttfa: p50=944.5 ms, p95=1521.9 ms, errors=0
+
+[TTS — azure_tts]
+  TTS [azure_tts]: n=100
+    [1/100] ttfa=328 ms, connect=50 ms
+    [11/100] ttfa=61 ms, connect=33 ms
+    [21/100] ttfa=66 ms, connect=34 ms
+    [31/100] ttfa=65 ms, connect=36 ms
+    [41/100] ttfa=68 ms, connect=35 ms
+    [51/100] ttfa=98 ms, connect=40 ms
+    [61/100] ttfa=67 ms, connect=43 ms
+    [71/100] ttfa=63 ms, connect=36 ms
+    [81/100] ttfa=61 ms, connect=33 ms
+    [91/100] ttfa=62 ms, connect=33 ms
+    tts_ttfa: p50=66.0 ms, p95=97.6 ms, errors=0
+
+Fertig.
+=== Schicht 3: Latenz-Messungen === n=100, tag=09h, api=all
+Output: /home/ubuntu/thesis/data/layer3/2026-05-16_09h.jsonl
+
+[STT — deepgram]
+  STT [deepgram]: n=100, sample=sample.wav (154 KB)
+    [1/100] ttft=635 ms, connect=482 ms
+    [11/100] ttft=624 ms, connect=461 ms
+    [21/100] ttft=482 ms, connect=344 ms
+    [31/100] ttft=566 ms, connect=437 ms
+    [41/100] ttft=590 ms, connect=465 ms
+    [51/100] ttft=589 ms, connect=435 ms
+    [61/100] ttft=733 ms, connect=462 ms
+    [71/100] ttft=562 ms, connect=435 ms
+    [81/100] ttft=457 ms, connect=337 ms
+    [91/100] ttft=563 ms, connect=427 ms
+    stt_ttft: p50=574.3 ms, p95=642.8 ms, errors=0
+
+[STT — revai]
+  STT [revai]: n=100, sample=sample.wav (154 KB)
+    [1/100] ttft=1466 ms, connect=594 ms
+    [11/100] ttft=1336 ms, connect=604 ms
+    [21/100] ttft=1505 ms, connect=590 ms
+    [31/100] ttft=1522 ms, connect=592 ms
+    [41/100] ttft=1360 ms, connect=588 ms
+    [51/100] ttft=1570 ms, connect=595 ms
+    [61/100] ttft=1461 ms, connect=592 ms
+    [71/100] ttft=1444 ms, connect=580 ms
+    [81/100] ttft=1382 ms, connect=575 ms
+    [91/100] ttft=1403 ms, connect=587 ms
+    stt_ttft: p50=1406.2 ms, p95=1570.5 ms, errors=0
+
+[STT — azure_stt]
+  STT [azure_stt]: n=100, sample=sample.wav (154 KB)
+    [1/100] ttft=1718 ms, connect=261 ms
+    [11/100] ttft=1726 ms, connect=46 ms
+    [21/100] ttft=1719 ms, connect=51 ms
+    [31/100] ttft=1719 ms, connect=46 ms
+    [41/100] ttft=1720 ms, connect=50 ms
+    [51/100] ttft=1719 ms, connect=48 ms
+    [61/100] ttft=1716 ms, connect=50 ms
+    [71/100] ttft=1716 ms, connect=45 ms
+    [81/100] ttft=1718 ms, connect=49 ms
+    [91/100] ttft=1716 ms, connect=46 ms
+    stt_ttft: p50=1718.0 ms, p95=1724.4 ms, errors=0
+
+[LLM — openai]
+  LLM [openai]: n=100
+    [1/100] ttft=2426 ms, ttl=2646 ms
+    [11/100] ttft=409 ms, ttl=502 ms
+    [21/100] ttft=472 ms, ttl=569 ms
+    [31/100] ttft=748 ms, ttl=971 ms
+    [41/100] ttft=704 ms, ttl=790 ms
+    [51/100] ttft=512 ms, ttl=590 ms
+    [61/100] ttft=469 ms, ttl=577 ms
+    [71/100] ttft=596 ms, ttl=690 ms
+    [81/100] ttft=512 ms, ttl=664 ms
+    [91/100] ttft=432 ms, ttl=515 ms
+    llm_ttft: p50=491.5 ms, p95=1422.7 ms, errors=0
+    llm_ttl: p50=608.2 ms, p95=1546.0 ms, errors=0
+
+[LLM — groq]
+  LLM [groq]: n=100
+    [1/100] ttft=91 ms, ttl=100 ms
+    [11/100] ttft=45 ms, ttl=55 ms
+    [21/100] ttft=68 ms, ttl=76 ms
+    [31/100] Fehler: HTTP 429: {"error":{"message":"Rate limit reached for model `llama-3.1-8b-instant` in organization `org_01kqn0cd0vefjb3jyt1q4mcmjs` service tier `on_demand` on requests per minute (RPM): Limit 30, Used 30, Requ
+    [33/100] Fehler: HTTP 429: {"error":{"message":"Rate limit reached for model `llama-3.1-8b-instant` in organization `org_01kqn0cd0vefjb3jyt1q4mcmjs` service tier `on_demand` on requests per minute (RPM): Limit 30, Used 30, Requ
+    [35/100] Fehler: HTTP 429: {"error":{"message":"Rate limit reached for model `llama-3.1-8b-instant` in organization `org_01kqn0cd0vefjb3jyt1q4mcmjs` service tier `on_demand` on requests per minute (RPM): Limit 30, Used 30, Requ
+    [37/100] Fehler: HTTP 429: {"error":{"message":"Rate limit reached for model `llama-3.1-8b-instant` in organization `org_01kqn0cd0vefjb3jyt1q4mcmjs` service tier `on_demand` on requests per minute (RPM): Limit 30, Used 30, Requ
+    [39/100] Fehler: HTTP 429: {"error":{"message":"Rate limit reached for model `llama-3.1-8b-instant` in organization `org_01kqn0cd0vefjb3jyt1q4mcmjs` service tier `on_demand` on requests per minute (RPM): Limit 30, Used 30, Requ
+    [41/100] Fehler: HTTP 429: {"error":{"message":"Rate limit reached for model `llama-3.1-8b-instant` in organization `org_01kqn0cd0vefjb3jyt1q4mcmjs` service tier `on_demand` on requests per minute (RPM): Limit 30, Used 30, Requ
+    [43/100] Fehler: HTTP 429: {"error":{"message":"Rate limit reached for model `llama-3.1-8b-instant` in organization `org_01kqn0cd0vefjb3jyt1q4mcmjs` service tier `on_demand` on requests per minute (RPM): Limit 30, Used 30, Requ
+    [45/100] Fehler: HTTP 429: {"error":{"message":"Rate limit reached for model `llama-3.1-8b-instant` in organization `org_01kqn0cd0vefjb3jyt1q4mcmjs` service tier `on_demand` on requests per minute (RPM): Limit 30, Used 30, Requ
+    [47/100] Fehler: HTTP 429: {"error":{"message":"Rate limit reached for model `llama-3.1-8b-instant` in organization `org_01kqn0cd0vefjb3jyt1q4mcmjs` service tier `on_demand` on requests per minute (RPM): Limit 30, Used 30, Requ
+    [49/100] Fehler: HTTP 429: {"error":{"message":"Rate limit reached for model `llama-3.1-8b-instant` in organization `org_01kqn0cd0vefjb3jyt1q4mcmjs` service tier `on_demand` on requests per minute (RPM): Limit 30, Used 30, Requ
+    [51/100] Fehler: HTTP 429: {"error":{"message":"Rate limit reached for model `llama-3.1-8b-instant` in organization `org_01kqn0cd0vefjb3jyt1q4mcmjs` service tier `on_demand` on requests per minute (RPM): Limit 30, Used 30, Requ
+    [53/100] Fehler: HTTP 429: {"error":{"message":"Rate limit reached for model `llama-3.1-8b-instant` in organization `org_01kqn0cd0vefjb3jyt1q4mcmjs` service tier `on_demand` on requests per minute (RPM): Limit 30, Used 30, Requ
+    [55/100] Fehler: HTTP 429: {"error":{"message":"Rate limit reached for model `llama-3.1-8b-instant` in organization `org_01kqn0cd0vefjb3jyt1q4mcmjs` service tier `on_demand` on requests per minute (RPM): Limit 30, Used 30, Requ
+    [57/100] Fehler: HTTP 429: {"error":{"message":"Rate limit reached for model `llama-3.1-8b-instant` in organization `org_01kqn0cd0vefjb3jyt1q4mcmjs` service tier `on_demand` on requests per minute (RPM): Limit 30, Used 30, Requ
+    [59/100] Fehler: HTTP 429: {"error":{"message":"Rate limit reached for model `llama-3.1-8b-instant` in organization `org_01kqn0cd0vefjb3jyt1q4mcmjs` service tier `on_demand` on requests per minute (RPM): Limit 30, Used 30, Requ
+    [61/100] Fehler: HTTP 429: {"error":{"message":"Rate limit reached for model `llama-3.1-8b-instant` in organization `org_01kqn0cd0vefjb3jyt1q4mcmjs` service tier `on_demand` on requests per minute (RPM): Limit 30, Used 30, Requ
+    [63/100] Fehler: HTTP 429: {"error":{"message":"Rate limit reached for model `llama-3.1-8b-instant` in organization `org_01kqn0cd0vefjb3jyt1q4mcmjs` service tier `on_demand` on requests per minute (RPM): Limit 30, Used 30, Requ
+    [65/100] Fehler: HTTP 429: {"error":{"message":"Rate limit reached for model `llama-3.1-8b-instant` in organization `org_01kqn0cd0vefjb3jyt1q4mcmjs` service tier `on_demand` on requests per minute (RPM): Limit 30, Used 30, Requ
+    [67/100] Fehler: HTTP 429: {"error":{"message":"Rate limit reached for model `llama-3.1-8b-instant` in organization `org_01kqn0cd0vefjb3jyt1q4mcmjs` service tier `on_demand` on requests per minute (RPM): Limit 30, Used 30, Requ
+    [69/100] Fehler: HTTP 429: {"error":{"message":"Rate limit reached for model `llama-3.1-8b-instant` in organization `org_01kqn0cd0vefjb3jyt1q4mcmjs` service tier `on_demand` on requests per minute (RPM): Limit 30, Used 30, Requ
+    [71/100] Fehler: HTTP 429: {"error":{"message":"Rate limit reached for model `llama-3.1-8b-instant` in organization `org_01kqn0cd0vefjb3jyt1q4mcmjs` service tier `on_demand` on requests per minute (RPM): Limit 30, Used 30, Requ
+    [73/100] Fehler: HTTP 429: {"error":{"message":"Rate limit reached for model `llama-3.1-8b-instant` in organization `org_01kqn0cd0vefjb3jyt1q4mcmjs` service tier `on_demand` on requests per minute (RPM): Limit 30, Used 30, Requ
+    [75/100] Fehler: HTTP 429: {"error":{"message":"Rate limit reached for model `llama-3.1-8b-instant` in organization `org_01kqn0cd0vefjb3jyt1q4mcmjs` service tier `on_demand` on requests per minute (RPM): Limit 30, Used 30, Requ
+    [77/100] Fehler: HTTP 429: {"error":{"message":"Rate limit reached for model `llama-3.1-8b-instant` in organization `org_01kqn0cd0vefjb3jyt1q4mcmjs` service tier `on_demand` on requests per minute (RPM): Limit 30, Used 30, Requ
+    [79/100] Fehler: HTTP 429: {"error":{"message":"Rate limit reached for model `llama-3.1-8b-instant` in organization `org_01kqn0cd0vefjb3jyt1q4mcmjs` service tier `on_demand` on requests per minute (RPM): Limit 30, Used 30, Requ
+    [81/100] Fehler: HTTP 429: {"error":{"message":"Rate limit reached for model `llama-3.1-8b-instant` in organization `org_01kqn0cd0vefjb3jyt1q4mcmjs` service tier `on_demand` on requests per minute (RPM): Limit 30, Used 30, Requ
+    [83/100] Fehler: HTTP 429: {"error":{"message":"Rate limit reached for model `llama-3.1-8b-instant` in organization `org_01kqn0cd0vefjb3jyt1q4mcmjs` service tier `on_demand` on requests per minute (RPM): Limit 30, Used 30, Requ
+    [85/100] Fehler: HTTP 429: {"error":{"message":"Rate limit reached for model `llama-3.1-8b-instant` in organization `org_01kqn0cd0vefjb3jyt1q4mcmjs` service tier `on_demand` on requests per minute (RPM): Limit 30, Used 30, Requ
+    [87/100] Fehler: HTTP 429: {"error":{"message":"Rate limit reached for model `llama-3.1-8b-instant` in organization `org_01kqn0cd0vefjb3jyt1q4mcmjs` service tier `on_demand` on requests per minute (RPM): Limit 30, Used 30, Requ
+    [89/100] Fehler: HTTP 429: {"error":{"message":"Rate limit reached for model `llama-3.1-8b-instant` in organization `org_01kqn0cd0vefjb3jyt1q4mcmjs` service tier `on_demand` on requests per minute (RPM): Limit 30, Used 30, Requ
+    [91/100] Fehler: HTTP 429: {"error":{"message":"Rate limit reached for model `llama-3.1-8b-instant` in organization `org_01kqn0cd0vefjb3jyt1q4mcmjs` service tier `on_demand` on requests per minute (RPM): Limit 30, Used 30, Requ
+    [93/100] Fehler: HTTP 429: {"error":{"message":"Rate limit reached for model `llama-3.1-8b-instant` in organization `org_01kqn0cd0vefjb3jyt1q4mcmjs` service tier `on_demand` on requests per minute (RPM): Limit 30, Used 30, Requ
+    [95/100] Fehler: HTTP 429: {"error":{"message":"Rate limit reached for model `llama-3.1-8b-instant` in organization `org_01kqn0cd0vefjb3jyt1q4mcmjs` service tier `on_demand` on requests per minute (RPM): Limit 30, Used 30, Requ
+    [97/100] Fehler: HTTP 429: {"error":{"message":"Rate limit reached for model `llama-3.1-8b-instant` in organization `org_01kqn0cd0vefjb3jyt1q4mcmjs` service tier `on_demand` on requests per minute (RPM): Limit 30, Used 30, Requ
+    [99/100] Fehler: HTTP 429: {"error":{"message":"Rate limit reached for model `llama-3.1-8b-instant` in organization `org_01kqn0cd0vefjb3jyt1q4mcmjs` service tier `on_demand` on requests per minute (RPM): Limit 30, Used 30, Requ
+    llm_ttft: p50=71.8 ms, p95=97.6 ms, errors=35
+    llm_ttl: p50=80.2 ms, p95=109.5 ms, errors=35
+
+[LLM — mistral]
+  LLM [mistral]: n=100
+    [1/100] ttft=200 ms, ttl=235 ms
+    [11/100] ttft=206 ms, ttl=236 ms
+    [21/100] ttft=274 ms, ttl=318 ms
+    [31/100] ttft=305 ms, ttl=336 ms
+    [41/100] ttft=197 ms, ttl=228 ms
+    [51/100] ttft=464 ms, ttl=475 ms
+    [61/100] ttft=220 ms, ttl=247 ms
+    [71/100] ttft=860 ms, ttl=907 ms
+    [81/100] ttft=266 ms, ttl=301 ms
+    [91/100] ttft=237 ms, ttl=267 ms
+    llm_ttft: p50=205.6 ms, p95=466.6 ms, errors=0
+    llm_ttl: p50=238.8 ms, p95=500.6 ms, errors=0
+
+[TTS — deepgram_tts]
+  TTS [deepgram_tts]: n=100
+    [1/100] ttfa=546 ms, connect=285 ms
+    [11/100] ttfa=566 ms, connect=286 ms
+    [21/100] ttfa=577 ms, connect=291 ms
+    [31/100] ttfa=551 ms, connect=283 ms
+    [41/100] ttfa=548 ms, connect=281 ms
+    [51/100] ttfa=543 ms, connect=284 ms
+    [61/100] ttfa=565 ms, connect=293 ms
+    [71/100] ttfa=418 ms, connect=285 ms
+    [81/100] ttfa=582 ms, connect=298 ms
+    [91/100] ttfa=553 ms, connect=284 ms
+    tts_ttfa: p50=549.6 ms, p95=581.6 ms, errors=0
+
+[TTS — openai_tts]
+  TTS [openai_tts]: n=100
+    [1/100] ttfa=1181 ms, connect=9 ms
+    [11/100] ttfa=595 ms, connect=9 ms
+    [21/100] ttfa=1336 ms, connect=12 ms
+    [31/100] ttfa=628 ms, connect=8 ms
+    [41/100] ttfa=1760 ms, connect=8 ms
+    [51/100] ttfa=1246 ms, connect=11 ms
+    [61/100] ttfa=1520 ms, connect=8 ms
+    [71/100] ttfa=1053 ms, connect=10 ms
+    [81/100] ttfa=1085 ms, connect=10 ms
+    [91/100] ttfa=568 ms, connect=10 ms
+    tts_ttfa: p50=958.6 ms, p95=1799.8 ms, errors=0
+
+[TTS — azure_tts]
+  TTS [azure_tts]: n=100
+    [1/100] ttfa=1168 ms, connect=41 ms
+    [11/100] ttfa=63 ms, connect=36 ms
+    [21/100] ttfa=71 ms, connect=32 ms
+    [31/100] ttfa=62 ms, connect=33 ms
+    [41/100] ttfa=64 ms, connect=35 ms
+    [51/100] ttfa=66 ms, connect=39 ms
+    [61/100] ttfa=64 ms, connect=38 ms
+    [71/100] ttfa=71 ms, connect=34 ms
+    [81/100] ttfa=65 ms, connect=33 ms
+    [91/100] ttfa=65 ms, connect=34 ms
+    tts_ttfa: p50=65.6 ms, p95=114.5 ms, errors=0
+
+Fertig.
+=== Schicht 3: Latenz-Messungen === n=100, tag=12h, api=all
+Output: /home/ubuntu/thesis/data/layer3/2026-05-16_12h.jsonl
+
+[STT — deepgram]
+  STT [deepgram]: n=100, sample=sample.wav (154 KB)
+    [1/100] ttft=580 ms, connect=481 ms
+    [11/100] ttft=564 ms, connect=450 ms
+    [21/100] ttft=629 ms, connect=462 ms
+    [31/100] ttft=564 ms, connect=434 ms
+    [41/100] ttft=565 ms, connect=436 ms
+    [51/100] ttft=625 ms, connect=457 ms
+    [61/100] ttft=611 ms, connect=439 ms
+    [71/100] ttft=565 ms, connect=435 ms
+    [81/100] ttft=563 ms, connect=436 ms
+    [91/100] ttft=631 ms, connect=462 ms
+    stt_ttft: p50=579.9 ms, p95=647.0 ms, errors=0
+
+[STT — revai]
+  STT [revai]: n=100, sample=sample.wav (154 KB)
+    [1/100] ttft=1378 ms, connect=573 ms
+    [11/100] ttft=1391 ms, connect=588 ms
+    [21/100] ttft=1334 ms, connect=590 ms
+    [31/100] ttft=1474 ms, connect=579 ms
+    [41/100] ttft=1336 ms, connect=601 ms
+    [51/100] ttft=1426 ms, connect=581 ms
+    [61/100] ttft=1452 ms, connect=586 ms
+    [71/100] ttft=1392 ms, connect=623 ms
+    [81/100] ttft=1318 ms, connect=575 ms
+    [91/100] ttft=1346 ms, connect=594 ms
+    stt_ttft: p50=1362.6 ms, p95=1497.2 ms, errors=0
+
+[STT — azure_stt]
+  STT [azure_stt]: n=100, sample=sample.wav (154 KB)
+    [1/100] ttft=1719 ms, connect=304 ms
+    [11/100] ttft=1721 ms, connect=48 ms
+    [21/100] ttft=1724 ms, connect=54 ms
+    [31/100] ttft=1718 ms, connect=45 ms
+    [41/100] ttft=1717 ms, connect=55 ms
+    [51/100] ttft=1721 ms, connect=45 ms
+    [61/100] ttft=1728 ms, connect=55 ms
+    [71/100] ttft=1720 ms, connect=87 ms
+    [81/100] ttft=1719 ms, connect=89 ms
+    [91/100] ttft=1719 ms, connect=46 ms
+    stt_ttft: p50=1719.0 ms, p95=1727.5 ms, errors=0
+
+[LLM — openai]
+  LLM [openai]: n=100
+    [1/100] ttft=2242 ms, ttl=2440 ms
+    [11/100] ttft=369 ms, ttl=476 ms
+    [21/100] ttft=490 ms, ttl=594 ms
+    [31/100] ttft=811 ms, ttl=956 ms
+    [41/100] ttft=471 ms, ttl=550 ms
+    [51/100] ttft=612 ms, ttl=697 ms
+    [61/100] ttft=1237 ms, ttl=1476 ms
+    [71/100] ttft=479 ms, ttl=572 ms
+    [81/100] ttft=434 ms, ttl=600 ms
+    [91/100] ttft=864 ms, ttl=1055 ms
+    llm_ttft: p50=515.7 ms, p95=1988.6 ms, errors=0
+    llm_ttl: p50=661.8 ms, p95=2100.0 ms, errors=0
+
+[LLM — groq]
+  LLM [groq]: n=100
+    [1/100] ttft=50 ms, ttl=67 ms
+    [11/100] ttft=44 ms, ttl=51 ms
+    [21/100] ttft=44 ms, ttl=51 ms
+    [31/100] Fehler: HTTP 429: {"error":{"message":"Rate limit reached for model `llama-3.1-8b-instant` in organization `org_01kqn0cd0vefjb3jyt1q4mcmjs` service tier `on_demand` on requests per minute (RPM): Limit 30, Used 30, Requ
+    [33/100] Fehler: HTTP 429: {"error":{"message":"Rate limit reached for model `llama-3.1-8b-instant` in organization `org_01kqn0cd0vefjb3jyt1q4mcmjs` service tier `on_demand` on requests per minute (RPM): Limit 30, Used 30, Requ
+    [35/100] Fehler: HTTP 429: {"error":{"message":"Rate limit reached for model `llama-3.1-8b-instant` in organization `org_01kqn0cd0vefjb3jyt1q4mcmjs` service tier `on_demand` on requests per minute (RPM): Limit 30, Used 30, Requ
+    [37/100] Fehler: HTTP 429: {"error":{"message":"Rate limit reached for model `llama-3.1-8b-instant` in organization `org_01kqn0cd0vefjb3jyt1q4mcmjs` service tier `on_demand` on requests per minute (RPM): Limit 30, Used 30, Requ
+    [39/100] Fehler: HTTP 429: {"error":{"message":"Rate limit reached for model `llama-3.1-8b-instant` in organization `org_01kqn0cd0vefjb3jyt1q4mcmjs` service tier `on_demand` on requests per minute (RPM): Limit 30, Used 30, Requ
+    [41/100] Fehler: HTTP 429: {"error":{"message":"Rate limit reached for model `llama-3.1-8b-instant` in organization `org_01kqn0cd0vefjb3jyt1q4mcmjs` service tier `on_demand` on requests per minute (RPM): Limit 30, Used 30, Requ
+    [43/100] Fehler: HTTP 429: {"error":{"message":"Rate limit reached for model `llama-3.1-8b-instant` in organization `org_01kqn0cd0vefjb3jyt1q4mcmjs` service tier `on_demand` on requests per minute (RPM): Limit 30, Used 30, Requ
+    [45/100] Fehler: HTTP 429: {"error":{"message":"Rate limit reached for model `llama-3.1-8b-instant` in organization `org_01kqn0cd0vefjb3jyt1q4mcmjs` service tier `on_demand` on requests per minute (RPM): Limit 30, Used 30, Requ
+    [47/100] Fehler: HTTP 429: {"error":{"message":"Rate limit reached for model `llama-3.1-8b-instant` in organization `org_01kqn0cd0vefjb3jyt1q4mcmjs` service tier `on_demand` on requests per minute (RPM): Limit 30, Used 30, Requ
+    [49/100] Fehler: HTTP 429: {"error":{"message":"Rate limit reached for model `llama-3.1-8b-instant` in organization `org_01kqn0cd0vefjb3jyt1q4mcmjs` service tier `on_demand` on requests per minute (RPM): Limit 30, Used 30, Requ
+    [51/100] Fehler: HTTP 429: {"error":{"message":"Rate limit reached for model `llama-3.1-8b-instant` in organization `org_01kqn0cd0vefjb3jyt1q4mcmjs` service tier `on_demand` on requests per minute (RPM): Limit 30, Used 30, Requ
+    [53/100] Fehler: HTTP 429: {"error":{"message":"Rate limit reached for model `llama-3.1-8b-instant` in organization `org_01kqn0cd0vefjb3jyt1q4mcmjs` service tier `on_demand` on requests per minute (RPM): Limit 30, Used 30, Requ
+    [55/100] Fehler: HTTP 429: {"error":{"message":"Rate limit reached for model `llama-3.1-8b-instant` in organization `org_01kqn0cd0vefjb3jyt1q4mcmjs` service tier `on_demand` on requests per minute (RPM): Limit 30, Used 30, Requ
+    [57/100] Fehler: HTTP 429: {"error":{"message":"Rate limit reached for model `llama-3.1-8b-instant` in organization `org_01kqn0cd0vefjb3jyt1q4mcmjs` service tier `on_demand` on requests per minute (RPM): Limit 30, Used 30, Requ
+    [59/100] Fehler: HTTP 429: {"error":{"message":"Rate limit reached for model `llama-3.1-8b-instant` in organization `org_01kqn0cd0vefjb3jyt1q4mcmjs` service tier `on_demand` on requests per minute (RPM): Limit 30, Used 30, Requ
+    [61/100] Fehler: HTTP 429: {"error":{"message":"Rate limit reached for model `llama-3.1-8b-instant` in organization `org_01kqn0cd0vefjb3jyt1q4mcmjs` service tier `on_demand` on requests per minute (RPM): Limit 30, Used 30, Requ
+    [63/100] Fehler: HTTP 429: {"error":{"message":"Rate limit reached for model `llama-3.1-8b-instant` in organization `org_01kqn0cd0vefjb3jyt1q4mcmjs` service tier `on_demand` on requests per minute (RPM): Limit 30, Used 30, Requ
+    [65/100] Fehler: HTTP 429: {"error":{"message":"Rate limit reached for model `llama-3.1-8b-instant` in organization `org_01kqn0cd0vefjb3jyt1q4mcmjs` service tier `on_demand` on requests per minute (RPM): Limit 30, Used 30, Requ
+    [67/100] Fehler: HTTP 429: {"error":{"message":"Rate limit reached for model `llama-3.1-8b-instant` in organization `org_01kqn0cd0vefjb3jyt1q4mcmjs` service tier `on_demand` on requests per minute (RPM): Limit 30, Used 30, Requ
+    [69/100] Fehler: HTTP 429: {"error":{"message":"Rate limit reached for model `llama-3.1-8b-instant` in organization `org_01kqn0cd0vefjb3jyt1q4mcmjs` service tier `on_demand` on requests per minute (RPM): Limit 30, Used 30, Requ
+    [71/100] Fehler: HTTP 429: {"error":{"message":"Rate limit reached for model `llama-3.1-8b-instant` in organization `org_01kqn0cd0vefjb3jyt1q4mcmjs` service tier `on_demand` on requests per minute (RPM): Limit 30, Used 30, Requ
+    [73/100] Fehler: HTTP 429: {"error":{"message":"Rate limit reached for model `llama-3.1-8b-instant` in organization `org_01kqn0cd0vefjb3jyt1q4mcmjs` service tier `on_demand` on requests per minute (RPM): Limit 30, Used 30, Requ
+    [75/100] Fehler: HTTP 429: {"error":{"message":"Rate limit reached for model `llama-3.1-8b-instant` in organization `org_01kqn0cd0vefjb3jyt1q4mcmjs` service tier `on_demand` on requests per minute (RPM): Limit 30, Used 30, Requ
+    [77/100] Fehler: HTTP 429: {"error":{"message":"Rate limit reached for model `llama-3.1-8b-instant` in organization `org_01kqn0cd0vefjb3jyt1q4mcmjs` service tier `on_demand` on requests per minute (RPM): Limit 30, Used 30, Requ
+    [79/100] Fehler: HTTP 429: {"error":{"message":"Rate limit reached for model `llama-3.1-8b-instant` in organization `org_01kqn0cd0vefjb3jyt1q4mcmjs` service tier `on_demand` on requests per minute (RPM): Limit 30, Used 30, Requ
+    [81/100] Fehler: HTTP 429: {"error":{"message":"Rate limit reached for model `llama-3.1-8b-instant` in organization `org_01kqn0cd0vefjb3jyt1q4mcmjs` service tier `on_demand` on requests per minute (RPM): Limit 30, Used 30, Requ
+    [83/100] Fehler: HTTP 429: {"error":{"message":"Rate limit reached for model `llama-3.1-8b-instant` in organization `org_01kqn0cd0vefjb3jyt1q4mcmjs` service tier `on_demand` on requests per minute (RPM): Limit 30, Used 30, Requ
+    [85/100] Fehler: HTTP 429: {"error":{"message":"Rate limit reached for model `llama-3.1-8b-instant` in organization `org_01kqn0cd0vefjb3jyt1q4mcmjs` service tier `on_demand` on requests per minute (RPM): Limit 30, Used 30, Requ
+    [87/100] Fehler: HTTP 429: {"error":{"message":"Rate limit reached for model `llama-3.1-8b-instant` in organization `org_01kqn0cd0vefjb3jyt1q4mcmjs` service tier `on_demand` on requests per minute (RPM): Limit 30, Used 30, Requ
+    [89/100] Fehler: HTTP 429: {"error":{"message":"Rate limit reached for model `llama-3.1-8b-instant` in organization `org_01kqn0cd0vefjb3jyt1q4mcmjs` service tier `on_demand` on requests per minute (RPM): Limit 30, Used 30, Requ
+    [91/100] Fehler: HTTP 429: {"error":{"message":"Rate limit reached for model `llama-3.1-8b-instant` in organization `org_01kqn0cd0vefjb3jyt1q4mcmjs` service tier `on_demand` on requests per minute (RPM): Limit 30, Used 30, Requ
+    [93/100] Fehler: HTTP 429: {"error":{"message":"Rate limit reached for model `llama-3.1-8b-instant` in organization `org_01kqn0cd0vefjb3jyt1q4mcmjs` service tier `on_demand` on requests per minute (RPM): Limit 30, Used 30, Requ
+    [95/100] Fehler: HTTP 429: {"error":{"message":"Rate limit reached for model `llama-3.1-8b-instant` in organization `org_01kqn0cd0vefjb3jyt1q4mcmjs` service tier `on_demand` on requests per minute (RPM): Limit 30, Used 30, Requ
+    [97/100] Fehler: HTTP 429: {"error":{"message":"Rate limit reached for model `llama-3.1-8b-instant` in organization `org_01kqn0cd0vefjb3jyt1q4mcmjs` service tier `on_demand` on requests per minute (RPM): Limit 30, Used 30, Requ
+    [99/100] Fehler: HTTP 429: {"error":{"message":"Rate limit reached for model `llama-3.1-8b-instant` in organization `org_01kqn0cd0vefjb3jyt1q4mcmjs` service tier `on_demand` on requests per minute (RPM): Limit 30, Used 30, Requ
+    llm_ttft: p50=54.4 ms, p95=103.2 ms, errors=35
+    llm_ttl: p50=61.6 ms, p95=115.4 ms, errors=35
+
+[LLM — mistral]
+  LLM [mistral]: n=100
+    [1/100] ttft=342 ms, ttl=373 ms
+    [11/100] ttft=196 ms, ttl=224 ms
+    [21/100] ttft=203 ms, ttl=232 ms
+    [31/100] ttft=209 ms, ttl=242 ms
+    [41/100] ttft=237 ms, ttl=276 ms
+    [51/100] ttft=383 ms, ttl=419 ms
+    [61/100] ttft=213 ms, ttl=250 ms
+    [71/100] ttft=197 ms, ttl=232 ms
+    [81/100] ttft=294 ms, ttl=325 ms
+    [91/100] ttft=255 ms, ttl=288 ms
+    llm_ttft: p50=236.8 ms, p95=615.5 ms, errors=0
+    llm_ttl: p50=278.1 ms, p95=650.0 ms, errors=0
+
+[TTS — deepgram_tts]
+  TTS [deepgram_tts]: n=100
+    [1/100] ttfa=557 ms, connect=298 ms
+    [11/100] ttfa=580 ms, connect=214 ms
+    [21/100] ttfa=567 ms, connect=286 ms
+    [31/100] ttfa=591 ms, connect=306 ms
+    [41/100] ttfa=551 ms, connect=282 ms
+    [51/100] ttfa=544 ms, connect=285 ms
+    [61/100] ttfa=550 ms, connect=284 ms
+    [71/100] ttfa=547 ms, connect=282 ms
+    [81/100] ttfa=575 ms, connect=291 ms
+    [91/100] ttfa=448 ms, connect=214 ms
+    tts_ttfa: p50=548.5 ms, p95=582.0 ms, errors=0
+
+[TTS — openai_tts]
+  TTS [openai_tts]: n=100
+    [1/100] ttfa=1684 ms, connect=14 ms
+    [11/100] ttfa=1119 ms, connect=10 ms
+    [21/100] ttfa=1092 ms, connect=9 ms
+    [31/100] ttfa=1204 ms, connect=18 ms
+    [41/100] ttfa=891 ms, connect=11 ms
+    [51/100] ttfa=2612 ms, connect=10 ms
+    [61/100] ttfa=645 ms, connect=11 ms
+    [71/100] ttfa=1282 ms, connect=9 ms
+    [81/100] ttfa=582 ms, connect=10 ms
+    [91/100] ttfa=613 ms, connect=11 ms
+    tts_ttfa: p50=1075.8 ms, p95=2254.9 ms, errors=0
+
+[TTS — azure_tts]
+  TTS [azure_tts]: n=100
+    [1/100] ttfa=909 ms, connect=41 ms
+    [11/100] ttfa=72 ms, connect=40 ms
+    [21/100] ttfa=66 ms, connect=35 ms
+    [31/100] ttfa=78 ms, connect=34 ms
+    [41/100] ttfa=66 ms, connect=35 ms
+    [51/100] ttfa=60 ms, connect=34 ms
+    [61/100] ttfa=69 ms, connect=34 ms
+    [71/100] ttfa=65 ms, connect=34 ms
+    [81/100] ttfa=62 ms, connect=33 ms
+    [91/100] ttfa=61 ms, connect=34 ms
+    tts_ttfa: p50=66.1 ms, p95=103.5 ms, errors=0
+
+Fertig.
+=== Schicht 3: Latenz-Messungen === n=100, tag=15h, api=all
+Output: /home/ubuntu/thesis/data/layer3/2026-05-16_15h.jsonl
+
+[STT — deepgram]
+  STT [deepgram]: n=100, sample=sample.wav (154 KB)
+    [1/100] ttft=583 ms, connect=471 ms
+    [11/100] ttft=607 ms, connect=486 ms
+    [21/100] ttft=416 ms, connect=331 ms
+    [31/100] ttft=566 ms, connect=435 ms
+    [41/100] ttft=566 ms, connect=437 ms
+    [51/100] ttft=418 ms, connect=330 ms
+    [61/100] ttft=629 ms, connect=456 ms
+    [71/100] ttft=606 ms, connect=435 ms
+    [81/100] ttft=567 ms, connect=436 ms
+    [91/100] ttft=567 ms, connect=439 ms
+    stt_ttft: p50=583.0 ms, p95=653.8 ms, errors=0
+
+[STT — revai]
+  STT [revai]: n=100, sample=sample.wav (154 KB)
+    [1/100] ttft=1339 ms, connect=586 ms
+    [11/100] ttft=1458 ms, connect=586 ms
+    [21/100] ttft=1405 ms, connect=610 ms
+    [31/100] ttft=1321 ms, connect=622 ms
+    [41/100] ttft=1333 ms, connect=592 ms
+    [51/100] ttft=1459 ms, connect=578 ms
+    [61/100] ttft=1327 ms, connect=589 ms
+    [71/100] ttft=1322 ms, connect=590 ms
+    [81/100] ttft=1325 ms, connect=580 ms
+    [91/100] ttft=1328 ms, connect=615 ms
+    stt_ttft: p50=1349.3 ms, p95=1495.0 ms, errors=0
+
+[STT — azure_stt]
+  STT [azure_stt]: n=100, sample=sample.wav (154 KB)
+    [1/100] ttft=1718 ms, connect=274 ms
+    [11/100] ttft=1717 ms, connect=45 ms
+    [21/100] ttft=1716 ms, connect=45 ms
+    [31/100] ttft=1721 ms, connect=47 ms
+    [41/100] ttft=1720 ms, connect=48 ms
+    [51/100] ttft=1719 ms, connect=47 ms
+    [61/100] ttft=1718 ms, connect=50 ms
+    [71/100] ttft=1722 ms, connect=48 ms
+    [81/100] ttft=1718 ms, connect=54 ms
+    [91/100] ttft=1722 ms, connect=46 ms
+    stt_ttft: p50=1718.8 ms, p95=1725.6 ms, errors=0
+
+[LLM — openai]
+  LLM [openai]: n=100
+    [1/100] ttft=2424 ms, ttl=2630 ms
+    [11/100] ttft=760 ms, ttl=836 ms
+    [21/100] ttft=974 ms, ttl=1107 ms
+    [31/100] ttft=522 ms, ttl=612 ms
+    [41/100] ttft=966 ms, ttl=1150 ms
+    [51/100] ttft=664 ms, ttl=734 ms
+    [61/100] ttft=463 ms, ttl=572 ms
+    [71/100] ttft=505 ms, ttl=606 ms
+    [81/100] ttft=1095 ms, ttl=1201 ms
+    [91/100] ttft=500 ms, ttl=534 ms
+    llm_ttft: p50=626.0 ms, p95=2190.3 ms, errors=0
+    llm_ttl: p50=716.4 ms, p95=2266.6 ms, errors=0
+
+[LLM — groq]
+  LLM [groq]: n=100
+    [1/100] ttft=55 ms, ttl=62 ms
+    [11/100] ttft=50 ms, ttl=57 ms
+    [21/100] ttft=73 ms, ttl=80 ms
+    [31/100] ttft=91 ms, ttl=94 ms
+    [32/100] Fehler: HTTP 429: {"error":{"message":"Rate limit reached for model `llama-3.1-8b-instant` in organization `org_01kqn0cd0vefjb3jyt1q4mcmjs` service tier `on_demand` on requests per minute (RPM): Limit 30, Used 30, Requ
+    [34/100] Fehler: HTTP 429: {"error":{"message":"Rate limit reached for model `llama-3.1-8b-instant` in organization `org_01kqn0cd0vefjb3jyt1q4mcmjs` service tier `on_demand` on requests per minute (RPM): Limit 30, Used 30, Requ
+    [36/100] Fehler: HTTP 429: {"error":{"message":"Rate limit reached for model `llama-3.1-8b-instant` in organization `org_01kqn0cd0vefjb3jyt1q4mcmjs` service tier `on_demand` on requests per minute (RPM): Limit 30, Used 30, Requ
+    [38/100] Fehler: HTTP 429: {"error":{"message":"Rate limit reached for model `llama-3.1-8b-instant` in organization `org_01kqn0cd0vefjb3jyt1q4mcmjs` service tier `on_demand` on requests per minute (RPM): Limit 30, Used 30, Requ
+    [40/100] Fehler: HTTP 429: {"error":{"message":"Rate limit reached for model `llama-3.1-8b-instant` in organization `org_01kqn0cd0vefjb3jyt1q4mcmjs` service tier `on_demand` on requests per minute (RPM): Limit 30, Used 30, Requ
+    [41/100] ttft=44 ms, ttl=50 ms
+    [42/100] Fehler: HTTP 429: {"error":{"message":"Rate limit reached for model `llama-3.1-8b-instant` in organization `org_01kqn0cd0vefjb3jyt1q4mcmjs` service tier `on_demand` on requests per minute (RPM): Limit 30, Used 30, Requ
+    [44/100] Fehler: HTTP 429: {"error":{"message":"Rate limit reached for model `llama-3.1-8b-instant` in organization `org_01kqn0cd0vefjb3jyt1q4mcmjs` service tier `on_demand` on requests per minute (RPM): Limit 30, Used 30, Requ
+    [46/100] Fehler: HTTP 429: {"error":{"message":"Rate limit reached for model `llama-3.1-8b-instant` in organization `org_01kqn0cd0vefjb3jyt1q4mcmjs` service tier `on_demand` on requests per minute (RPM): Limit 30, Used 30, Requ
+    [48/100] Fehler: HTTP 429: {"error":{"message":"Rate limit reached for model `llama-3.1-8b-instant` in organization `org_01kqn0cd0vefjb3jyt1q4mcmjs` service tier `on_demand` on requests per minute (RPM): Limit 30, Used 30, Requ
+    [50/100] Fehler: HTTP 429: {"error":{"message":"Rate limit reached for model `llama-3.1-8b-instant` in organization `org_01kqn0cd0vefjb3jyt1q4mcmjs` service tier `on_demand` on requests per minute (RPM): Limit 30, Used 30, Requ
+    [51/100] ttft=44 ms, ttl=51 ms
+    [52/100] Fehler: HTTP 429: {"error":{"message":"Rate limit reached for model `llama-3.1-8b-instant` in organization `org_01kqn0cd0vefjb3jyt1q4mcmjs` service tier `on_demand` on requests per minute (RPM): Limit 30, Used 30, Requ
+    [54/100] Fehler: HTTP 429: {"error":{"message":"Rate limit reached for model `llama-3.1-8b-instant` in organization `org_01kqn0cd0vefjb3jyt1q4mcmjs` service tier `on_demand` on requests per minute (RPM): Limit 30, Used 30, Requ
+    [56/100] Fehler: HTTP 429: {"error":{"message":"Rate limit reached for model `llama-3.1-8b-instant` in organization `org_01kqn0cd0vefjb3jyt1q4mcmjs` service tier `on_demand` on requests per minute (RPM): Limit 30, Used 30, Requ
+    [58/100] Fehler: HTTP 429: {"error":{"message":"Rate limit reached for model `llama-3.1-8b-instant` in organization `org_01kqn0cd0vefjb3jyt1q4mcmjs` service tier `on_demand` on requests per minute (RPM): Limit 30, Used 30, Requ
+    [60/100] Fehler: HTTP 429: {"error":{"message":"Rate limit reached for model `llama-3.1-8b-instant` in organization `org_01kqn0cd0vefjb3jyt1q4mcmjs` service tier `on_demand` on requests per minute (RPM): Limit 30, Used 30, Requ
+    [61/100] ttft=76 ms, ttl=83 ms
+    [62/100] Fehler: HTTP 429: {"error":{"message":"Rate limit reached for model `llama-3.1-8b-instant` in organization `org_01kqn0cd0vefjb3jyt1q4mcmjs` service tier `on_demand` on requests per minute (RPM): Limit 30, Used 30, Requ
+    [64/100] Fehler: HTTP 429: {"error":{"message":"Rate limit reached for model `llama-3.1-8b-instant` in organization `org_01kqn0cd0vefjb3jyt1q4mcmjs` service tier `on_demand` on requests per minute (RPM): Limit 30, Used 30, Requ
+    [66/100] Fehler: HTTP 429: {"error":{"message":"Rate limit reached for model `llama-3.1-8b-instant` in organization `org_01kqn0cd0vefjb3jyt1q4mcmjs` service tier `on_demand` on requests per minute (RPM): Limit 30, Used 30, Requ
+    [68/100] Fehler: HTTP 429: {"error":{"message":"Rate limit reached for model `llama-3.1-8b-instant` in organization `org_01kqn0cd0vefjb3jyt1q4mcmjs` service tier `on_demand` on requests per minute (RPM): Limit 30, Used 30, Requ
+    [70/100] Fehler: HTTP 429: {"error":{"message":"Rate limit reached for model `llama-3.1-8b-instant` in organization `org_01kqn0cd0vefjb3jyt1q4mcmjs` service tier `on_demand` on requests per minute (RPM): Limit 30, Used 30, Requ
+    [71/100] ttft=74 ms, ttl=82 ms
+    [72/100] Fehler: HTTP 429: {"error":{"message":"Rate limit reached for model `llama-3.1-8b-instant` in organization `org_01kqn0cd0vefjb3jyt1q4mcmjs` service tier `on_demand` on requests per minute (RPM): Limit 30, Used 30, Requ
+    [74/100] Fehler: HTTP 429: {"error":{"message":"Rate limit reached for model `llama-3.1-8b-instant` in organization `org_01kqn0cd0vefjb3jyt1q4mcmjs` service tier `on_demand` on requests per minute (RPM): Limit 30, Used 30, Requ
+    [76/100] Fehler: HTTP 429: {"error":{"message":"Rate limit reached for model `llama-3.1-8b-instant` in organization `org_01kqn0cd0vefjb3jyt1q4mcmjs` service tier `on_demand` on requests per minute (RPM): Limit 30, Used 30, Requ
+    [78/100] Fehler: HTTP 429: {"error":{"message":"Rate limit reached for model `llama-3.1-8b-instant` in organization `org_01kqn0cd0vefjb3jyt1q4mcmjs` service tier `on_demand` on requests per minute (RPM): Limit 30, Used 30, Requ
+    [80/100] Fehler: HTTP 429: {"error":{"message":"Rate limit reached for model `llama-3.1-8b-instant` in organization `org_01kqn0cd0vefjb3jyt1q4mcmjs` service tier `on_demand` on requests per minute (RPM): Limit 30, Used 30, Requ
+    [81/100] ttft=72 ms, ttl=81 ms
+    [82/100] Fehler: HTTP 429: {"error":{"message":"Rate limit reached for model `llama-3.1-8b-instant` in organization `org_01kqn0cd0vefjb3jyt1q4mcmjs` service tier `on_demand` on requests per minute (RPM): Limit 30, Used 30, Requ
+    [84/100] Fehler: HTTP 429: {"error":{"message":"Rate limit reached for model `llama-3.1-8b-instant` in organization `org_01kqn0cd0vefjb3jyt1q4mcmjs` service tier `on_demand` on requests per minute (RPM): Limit 30, Used 30, Requ
+    [86/100] Fehler: HTTP 429: {"error":{"message":"Rate limit reached for model `llama-3.1-8b-instant` in organization `org_01kqn0cd0vefjb3jyt1q4mcmjs` service tier `on_demand` on requests per minute (RPM): Limit 30, Used 30, Requ
+    [88/100] Fehler: HTTP 429: {"error":{"message":"Rate limit reached for model `llama-3.1-8b-instant` in organization `org_01kqn0cd0vefjb3jyt1q4mcmjs` service tier `on_demand` on requests per minute (RPM): Limit 30, Used 30, Requ
+    [90/100] Fehler: HTTP 429: {"error":{"message":"Rate limit reached for model `llama-3.1-8b-instant` in organization `org_01kqn0cd0vefjb3jyt1q4mcmjs` service tier `on_demand` on requests per minute (RPM): Limit 30, Used 30, Requ
+    [91/100] ttft=67 ms, ttl=75 ms
+    [92/100] Fehler: HTTP 429: {"error":{"message":"Rate limit reached for model `llama-3.1-8b-instant` in organization `org_01kqn0cd0vefjb3jyt1q4mcmjs` service tier `on_demand` on requests per minute (RPM): Limit 30, Used 30, Requ
+    [94/100] Fehler: HTTP 429: {"error":{"message":"Rate limit reached for model `llama-3.1-8b-instant` in organization `org_01kqn0cd0vefjb3jyt1q4mcmjs` service tier `on_demand` on requests per minute (RPM): Limit 30, Used 30, Requ
+    [96/100] Fehler: HTTP 429: {"error":{"message":"Rate limit reached for model `llama-3.1-8b-instant` in organization `org_01kqn0cd0vefjb3jyt1q4mcmjs` service tier `on_demand` on requests per minute (RPM): Limit 30, Used 30, Requ
+    [98/100] Fehler: HTTP 429: {"error":{"message":"Rate limit reached for model `llama-3.1-8b-instant` in organization `org_01kqn0cd0vefjb3jyt1q4mcmjs` service tier `on_demand` on requests per minute (RPM): Limit 30, Used 30, Requ
+    [100/100] Fehler: HTTP 429: {"error":{"message":"Rate limit reached for model `llama-3.1-8b-instant` in organization `org_01kqn0cd0vefjb3jyt1q4mcmjs` service tier `on_demand` on requests per minute (RPM): Limit 30, Used 30, Requ
+    llm_ttft: p50=70.3 ms, p95=135.5 ms, errors=35
+    llm_ttl: p50=79.1 ms, p95=143.9 ms, errors=35
+
+[LLM — mistral]
+  LLM [mistral]: n=100
+    [1/100] ttft=175 ms, ttl=212 ms
+    [11/100] ttft=201 ms, ttl=239 ms
+    [21/100] ttft=229 ms, ttl=265 ms
+    [31/100] ttft=255 ms, ttl=291 ms
+    [41/100] ttft=207 ms, ttl=242 ms
+    [51/100] ttft=288 ms, ttl=323 ms
+    [61/100] ttft=325 ms, ttl=360 ms
+    [71/100] ttft=209 ms, ttl=240 ms
+    [81/100] ttft=202 ms, ttl=227 ms
+    [91/100] ttft=309 ms, ttl=337 ms
+    llm_ttft: p50=221.0 ms, p95=432.3 ms, errors=0
+    llm_ttl: p50=255.6 ms, p95=451.0 ms, errors=0
+
+[TTS — deepgram_tts]
+  TTS [deepgram_tts]: n=100
+    [1/100] ttfa=457 ms, connect=308 ms
+    [11/100] ttfa=415 ms, connect=209 ms
+    [21/100] ttfa=557 ms, connect=284 ms
+    [31/100] ttfa=414 ms, connect=210 ms
+    [41/100] ttfa=571 ms, connect=296 ms
+    [51/100] ttfa=573 ms, connect=293 ms
+    [61/100] ttfa=413 ms, connect=210 ms
+    [71/100] ttfa=418 ms, connect=208 ms
+    [81/100] ttfa=572 ms, connect=208 ms
+    [91/100] ttfa=418 ms, connect=209 ms
+    tts_ttfa: p50=543.7 ms, p95=585.6 ms, errors=0
+
+[TTS — openai_tts]
+  TTS [openai_tts]: n=100
+    [1/100] ttfa=1535 ms, connect=10 ms
+    [11/100] ttfa=644 ms, connect=10 ms
+    [21/100] ttfa=1119 ms, connect=18 ms
+    [31/100] ttfa=873 ms, connect=9 ms
+    [41/100] ttfa=1110 ms, connect=8 ms
+    [51/100] ttfa=1161 ms, connect=11 ms
+    [61/100] ttfa=1153 ms, connect=10 ms
+    [71/100] ttfa=618 ms, connect=10 ms
+    [81/100] ttfa=851 ms, connect=8 ms
+    [91/100] ttfa=661 ms, connect=8 ms
+    tts_ttfa: p50=900.6 ms, p95=1814.5 ms, errors=0
+
+[TTS — azure_tts]
+  TTS [azure_tts]: n=100
+    [1/100] ttfa=391 ms, connect=42 ms
+    [11/100] ttfa=60 ms, connect=34 ms
+    [21/100] ttfa=62 ms, connect=31 ms
+    [31/100] ttfa=68 ms, connect=32 ms
+    [41/100] ttfa=67 ms, connect=35 ms
+    [51/100] ttfa=66 ms, connect=34 ms
+    [61/100] ttfa=65 ms, connect=33 ms
+    [71/100] ttfa=61 ms, connect=34 ms
+    [81/100] ttfa=79 ms, connect=34 ms
+    [91/100] ttfa=64 ms, connect=33 ms
+    tts_ttfa: p50=66.2 ms, p95=116.2 ms, errors=0
+
+Fertig.
+=== Schicht 3: Latenz-Messungen === n=100, tag=18h, api=all
+Output: /home/ubuntu/thesis/data/layer3/2026-05-16_18h.jsonl
+
+[STT — deepgram]
+  STT [deepgram]: n=100, sample=sample.wav (154 KB)
+    [1/100] ttft=568 ms, connect=449 ms
+    [11/100] ttft=468 ms, connect=330 ms
+    [21/100] ttft=564 ms, connect=439 ms
+    [31/100] ttft=634 ms, connect=460 ms
+    [41/100] ttft=426 ms, connect=336 ms
+    [51/100] ttft=462 ms, connect=339 ms
+    [61/100] ttft=606 ms, connect=482 ms
+    [71/100] ttft=423 ms, connect=343 ms
+    [81/100] ttft=564 ms, connect=435 ms
+    [91/100] ttft=606 ms, connect=480 ms
+    stt_ttft: p50=570.2 ms, p95=655.9 ms, errors=0
+
+[STT — revai]
+  STT [revai]: n=100, sample=sample.wav (154 KB)
+    [1/100] ttft=1430 ms, connect=589 ms
+    [11/100] ttft=1390 ms, connect=595 ms
+    [21/100] ttft=1376 ms, connect=604 ms
+    [31/100] ttft=1356 ms, connect=583 ms
+    [41/100] ttft=1305 ms, connect=579 ms
+    [51/100] ttft=1324 ms, connect=588 ms
+    [61/100] ttft=1367 ms, connect=582 ms
+    [71/100] ttft=4172 ms, connect=584 ms
+    [81/100] ttft=4198 ms, connect=586 ms
+    [91/100] ttft=1381 ms, connect=573 ms
+    stt_ttft: p50=1356.1 ms, p95=1463.9 ms, errors=0
+
+[STT — azure_stt]
+  STT [azure_stt]: n=100, sample=sample.wav (154 KB)
+    [1/100] ttft=1717 ms, connect=297 ms
+    [11/100] ttft=1718 ms, connect=46 ms
+    [21/100] ttft=1717 ms, connect=46 ms
+    [31/100] ttft=1717 ms, connect=48 ms
+    [41/100] ttft=1716 ms, connect=48 ms
+    [51/100] ttft=1729 ms, connect=46 ms
+    [61/100] ttft=1715 ms, connect=56 ms
+    [71/100] ttft=1716 ms, connect=45 ms
+    [81/100] ttft=1719 ms, connect=45 ms
+    [91/100] ttft=1719 ms, connect=46 ms
+    stt_ttft: p50=1717.4 ms, p95=1726.4 ms, errors=0
+
+[LLM — openai]
+  LLM [openai]: n=100
+    [1/100] ttft=1901 ms, ttl=1988 ms
+    [11/100] ttft=430 ms, ttl=523 ms
+    [21/100] ttft=446 ms, ttl=729 ms
+    [31/100] ttft=1274 ms, ttl=1375 ms
+    [41/100] ttft=879 ms, ttl=983 ms
+    [51/100] ttft=772 ms, ttl=861 ms
+    [61/100] ttft=403 ms, ttl=493 ms
+    [71/100] ttft=466 ms, ttl=560 ms
+    [81/100] ttft=1507 ms, ttl=1802 ms
+    [91/100] ttft=499 ms, ttl=723 ms
+    llm_ttft: p50=550.3 ms, p95=1274.4 ms, errors=0
+    llm_ttl: p50=703.5 ms, p95=1430.3 ms, errors=0
+
+[LLM — groq]
+  LLM [groq]: n=100
+    [1/100] ttft=47 ms, ttl=54 ms
+    [11/100] ttft=44 ms, ttl=51 ms
+    [21/100] ttft=72 ms, ttl=82 ms
+    [31/100] Fehler: HTTP 429: {"error":{"message":"Rate limit reached for model `llama-3.1-8b-instant` in organization `org_01kqn0cd0vefjb3jyt1q4mcmjs` service tier `on_demand` on requests per minute (RPM): Limit 30, Used 30, Requ
+    [33/100] Fehler: HTTP 429: {"error":{"message":"Rate limit reached for model `llama-3.1-8b-instant` in organization `org_01kqn0cd0vefjb3jyt1q4mcmjs` service tier `on_demand` on requests per minute (RPM): Limit 30, Used 30, Requ
+    [35/100] Fehler: HTTP 429: {"error":{"message":"Rate limit reached for model `llama-3.1-8b-instant` in organization `org_01kqn0cd0vefjb3jyt1q4mcmjs` service tier `on_demand` on requests per minute (RPM): Limit 30, Used 30, Requ
+    [37/100] Fehler: HTTP 429: {"error":{"message":"Rate limit reached for model `llama-3.1-8b-instant` in organization `org_01kqn0cd0vefjb3jyt1q4mcmjs` service tier `on_demand` on requests per minute (RPM): Limit 30, Used 30, Requ
+    [39/100] Fehler: HTTP 429: {"error":{"message":"Rate limit reached for model `llama-3.1-8b-instant` in organization `org_01kqn0cd0vefjb3jyt1q4mcmjs` service tier `on_demand` on requests per minute (RPM): Limit 30, Used 30, Requ
+    [41/100] Fehler: HTTP 429: {"error":{"message":"Rate limit reached for model `llama-3.1-8b-instant` in organization `org_01kqn0cd0vefjb3jyt1q4mcmjs` service tier `on_demand` on requests per minute (RPM): Limit 30, Used 30, Requ
+    [43/100] Fehler: HTTP 429: {"error":{"message":"Rate limit reached for model `llama-3.1-8b-instant` in organization `org_01kqn0cd0vefjb3jyt1q4mcmjs` service tier `on_demand` on requests per minute (RPM): Limit 30, Used 30, Requ
+    [45/100] Fehler: HTTP 429: {"error":{"message":"Rate limit reached for model `llama-3.1-8b-instant` in organization `org_01kqn0cd0vefjb3jyt1q4mcmjs` service tier `on_demand` on requests per minute (RPM): Limit 30, Used 30, Requ
+    [47/100] Fehler: HTTP 429: {"error":{"message":"Rate limit reached for model `llama-3.1-8b-instant` in organization `org_01kqn0cd0vefjb3jyt1q4mcmjs` service tier `on_demand` on requests per minute (RPM): Limit 30, Used 30, Requ
+    [49/100] Fehler: HTTP 429: {"error":{"message":"Rate limit reached for model `llama-3.1-8b-instant` in organization `org_01kqn0cd0vefjb3jyt1q4mcmjs` service tier `on_demand` on requests per minute (RPM): Limit 30, Used 30, Requ
+    [51/100] Fehler: HTTP 429: {"error":{"message":"Rate limit reached for model `llama-3.1-8b-instant` in organization `org_01kqn0cd0vefjb3jyt1q4mcmjs` service tier `on_demand` on requests per minute (RPM): Limit 30, Used 30, Requ
+    [53/100] Fehler: HTTP 429: {"error":{"message":"Rate limit reached for model `llama-3.1-8b-instant` in organization `org_01kqn0cd0vefjb3jyt1q4mcmjs` service tier `on_demand` on requests per minute (RPM): Limit 30, Used 30, Requ
+    [55/100] Fehler: HTTP 429: {"error":{"message":"Rate limit reached for model `llama-3.1-8b-instant` in organization `org_01kqn0cd0vefjb3jyt1q4mcmjs` service tier `on_demand` on requests per minute (RPM): Limit 30, Used 30, Requ
+    [57/100] Fehler: HTTP 429: {"error":{"message":"Rate limit reached for model `llama-3.1-8b-instant` in organization `org_01kqn0cd0vefjb3jyt1q4mcmjs` service tier `on_demand` on requests per minute (RPM): Limit 30, Used 30, Requ
+    [59/100] Fehler: HTTP 429: {"error":{"message":"Rate limit reached for model `llama-3.1-8b-instant` in organization `org_01kqn0cd0vefjb3jyt1q4mcmjs` service tier `on_demand` on requests per minute (RPM): Limit 30, Used 30, Requ
+    [61/100] Fehler: HTTP 429: {"error":{"message":"Rate limit reached for model `llama-3.1-8b-instant` in organization `org_01kqn0cd0vefjb3jyt1q4mcmjs` service tier `on_demand` on requests per minute (RPM): Limit 30, Used 30, Requ
+    [63/100] Fehler: HTTP 429: {"error":{"message":"Rate limit reached for model `llama-3.1-8b-instant` in organization `org_01kqn0cd0vefjb3jyt1q4mcmjs` service tier `on_demand` on requests per minute (RPM): Limit 30, Used 30, Requ
+    [65/100] Fehler: HTTP 429: {"error":{"message":"Rate limit reached for model `llama-3.1-8b-instant` in organization `org_01kqn0cd0vefjb3jyt1q4mcmjs` service tier `on_demand` on requests per minute (RPM): Limit 30, Used 30, Requ
+    [67/100] Fehler: HTTP 429: {"error":{"message":"Rate limit reached for model `llama-3.1-8b-instant` in organization `org_01kqn0cd0vefjb3jyt1q4mcmjs` service tier `on_demand` on requests per minute (RPM): Limit 30, Used 30, Requ
+    [69/100] Fehler: HTTP 429: {"error":{"message":"Rate limit reached for model `llama-3.1-8b-instant` in organization `org_01kqn0cd0vefjb3jyt1q4mcmjs` service tier `on_demand` on requests per minute (RPM): Limit 30, Used 30, Requ
+    [71/100] Fehler: HTTP 429: {"error":{"message":"Rate limit reached for model `llama-3.1-8b-instant` in organization `org_01kqn0cd0vefjb3jyt1q4mcmjs` service tier `on_demand` on requests per minute (RPM): Limit 30, Used 30, Requ
+    [73/100] Fehler: HTTP 429: {"error":{"message":"Rate limit reached for model `llama-3.1-8b-instant` in organization `org_01kqn0cd0vefjb3jyt1q4mcmjs` service tier `on_demand` on requests per minute (RPM): Limit 30, Used 30, Requ
+    [75/100] Fehler: HTTP 429: {"error":{"message":"Rate limit reached for model `llama-3.1-8b-instant` in organization `org_01kqn0cd0vefjb3jyt1q4mcmjs` service tier `on_demand` on requests per minute (RPM): Limit 30, Used 30, Requ
+    [77/100] Fehler: HTTP 429: {"error":{"message":"Rate limit reached for model `llama-3.1-8b-instant` in organization `org_01kqn0cd0vefjb3jyt1q4mcmjs` service tier `on_demand` on requests per minute (RPM): Limit 30, Used 30, Requ
+    [79/100] Fehler: HTTP 429: {"error":{"message":"Rate limit reached for model `llama-3.1-8b-instant` in organization `org_01kqn0cd0vefjb3jyt1q4mcmjs` service tier `on_demand` on requests per minute (RPM): Limit 30, Used 30, Requ
+    [81/100] Fehler: HTTP 429: {"error":{"message":"Rate limit reached for model `llama-3.1-8b-instant` in organization `org_01kqn0cd0vefjb3jyt1q4mcmjs` service tier `on_demand` on requests per minute (RPM): Limit 30, Used 30, Requ
+    [83/100] Fehler: HTTP 429: {"error":{"message":"Rate limit reached for model `llama-3.1-8b-instant` in organization `org_01kqn0cd0vefjb3jyt1q4mcmjs` service tier `on_demand` on requests per minute (RPM): Limit 30, Used 30, Requ
+    [85/100] Fehler: HTTP 429: {"error":{"message":"Rate limit reached for model `llama-3.1-8b-instant` in organization `org_01kqn0cd0vefjb3jyt1q4mcmjs` service tier `on_demand` on requests per minute (RPM): Limit 30, Used 30, Requ
+    [87/100] Fehler: HTTP 429: {"error":{"message":"Rate limit reached for model `llama-3.1-8b-instant` in organization `org_01kqn0cd0vefjb3jyt1q4mcmjs` service tier `on_demand` on requests per minute (RPM): Limit 30, Used 30, Requ
+    [89/100] Fehler: HTTP 429: {"error":{"message":"Rate limit reached for model `llama-3.1-8b-instant` in organization `org_01kqn0cd0vefjb3jyt1q4mcmjs` service tier `on_demand` on requests per minute (RPM): Limit 30, Used 30, Requ
+    [91/100] Fehler: HTTP 429: {"error":{"message":"Rate limit reached for model `llama-3.1-8b-instant` in organization `org_01kqn0cd0vefjb3jyt1q4mcmjs` service tier `on_demand` on requests per minute (RPM): Limit 30, Used 30, Requ
+    [93/100] Fehler: HTTP 429: {"error":{"message":"Rate limit reached for model `llama-3.1-8b-instant` in organization `org_01kqn0cd0vefjb3jyt1q4mcmjs` service tier `on_demand` on requests per minute (RPM): Limit 30, Used 30, Requ
+    [95/100] Fehler: HTTP 429: {"error":{"message":"Rate limit reached for model `llama-3.1-8b-instant` in organization `org_01kqn0cd0vefjb3jyt1q4mcmjs` service tier `on_demand` on requests per minute (RPM): Limit 30, Used 30, Requ
+    [97/100] Fehler: HTTP 429: {"error":{"message":"Rate limit reached for model `llama-3.1-8b-instant` in organization `org_01kqn0cd0vefjb3jyt1q4mcmjs` service tier `on_demand` on requests per minute (RPM): Limit 30, Used 30, Requ
+    [99/100] Fehler: HTTP 429: {"error":{"message":"Rate limit reached for model `llama-3.1-8b-instant` in organization `org_01kqn0cd0vefjb3jyt1q4mcmjs` service tier `on_demand` on requests per minute (RPM): Limit 30, Used 30, Requ
+    llm_ttft: p50=70.3 ms, p95=117.8 ms, errors=35
+    llm_ttl: p50=78.1 ms, p95=118.4 ms, errors=35
+
+[LLM — mistral]
+  LLM [mistral]: n=100
+    [1/100] ttft=195 ms, ttl=223 ms
+    [11/100] ttft=195 ms, ttl=230 ms
+    [21/100] ttft=198 ms, ttl=227 ms
+    [31/100] ttft=220 ms, ttl=243 ms
+    [41/100] ttft=276 ms, ttl=330 ms
+    [51/100] ttft=227 ms, ttl=259 ms
+    [61/100] ttft=425 ms, ttl=460 ms
+    [71/100] ttft=203 ms, ttl=235 ms
+    [81/100] ttft=372 ms, ttl=407 ms
+    [91/100] ttft=212 ms, ttl=248 ms
+    llm_ttft: p50=223.8 ms, p95=411.9 ms, errors=0
+    llm_ttl: p50=257.0 ms, p95=431.3 ms, errors=0
+
+[TTS — deepgram_tts]
+  TTS [deepgram_tts]: n=100
+    [1/100] ttfa=553 ms, connect=294 ms
+    [11/100] ttfa=551 ms, connect=282 ms
+    [21/100] ttfa=569 ms, connect=210 ms
+    [31/100] ttfa=560 ms, connect=297 ms
+    [41/100] ttfa=542 ms, connect=286 ms
+    [51/100] ttfa=559 ms, connect=293 ms
+    [61/100] ttfa=546 ms, connect=285 ms
+    [71/100] ttfa=552 ms, connect=282 ms
+    [81/100] ttfa=414 ms, connect=210 ms
+    [91/100] ttfa=552 ms, connect=209 ms
+    tts_ttfa: p50=551.5 ms, p95=584.4 ms, errors=0
+
+[TTS — openai_tts]
+  TTS [openai_tts]: n=100
+    [1/100] ttfa=1052 ms, connect=12 ms
+    [11/100] ttfa=1147 ms, connect=8 ms
+    [21/100] ttfa=671 ms, connect=11 ms
+    [31/100] ttfa=738 ms, connect=10 ms
+    [41/100] ttfa=1121 ms, connect=8 ms
+    [51/100] ttfa=1461 ms, connect=9 ms
+    [61/100] ttfa=1328 ms, connect=12 ms
+    [71/100] ttfa=646 ms, connect=8 ms
+    [81/100] ttfa=756 ms, connect=12 ms
+    [91/100] ttfa=648 ms, connect=8 ms
+    tts_ttfa: p50=972.2 ms, p95=1707.5 ms, errors=0
+
+[TTS — azure_tts]
+  TTS [azure_tts]: n=100
+    [1/100] ttfa=985 ms, connect=42 ms
+    [11/100] ttfa=71 ms, connect=34 ms
+    [21/100] ttfa=64 ms, connect=34 ms
+    [31/100] ttfa=66 ms, connect=34 ms
+    [41/100] ttfa=75 ms, connect=45 ms
+    [51/100] ttfa=68 ms, connect=33 ms
+    [61/100] ttfa=61 ms, connect=32 ms
+    [71/100] ttfa=69 ms, connect=34 ms
+    [81/100] ttfa=68 ms, connect=33 ms
+    [91/100] ttfa=74 ms, connect=34 ms
+    tts_ttfa: p50=66.3 ms, p95=131.4 ms, errors=0
+
+Fertig.
+=== Schicht 3: Latenz-Messungen === n=100, tag=21h, api=all
+Output: /home/ubuntu/thesis/data/layer3/2026-05-16_21h.jsonl
+
+[STT — deepgram]
+  STT [deepgram]: n=100, sample=sample.wav (154 KB)
+    [1/100] ttft=484 ms, connect=367 ms
+    [11/100] ttft=635 ms, connect=463 ms
+    [21/100] ttft=565 ms, connect=435 ms
+    [31/100] ttft=568 ms, connect=439 ms
+    [41/100] ttft=570 ms, connect=442 ms
+    [51/100] ttft=582 ms, connect=453 ms
+    [61/100] ttft=582 ms, connect=453 ms
+    [71/100] ttft=603 ms, connect=433 ms
+    [81/100] ttft=563 ms, connect=434 ms
+    [91/100] ttft=563 ms, connect=434 ms
+    stt_ttft: p50=569.9 ms, p95=644.0 ms, errors=0
+
+[STT — revai]
+  STT [revai]: n=100, sample=sample.wav (154 KB)
+    [1/100] ttft=1334 ms, connect=610 ms
+    [11/100] ttft=1486 ms, connect=583 ms
+    [21/100] ttft=1452 ms, connect=587 ms
+    [31/100] ttft=1364 ms, connect=574 ms
+    [41/100] ttft=1387 ms, connect=605 ms
+    [51/100] ttft=1380 ms, connect=591 ms
+    [61/100] ttft=1442 ms, connect=609 ms
+    [71/100] ttft=1401 ms, connect=590 ms
+    [81/100] ttft=1385 ms, connect=581 ms
+    [91/100] ttft=1338 ms, connect=599 ms
+    stt_ttft: p50=1377.5 ms, p95=1451.8 ms, errors=0
+
+[STT — azure_stt]
+  STT [azure_stt]: n=100, sample=sample.wav (154 KB)
+    [1/100] ttft=1726 ms, connect=330 ms
+    [11/100] ttft=1720 ms, connect=78 ms
+    [21/100] ttft=1718 ms, connect=48 ms
+    [31/100] ttft=1718 ms, connect=48 ms
+    [41/100] ttft=1718 ms, connect=55 ms
+    [51/100] ttft=1720 ms, connect=50 ms
+    [61/100] ttft=1718 ms, connect=46 ms
+    [71/100] ttft=1720 ms, connect=80 ms
+    [81/100] ttft=1719 ms, connect=86 ms
+    [91/100] ttft=1718 ms, connect=54 ms
+    stt_ttft: p50=1718.5 ms, p95=1723.9 ms, errors=0
+
+[LLM — openai]
+  LLM [openai]: n=100
+    [1/100] ttft=2062 ms, ttl=2145 ms
+    [11/100] ttft=484 ms, ttl=634 ms
+    [21/100] ttft=617 ms, ttl=711 ms
+    [31/100] ttft=406 ms, ttl=540 ms
+    [41/100] ttft=635 ms, ttl=714 ms
+    [51/100] ttft=382 ms, ttl=553 ms
+    [61/100] ttft=645 ms, ttl=722 ms
+    [71/100] ttft=467 ms, ttl=546 ms
+    [81/100] ttft=372 ms, ttl=468 ms
+    [91/100] ttft=560 ms, ttl=628 ms
+    llm_ttft: p50=499.0 ms, p95=1256.8 ms, errors=0
+    llm_ttl: p50=597.8 ms, p95=1334.3 ms, errors=0
+
+[LLM — groq]
+  LLM [groq]: n=100
+    [1/100] ttft=129 ms, ttl=137 ms
+    [11/100] ttft=82 ms, ttl=90 ms
+    [21/100] ttft=116 ms, ttl=125 ms
+    [31/100] Fehler: HTTP 429: {"error":{"message":"Rate limit reached for model `llama-3.1-8b-instant` in organization `org_01kqn0cd0vefjb3jyt1q4mcmjs` service tier `on_demand` on requests per minute (RPM): Limit 30, Used 30, Requ
+    [33/100] Fehler: HTTP 429: {"error":{"message":"Rate limit reached for model `llama-3.1-8b-instant` in organization `org_01kqn0cd0vefjb3jyt1q4mcmjs` service tier `on_demand` on requests per minute (RPM): Limit 30, Used 30, Requ
+    [35/100] Fehler: HTTP 429: {"error":{"message":"Rate limit reached for model `llama-3.1-8b-instant` in organization `org_01kqn0cd0vefjb3jyt1q4mcmjs` service tier `on_demand` on requests per minute (RPM): Limit 30, Used 30, Requ
+    [37/100] Fehler: HTTP 429: {"error":{"message":"Rate limit reached for model `llama-3.1-8b-instant` in organization `org_01kqn0cd0vefjb3jyt1q4mcmjs` service tier `on_demand` on requests per minute (RPM): Limit 30, Used 30, Requ
+    [39/100] Fehler: HTTP 429: {"error":{"message":"Rate limit reached for model `llama-3.1-8b-instant` in organization `org_01kqn0cd0vefjb3jyt1q4mcmjs` service tier `on_demand` on requests per minute (RPM): Limit 30, Used 30, Requ
+    [41/100] Fehler: HTTP 429: {"error":{"message":"Rate limit reached for model `llama-3.1-8b-instant` in organization `org_01kqn0cd0vefjb3jyt1q4mcmjs` service tier `on_demand` on requests per minute (RPM): Limit 30, Used 30, Requ
+    [43/100] Fehler: HTTP 429: {"error":{"message":"Rate limit reached for model `llama-3.1-8b-instant` in organization `org_01kqn0cd0vefjb3jyt1q4mcmjs` service tier `on_demand` on requests per minute (RPM): Limit 30, Used 30, Requ
+    [45/100] Fehler: HTTP 429: {"error":{"message":"Rate limit reached for model `llama-3.1-8b-instant` in organization `org_01kqn0cd0vefjb3jyt1q4mcmjs` service tier `on_demand` on requests per minute (RPM): Limit 30, Used 30, Requ
+    [47/100] Fehler: HTTP 429: {"error":{"message":"Rate limit reached for model `llama-3.1-8b-instant` in organization `org_01kqn0cd0vefjb3jyt1q4mcmjs` service tier `on_demand` on requests per minute (RPM): Limit 30, Used 30, Requ
+    [49/100] Fehler: HTTP 429: {"error":{"message":"Rate limit reached for model `llama-3.1-8b-instant` in organization `org_01kqn0cd0vefjb3jyt1q4mcmjs` service tier `on_demand` on requests per minute (RPM): Limit 30, Used 30, Requ
+    [51/100] Fehler: HTTP 429: {"error":{"message":"Rate limit reached for model `llama-3.1-8b-instant` in organization `org_01kqn0cd0vefjb3jyt1q4mcmjs` service tier `on_demand` on requests per minute (RPM): Limit 30, Used 30, Requ
+    [53/100] Fehler: HTTP 429: {"error":{"message":"Rate limit reached for model `llama-3.1-8b-instant` in organization `org_01kqn0cd0vefjb3jyt1q4mcmjs` service tier `on_demand` on requests per minute (RPM): Limit 30, Used 30, Requ
+    [55/100] Fehler: HTTP 429: {"error":{"message":"Rate limit reached for model `llama-3.1-8b-instant` in organization `org_01kqn0cd0vefjb3jyt1q4mcmjs` service tier `on_demand` on requests per minute (RPM): Limit 30, Used 30, Requ
+    [57/100] Fehler: HTTP 429: {"error":{"message":"Rate limit reached for model `llama-3.1-8b-instant` in organization `org_01kqn0cd0vefjb3jyt1q4mcmjs` service tier `on_demand` on requests per minute (RPM): Limit 30, Used 30, Requ
+    [59/100] Fehler: HTTP 429: {"error":{"message":"Rate limit reached for model `llama-3.1-8b-instant` in organization `org_01kqn0cd0vefjb3jyt1q4mcmjs` service tier `on_demand` on requests per minute (RPM): Limit 30, Used 30, Requ
+    [61/100] Fehler: HTTP 429: {"error":{"message":"Rate limit reached for model `llama-3.1-8b-instant` in organization `org_01kqn0cd0vefjb3jyt1q4mcmjs` service tier `on_demand` on requests per minute (RPM): Limit 30, Used 30, Requ
+    [63/100] Fehler: HTTP 429: {"error":{"message":"Rate limit reached for model `llama-3.1-8b-instant` in organization `org_01kqn0cd0vefjb3jyt1q4mcmjs` service tier `on_demand` on requests per minute (RPM): Limit 30, Used 30, Requ
+    [65/100] Fehler: HTTP 429: {"error":{"message":"Rate limit reached for model `llama-3.1-8b-instant` in organization `org_01kqn0cd0vefjb3jyt1q4mcmjs` service tier `on_demand` on requests per minute (RPM): Limit 30, Used 30, Requ
+    [67/100] Fehler: HTTP 429: {"error":{"message":"Rate limit reached for model `llama-3.1-8b-instant` in organization `org_01kqn0cd0vefjb3jyt1q4mcmjs` service tier `on_demand` on requests per minute (RPM): Limit 30, Used 30, Requ
+    [69/100] Fehler: HTTP 429: {"error":{"message":"Rate limit reached for model `llama-3.1-8b-instant` in organization `org_01kqn0cd0vefjb3jyt1q4mcmjs` service tier `on_demand` on requests per minute (RPM): Limit 30, Used 30, Requ
+    [71/100] Fehler: HTTP 429: {"error":{"message":"Rate limit reached for model `llama-3.1-8b-instant` in organization `org_01kqn0cd0vefjb3jyt1q4mcmjs` service tier `on_demand` on requests per minute (RPM): Limit 30, Used 30, Requ
+    [73/100] Fehler: HTTP 429: {"error":{"message":"Rate limit reached for model `llama-3.1-8b-instant` in organization `org_01kqn0cd0vefjb3jyt1q4mcmjs` service tier `on_demand` on requests per minute (RPM): Limit 30, Used 30, Requ
+    [75/100] Fehler: HTTP 429: {"error":{"message":"Rate limit reached for model `llama-3.1-8b-instant` in organization `org_01kqn0cd0vefjb3jyt1q4mcmjs` service tier `on_demand` on requests per minute (RPM): Limit 30, Used 30, Requ
+    [77/100] Fehler: HTTP 429: {"error":{"message":"Rate limit reached for model `llama-3.1-8b-instant` in organization `org_01kqn0cd0vefjb3jyt1q4mcmjs` service tier `on_demand` on requests per minute (RPM): Limit 30, Used 30, Requ
+    [79/100] Fehler: HTTP 429: {"error":{"message":"Rate limit reached for model `llama-3.1-8b-instant` in organization `org_01kqn0cd0vefjb3jyt1q4mcmjs` service tier `on_demand` on requests per minute (RPM): Limit 30, Used 30, Requ
+    [81/100] Fehler: HTTP 429: {"error":{"message":"Rate limit reached for model `llama-3.1-8b-instant` in organization `org_01kqn0cd0vefjb3jyt1q4mcmjs` service tier `on_demand` on requests per minute (RPM): Limit 30, Used 30, Requ
+    [83/100] Fehler: HTTP 429: {"error":{"message":"Rate limit reached for model `llama-3.1-8b-instant` in organization `org_01kqn0cd0vefjb3jyt1q4mcmjs` service tier `on_demand` on requests per minute (RPM): Limit 30, Used 30, Requ
+    [85/100] Fehler: HTTP 429: {"error":{"message":"Rate limit reached for model `llama-3.1-8b-instant` in organization `org_01kqn0cd0vefjb3jyt1q4mcmjs` service tier `on_demand` on requests per minute (RPM): Limit 30, Used 30, Requ
+    [87/100] Fehler: HTTP 429: {"error":{"message":"Rate limit reached for model `llama-3.1-8b-instant` in organization `org_01kqn0cd0vefjb3jyt1q4mcmjs` service tier `on_demand` on requests per minute (RPM): Limit 30, Used 30, Requ
+    [89/100] Fehler: HTTP 429: {"error":{"message":"Rate limit reached for model `llama-3.1-8b-instant` in organization `org_01kqn0cd0vefjb3jyt1q4mcmjs` service tier `on_demand` on requests per minute (RPM): Limit 30, Used 30, Requ
+    [91/100] Fehler: HTTP 429: {"error":{"message":"Rate limit reached for model `llama-3.1-8b-instant` in organization `org_01kqn0cd0vefjb3jyt1q4mcmjs` service tier `on_demand` on requests per minute (RPM): Limit 30, Used 30, Requ
+    [93/100] Fehler: HTTP 429: {"error":{"message":"Rate limit reached for model `llama-3.1-8b-instant` in organization `org_01kqn0cd0vefjb3jyt1q4mcmjs` service tier `on_demand` on requests per minute (RPM): Limit 30, Used 30, Requ
+    [95/100] Fehler: HTTP 429: {"error":{"message":"Rate limit reached for model `llama-3.1-8b-instant` in organization `org_01kqn0cd0vefjb3jyt1q4mcmjs` service tier `on_demand` on requests per minute (RPM): Limit 30, Used 30, Requ
+    [97/100] Fehler: HTTP 429: {"error":{"message":"Rate limit reached for model `llama-3.1-8b-instant` in organization `org_01kqn0cd0vefjb3jyt1q4mcmjs` service tier `on_demand` on requests per minute (RPM): Limit 30, Used 30, Requ
+    [99/100] Fehler: HTTP 429: {"error":{"message":"Rate limit reached for model `llama-3.1-8b-instant` in organization `org_01kqn0cd0vefjb3jyt1q4mcmjs` service tier `on_demand` on requests per minute (RPM): Limit 30, Used 30, Requ
+    llm_ttft: p50=66.5 ms, p95=120.2 ms, errors=35
+    llm_ttl: p50=75.5 ms, p95=127.5 ms, errors=35
+
+[LLM — mistral]
+  LLM [mistral]: n=100
+    [1/100] ttft=248 ms, ttl=276 ms
+    [11/100] ttft=216 ms, ttl=250 ms
+    [21/100] ttft=190 ms, ttl=222 ms
+    [31/100] ttft=199 ms, ttl=247 ms
+    [41/100] ttft=277 ms, ttl=287 ms
+    [51/100] ttft=267 ms, ttl=300 ms
+    [61/100] ttft=223 ms, ttl=276 ms
+    [71/100] ttft=194 ms, ttl=227 ms
+    [81/100] ttft=210 ms, ttl=246 ms
+    [91/100] ttft=198 ms, ttl=231 ms
+    llm_ttft: p50=208.9 ms, p95=407.7 ms, errors=0
+    llm_ttl: p50=243.7 ms, p95=443.9 ms, errors=0
+
+[TTS — deepgram_tts]
+  TTS [deepgram_tts]: n=100
+    [1/100] ttfa=546 ms, connect=288 ms
+    [11/100] ttfa=588 ms, connect=296 ms
+    [21/100] ttfa=566 ms, connect=293 ms
+    [31/100] ttfa=421 ms, connect=292 ms
+    [41/100] ttfa=416 ms, connect=210 ms
+    [51/100] ttfa=555 ms, connect=295 ms
+    [61/100] ttfa=457 ms, connect=297 ms
+    [71/100] ttfa=578 ms, connect=286 ms
+    [81/100] ttfa=546 ms, connect=282 ms
+    [91/100] ttfa=568 ms, connect=294 ms
+    tts_ttfa: p50=554.6 ms, p95=593.3 ms, errors=0
+
+[TTS — openai_tts]
+  TTS [openai_tts]: n=100
+    [1/100] ttfa=1226 ms, connect=9 ms
+    [11/100] ttfa=910 ms, connect=9 ms
+    [21/100] ttfa=1846 ms, connect=10 ms
+    [31/100] ttfa=650 ms, connect=7 ms
+    [41/100] ttfa=534 ms, connect=9 ms
+    [51/100] ttfa=1131 ms, connect=12 ms
+    [61/100] ttfa=1125 ms, connect=11 ms
+    [71/100] ttfa=1257 ms, connect=9 ms
+    [81/100] ttfa=1134 ms, connect=17 ms
+    [91/100] ttfa=1312 ms, connect=9 ms
+    tts_ttfa: p50=903.0 ms, p95=1667.9 ms, errors=0
+
+[TTS — azure_tts]
+  TTS [azure_tts]: n=100
+    [1/100] ttfa=350 ms, connect=42 ms
+    [11/100] ttfa=66 ms, connect=33 ms
+    [21/100] ttfa=64 ms, connect=32 ms
+    [31/100] ttfa=67 ms, connect=34 ms
+    [41/100] ttfa=73 ms, connect=35 ms
+    [51/100] ttfa=66 ms, connect=33 ms
+    [61/100] ttfa=61 ms, connect=40 ms
+    [71/100] ttfa=81 ms, connect=36 ms
+    [81/100] ttfa=64 ms, connect=39 ms
+    [91/100] ttfa=63 ms, connect=34 ms
+    tts_ttfa: p50=66.1 ms, p95=111.5 ms, errors=0
+
+Fertig.
+=== Schicht 3: Latenz-Messungen === n=100, tag=00h, api=all
+Output: /home/ubuntu/thesis/data/layer3/2026-05-17_00h.jsonl
+
+[STT — deepgram]
+  STT [deepgram]: n=100, sample=sample.wav (154 KB)
+    [1/100] ttft=564 ms, connect=470 ms
+    [11/100] ttft=566 ms, connect=432 ms
+    [21/100] ttft=474 ms, connect=322 ms
+    [31/100] ttft=565 ms, connect=435 ms
+    [41/100] ttft=604 ms, connect=434 ms
+    [51/100] ttft=564 ms, connect=441 ms
+    [61/100] ttft=563 ms, connect=433 ms
+    [71/100] ttft=563 ms, connect=435 ms
+    [81/100] ttft=609 ms, connect=438 ms
+    [91/100] ttft=612 ms, connect=443 ms
+    stt_ttft: p50=565.5 ms, p95=656.2 ms, errors=0
+
+[STT — revai]
+  STT [revai]: n=100, sample=sample.wav (154 KB)
+    [1/100] ttft=1335 ms, connect=600 ms
+    [11/100] ttft=1335 ms, connect=618 ms
+    [21/100] ttft=1373 ms, connect=576 ms
+    [31/100] ttft=1396 ms, connect=597 ms
+    [41/100] ttft=1470 ms, connect=574 ms
+    [51/100] ttft=1417 ms, connect=600 ms
+    [61/100] ttft=1387 ms, connect=586 ms
+    [71/100] ttft=1327 ms, connect=590 ms
+    [81/100] ttft=1357 ms, connect=594 ms
+    [91/100] ttft=1306 ms, connect=576 ms
+    stt_ttft: p50=1352.7 ms, p95=1462.4 ms, errors=0
+
+[STT — azure_stt]
+  STT [azure_stt]: n=100, sample=sample.wav (154 KB)
+    [1/100] ttft=1739 ms, connect=893 ms
+    [11/100] ttft=1720 ms, connect=45 ms
+    [21/100] ttft=1727 ms, connect=49 ms
+    [31/100] ttft=1716 ms, connect=46 ms
+    [41/100] ttft=1726 ms, connect=47 ms
+    [51/100] ttft=1715 ms, connect=45 ms
+    [61/100] ttft=1720 ms, connect=44 ms
+    [71/100] ttft=1718 ms, connect=51 ms
+    [81/100] ttft=1719 ms, connect=48 ms
+    [91/100] ttft=1718 ms, connect=50 ms
+    stt_ttft: p50=1717.8 ms, p95=1726.7 ms, errors=0
+
+[LLM — openai]
+  LLM [openai]: n=100
+    [1/100] ttft=2245 ms, ttl=2340 ms
+    [11/100] ttft=486 ms, ttl=556 ms
+    [21/100] ttft=771 ms, ttl=965 ms
+    [31/100] ttft=418 ms, ttl=538 ms
+    [41/100] ttft=393 ms, ttl=475 ms
+    [51/100] ttft=716 ms, ttl=863 ms
+    [61/100] ttft=460 ms, ttl=580 ms
+    [71/100] ttft=637 ms, ttl=721 ms
+    [81/100] ttft=436 ms, ttl=508 ms
+    [91/100] ttft=477 ms, ttl=549 ms
+    llm_ttft: p50=475.1 ms, p95=1345.0 ms, errors=0
+    llm_ttl: p50=580.5 ms, p95=1560.7 ms, errors=0
+
+[LLM — groq]
+  LLM [groq]: n=100
+    [1/100] ttft=77 ms, ttl=84 ms
+    [11/100] ttft=192 ms, ttl=200 ms
+    [21/100] ttft=42 ms, ttl=46 ms
+    [31/100] Fehler: HTTP 429: {"error":{"message":"Rate limit reached for model `llama-3.1-8b-instant` in organization `org_01kqn0cd0vefjb3jyt1q4mcmjs` service tier `on_demand` on requests per minute (RPM): Limit 30, Used 30, Requ
+    [33/100] Fehler: HTTP 429: {"error":{"message":"Rate limit reached for model `llama-3.1-8b-instant` in organization `org_01kqn0cd0vefjb3jyt1q4mcmjs` service tier `on_demand` on requests per minute (RPM): Limit 30, Used 30, Requ
+    [35/100] Fehler: HTTP 429: {"error":{"message":"Rate limit reached for model `llama-3.1-8b-instant` in organization `org_01kqn0cd0vefjb3jyt1q4mcmjs` service tier `on_demand` on requests per minute (RPM): Limit 30, Used 30, Requ
+    [37/100] Fehler: HTTP 429: {"error":{"message":"Rate limit reached for model `llama-3.1-8b-instant` in organization `org_01kqn0cd0vefjb3jyt1q4mcmjs` service tier `on_demand` on requests per minute (RPM): Limit 30, Used 30, Requ
+    [39/100] Fehler: HTTP 429: {"error":{"message":"Rate limit reached for model `llama-3.1-8b-instant` in organization `org_01kqn0cd0vefjb3jyt1q4mcmjs` service tier `on_demand` on requests per minute (RPM): Limit 30, Used 30, Requ
+    [41/100] Fehler: HTTP 429: {"error":{"message":"Rate limit reached for model `llama-3.1-8b-instant` in organization `org_01kqn0cd0vefjb3jyt1q4mcmjs` service tier `on_demand` on requests per minute (RPM): Limit 30, Used 30, Requ
+    [43/100] Fehler: HTTP 429: {"error":{"message":"Rate limit reached for model `llama-3.1-8b-instant` in organization `org_01kqn0cd0vefjb3jyt1q4mcmjs` service tier `on_demand` on requests per minute (RPM): Limit 30, Used 30, Requ
+    [45/100] Fehler: HTTP 429: {"error":{"message":"Rate limit reached for model `llama-3.1-8b-instant` in organization `org_01kqn0cd0vefjb3jyt1q4mcmjs` service tier `on_demand` on requests per minute (RPM): Limit 30, Used 30, Requ
+    [47/100] Fehler: HTTP 429: {"error":{"message":"Rate limit reached for model `llama-3.1-8b-instant` in organization `org_01kqn0cd0vefjb3jyt1q4mcmjs` service tier `on_demand` on requests per minute (RPM): Limit 30, Used 30, Requ
+    [49/100] Fehler: HTTP 429: {"error":{"message":"Rate limit reached for model `llama-3.1-8b-instant` in organization `org_01kqn0cd0vefjb3jyt1q4mcmjs` service tier `on_demand` on requests per minute (RPM): Limit 30, Used 30, Requ
+    [51/100] Fehler: HTTP 429: {"error":{"message":"Rate limit reached for model `llama-3.1-8b-instant` in organization `org_01kqn0cd0vefjb3jyt1q4mcmjs` service tier `on_demand` on requests per minute (RPM): Limit 30, Used 30, Requ
+    [53/100] Fehler: HTTP 429: {"error":{"message":"Rate limit reached for model `llama-3.1-8b-instant` in organization `org_01kqn0cd0vefjb3jyt1q4mcmjs` service tier `on_demand` on requests per minute (RPM): Limit 30, Used 30, Requ
+    [55/100] Fehler: HTTP 429: {"error":{"message":"Rate limit reached for model `llama-3.1-8b-instant` in organization `org_01kqn0cd0vefjb3jyt1q4mcmjs` service tier `on_demand` on requests per minute (RPM): Limit 30, Used 30, Requ
+    [57/100] Fehler: HTTP 429: {"error":{"message":"Rate limit reached for model `llama-3.1-8b-instant` in organization `org_01kqn0cd0vefjb3jyt1q4mcmjs` service tier `on_demand` on requests per minute (RPM): Limit 30, Used 30, Requ
+    [59/100] Fehler: HTTP 429: {"error":{"message":"Rate limit reached for model `llama-3.1-8b-instant` in organization `org_01kqn0cd0vefjb3jyt1q4mcmjs` service tier `on_demand` on requests per minute (RPM): Limit 30, Used 30, Requ
+    [61/100] Fehler: HTTP 429: {"error":{"message":"Rate limit reached for model `llama-3.1-8b-instant` in organization `org_01kqn0cd0vefjb3jyt1q4mcmjs` service tier `on_demand` on requests per minute (RPM): Limit 30, Used 30, Requ
+    [63/100] Fehler: HTTP 429: {"error":{"message":"Rate limit reached for model `llama-3.1-8b-instant` in organization `org_01kqn0cd0vefjb3jyt1q4mcmjs` service tier `on_demand` on requests per minute (RPM): Limit 30, Used 30, Requ
+    [65/100] Fehler: HTTP 429: {"error":{"message":"Rate limit reached for model `llama-3.1-8b-instant` in organization `org_01kqn0cd0vefjb3jyt1q4mcmjs` service tier `on_demand` on requests per minute (RPM): Limit 30, Used 30, Requ
+    [67/100] Fehler: HTTP 429: {"error":{"message":"Rate limit reached for model `llama-3.1-8b-instant` in organization `org_01kqn0cd0vefjb3jyt1q4mcmjs` service tier `on_demand` on requests per minute (RPM): Limit 30, Used 30, Requ
+    [69/100] Fehler: HTTP 429: {"error":{"message":"Rate limit reached for model `llama-3.1-8b-instant` in organization `org_01kqn0cd0vefjb3jyt1q4mcmjs` service tier `on_demand` on requests per minute (RPM): Limit 30, Used 30, Requ
+    [71/100] Fehler: HTTP 429: {"error":{"message":"Rate limit reached for model `llama-3.1-8b-instant` in organization `org_01kqn0cd0vefjb3jyt1q4mcmjs` service tier `on_demand` on requests per minute (RPM): Limit 30, Used 30, Requ
+    [73/100] Fehler: HTTP 429: {"error":{"message":"Rate limit reached for model `llama-3.1-8b-instant` in organization `org_01kqn0cd0vefjb3jyt1q4mcmjs` service tier `on_demand` on requests per minute (RPM): Limit 30, Used 30, Requ
+    [75/100] Fehler: HTTP 429: {"error":{"message":"Rate limit reached for model `llama-3.1-8b-instant` in organization `org_01kqn0cd0vefjb3jyt1q4mcmjs` service tier `on_demand` on requests per minute (RPM): Limit 30, Used 30, Requ
+    [77/100] Fehler: HTTP 429: {"error":{"message":"Rate limit reached for model `llama-3.1-8b-instant` in organization `org_01kqn0cd0vefjb3jyt1q4mcmjs` service tier `on_demand` on requests per minute (RPM): Limit 30, Used 30, Requ
+    [79/100] Fehler: HTTP 429: {"error":{"message":"Rate limit reached for model `llama-3.1-8b-instant` in organization `org_01kqn0cd0vefjb3jyt1q4mcmjs` service tier `on_demand` on requests per minute (RPM): Limit 30, Used 30, Requ
+    [81/100] Fehler: HTTP 429: {"error":{"message":"Rate limit reached for model `llama-3.1-8b-instant` in organization `org_01kqn0cd0vefjb3jyt1q4mcmjs` service tier `on_demand` on requests per minute (RPM): Limit 30, Used 30, Requ
+    [83/100] Fehler: HTTP 429: {"error":{"message":"Rate limit reached for model `llama-3.1-8b-instant` in organization `org_01kqn0cd0vefjb3jyt1q4mcmjs` service tier `on_demand` on requests per minute (RPM): Limit 30, Used 30, Requ
+    [85/100] Fehler: HTTP 429: {"error":{"message":"Rate limit reached for model `llama-3.1-8b-instant` in organization `org_01kqn0cd0vefjb3jyt1q4mcmjs` service tier `on_demand` on requests per minute (RPM): Limit 30, Used 30, Requ
+    [87/100] Fehler: HTTP 429: {"error":{"message":"Rate limit reached for model `llama-3.1-8b-instant` in organization `org_01kqn0cd0vefjb3jyt1q4mcmjs` service tier `on_demand` on requests per minute (RPM): Limit 30, Used 30, Requ
+    [89/100] Fehler: HTTP 429: {"error":{"message":"Rate limit reached for model `llama-3.1-8b-instant` in organization `org_01kqn0cd0vefjb3jyt1q4mcmjs` service tier `on_demand` on requests per minute (RPM): Limit 30, Used 30, Requ
+    [91/100] Fehler: HTTP 429: {"error":{"message":"Rate limit reached for model `llama-3.1-8b-instant` in organization `org_01kqn0cd0vefjb3jyt1q4mcmjs` service tier `on_demand` on requests per minute (RPM): Limit 30, Used 30, Requ
+    [93/100] Fehler: HTTP 429: {"error":{"message":"Rate limit reached for model `llama-3.1-8b-instant` in organization `org_01kqn0cd0vefjb3jyt1q4mcmjs` service tier `on_demand` on requests per minute (RPM): Limit 30, Used 30, Requ
+    [95/100] Fehler: HTTP 429: {"error":{"message":"Rate limit reached for model `llama-3.1-8b-instant` in organization `org_01kqn0cd0vefjb3jyt1q4mcmjs` service tier `on_demand` on requests per minute (RPM): Limit 30, Used 30, Requ
+    [97/100] Fehler: HTTP 429: {"error":{"message":"Rate limit reached for model `llama-3.1-8b-instant` in organization `org_01kqn0cd0vefjb3jyt1q4mcmjs` service tier `on_demand` on requests per minute (RPM): Limit 30, Used 30, Requ
+    [99/100] Fehler: HTTP 429: {"error":{"message":"Rate limit reached for model `llama-3.1-8b-instant` in organization `org_01kqn0cd0vefjb3jyt1q4mcmjs` service tier `on_demand` on requests per minute (RPM): Limit 30, Used 30, Requ
+    llm_ttft: p50=46.2 ms, p95=85.3 ms, errors=35
+    llm_ttl: p50=52.0 ms, p95=92.5 ms, errors=35
+
+[LLM — mistral]
+  LLM [mistral]: n=100
+    [1/100] ttft=421 ms, ttl=462 ms
+    [11/100] ttft=345 ms, ttl=379 ms
+    [21/100] ttft=391 ms, ttl=423 ms
+    [31/100] ttft=536 ms, ttl=570 ms
+    [41/100] ttft=205 ms, ttl=234 ms
+    [51/100] ttft=497 ms, ttl=529 ms
+    [61/100] ttft=364 ms, ttl=398 ms
+    [71/100] ttft=785 ms, ttl=814 ms
+    [81/100] ttft=362 ms, ttl=384 ms
+    [91/100] ttft=182 ms, ttl=217 ms
+    llm_ttft: p50=282.9 ms, p95=497.3 ms, errors=0
+    llm_ttl: p50=319.7 ms, p95=569.6 ms, errors=0
+
+[TTS — deepgram_tts]
+  TTS [deepgram_tts]: n=100
+    [1/100] ttfa=460 ms, connect=215 ms
+    [11/100] ttfa=419 ms, connect=213 ms
+    [21/100] ttfa=417 ms, connect=210 ms
+    [31/100] ttfa=586 ms, connect=298 ms
+    [41/100] ttfa=553 ms, connect=283 ms
+    [51/100] ttfa=550 ms, connect=282 ms
+    [61/100] ttfa=549 ms, connect=284 ms
+    [71/100] ttfa=549 ms, connect=282 ms
+    [81/100] ttfa=553 ms, connect=283 ms
+    [91/100] ttfa=584 ms, connect=297 ms
+    tts_ttfa: p50=554.0 ms, p95=590.2 ms, errors=0
+
+[TTS — openai_tts]
+  TTS [openai_tts]: n=100
+    [1/100] ttfa=886 ms, connect=9 ms
+    [11/100] ttfa=1282 ms, connect=8 ms
+    [21/100] ttfa=1229 ms, connect=11 ms
+    [31/100] ttfa=1338 ms, connect=9 ms
+    [41/100] ttfa=1169 ms, connect=13 ms
+    [51/100] ttfa=1146 ms, connect=10 ms
+    [61/100] ttfa=1194 ms, connect=12 ms
+    [71/100] ttfa=1103 ms, connect=8 ms
+    [81/100] ttfa=1210 ms, connect=8 ms
+    [91/100] ttfa=852 ms, connect=9 ms
+    tts_ttfa: p50=977.5 ms, p95=1739.7 ms, errors=0
+
+[TTS — azure_tts]
+  TTS [azure_tts]: n=100
+    [1/100] ttfa=574 ms, connect=42 ms
+    [11/100] ttfa=63 ms, connect=35 ms
+    [21/100] ttfa=66 ms, connect=33 ms
+    [31/100] ttfa=73 ms, connect=37 ms
+    [41/100] ttfa=62 ms, connect=46 ms
+    [51/100] ttfa=70 ms, connect=32 ms
+    [61/100] ttfa=67 ms, connect=36 ms
+    [71/100] ttfa=67 ms, connect=35 ms
+    [81/100] ttfa=62 ms, connect=39 ms
+    [91/100] ttfa=63 ms, connect=32 ms
+    tts_ttfa: p50=66.1 ms, p95=127.8 ms, errors=0
+
+Fertig.
