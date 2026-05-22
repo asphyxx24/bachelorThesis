@@ -114,51 +114,60 @@ Alle 9 Provider-Module implementiert und per `--dry-run` getestet (2026-05-03).
 
 - [x] Cron-Jobs auf EC2 eingerichtet (2026-05-03)
 - [x] Testlauf: Manuell alle 9 Provider, 0 Errors
-- [ ] Logs pruefen nach erstem automatischen Lauf
+- [x] Logs geprueft, Kampagne lief sauber ueber 18 Tage
+- [x] Cron-Jobs am 2026-05-22 deaktiviert (Kampagnenende)
 
 ---
 
-## Phase 8: Kampagne starten (14 Tage)
+## Phase 8: Kampagne (ERLEDIGT)
 
-**Startbedingungen:**
 - [x] `sample.wav` aufgenommen und validiert
 - [x] Alle API-Keys in `.env` eingetragen
 - [x] Alle 9 Layer-3-Module implementiert und getestet
 - [x] EC2 laeuft, SSH-Zugang funktioniert (IP: 35.159.112.40)
-- [x] Cron-Jobs aktiv (seit 2026-05-03)
-
-**Kampagne laeuft automatisch** — taeglich Git-Sync pruefen ob Daten ankommen.
-
----
-
-## Phase 9: Layer-2 Captures (waehrend Kampagne)
-
-Layer 2 ist kein automatischer Messlauf — manuell auf EC2 per `tcpdump`.
-Ein paar gezielte Captures pro Provider reichen.
-
-- [ ] Deepgram STT Capture (WebSocket, Audio-Upload-Pattern)
-- [ ] Rev.ai STT Capture (WebSocket, Vergleich)
-- [ ] Azure STT Capture (WebSocket, EU-Endpoint)
-- [ ] OpenAI LLM Capture (HTTPS+SSE, Token-Delivery)
-- [ ] Groq LLM Capture (HTTPS+SSE, LPU-Verhalten)
-- [ ] Mistral LLM Capture (HTTPS+SSE, EU-Endpoint)
-- [ ] Analyse mit tshark (Inter-Paket-Zeiten, WebSocket-Frames)
-
-Anleitung: `measurements/layer2/README.md`
-POC-Ergebnisse: `notes/layer2_first_capture.md`
+- [x] Cron-Jobs aktiv (2026-05-03 bis 2026-05-22)
+- [x] Kampagne abgeschlossen — 18 Tage, 145 Slots, 128.580 Messungen
+- [x] Datenqualitaet validiert (7/9 Provider ~0% Fehler, Groq 34% durch
+      Free-Tier-Rate-Limit, Mistral 4,3%)
+- [x] Tatsaechliche Kosten: ~$68 API + ~$13 AWS
 
 ---
 
-## Phase 10: Analyse (nach Kampagne)
+## Phase 9: Layer-2 Captures (ERLEDIGT)
+
+- [x] PCAP-Capture aller 9 Provider auf EC2 (2026-05-04)
+- [x] Erstanalyse mit tshark (TCP/TLS-Submetriken, Inter-Paket-Zeiten)
+- [x] PCAP-Dateien lokal gesichert (`data/layer2/capture_*.pcap`)
+- [x] `analysis_summary.json` mit Submetriken pro Provider
+
+Vertiefte Analyse (alle IPs/ASNs, Kommunikationsmatrix) folgt in Phase 10 —
+Notebook `02_pcap_communication.ipynb`, siehe `notes/analysis_plan.md`.
+
+---
+
+## Phase 10: Analyse (AKTUELLE PHASE)
+
+**Master-Plan:** `notes/analysis_plan.md` (PRP, erstellt 2026-05-22)
+
+Acht Notebooks geplant in der Reihenfolge `00 → 01 → 02 → 03 → 04 → 05 → 06 → 07`:
 
 | Notebook | Inhalt |
 |----------|--------|
-| `analysis/layer1_infrastructure.ipynb` | DNS-Varianz, Ping-RTT, TLS-Handshake, AS-Pfade |
-| `analysis/layer3_all_providers.ipynb` | p50/p95/p99 aller 9 Provider |
-| `analysis/layer3_daytime_trends.ipynb` | Latenz nach Tageszeit / Wochentag |
-| `analysis/layer1_vs_layer3_correlation.ipynb` | Ping RTT × 3 ≈ connect_ms? (Kernbefund) |
-| `analysis/layer3_e2e_pipeline.ipynb` | E2E-Chain: STT + LLM + TTS Gesamtlatenz |
-| `analysis/layer2_protocol.ipynb` | 3-RTT-Overhead, Protokollvergleich aus PCAP |
+| `00_data_quality.ipynb` | Sanity-Check der processed-Daten |
+| `01_layer1_infrastructure.ipynb` | DNS, Ping, TLS, Traceroute + DNSSEC |
+| `02_pcap_communication.ipynb` | PCAP-Analyse, ASN-Lookup, Kommunikationsmatrix |
+| `03_layer3_stt.ipynb` | STT-Vergleich |
+| `04_layer3_llm.ipynb` | LLM-Vergleich (incl. Groq-Rate-Limit-Befund) |
+| `05_layer3_tts.ipynb` | TTS-Vergleich |
+| `06_cross_layer_correlation.ipynb` | KERNBEFUND: Ping × N_RTTs ≈ connect_ms |
+| `07_e2e_pipeline.ipynb` | E2E-Pipeline, 27 Provider-Kombinationen |
+
+Voraussetzung vor Start:
+- `pip install jupyter matplotlib seaborn scipy dnspython`
+- Wireshark/tshark installieren (fuer Notebook 02)
+
+Datenaufbereitung erledigt: `data/process_raw_data.py` hat 8 saubere Dateien
+in `data/processed/` erzeugt (4 Parquet fuer Layer 3, 4 CSV fuer Layer 1).
 
 ---
 
