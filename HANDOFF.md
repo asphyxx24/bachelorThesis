@@ -30,14 +30,13 @@ Alle Cron-Jobs deaktiviert, EC2-Instanz gestoppt. Alle Daten lokal und auf GitHu
 
 **Phase 10: Analyse** — Jupyter Notebooks lokal aufsetzen und Daten auswerten.
 
-Reihenfolge:
-1. Python-Umgebung lokal einrichten (Jupyter, pandas, matplotlib, scipy)
-2. `analysis/layer3_all_providers.ipynb` — p50/p95/p99 aller 9 Provider
-3. `analysis/layer3_daytime_trends.ipynb` — Latenz nach Tageszeit / Wochentag
-4. `analysis/layer1_infrastructure.ipynb` — DNS-Varianz, Ping-RTT, TLS
-5. `analysis/layer1_vs_layer3_correlation.ipynb` — Ping RTT x 3 ≈ connect_ms (Kernbefund)
-6. E2E-Validierung (manuelle Pipeline-Runs, ~1 Tag)
-7. Thesis schreiben (~3-4 Wochen)
+**Master-Plan fuer die Analyse:** `notes/analysis_plan.md` (PRP, 2026-05-22)
+Das Dokument enthaelt die 8 geplanten Notebooks mit Inputs, Methoden und erwarteten
+Outputs. Naechster konkreter Schritt: `00_data_quality.ipynb` aufsetzen.
+
+Voraussetzungen vor Start:
+- `pip install jupyter matplotlib seaborn scipy dnspython`
+- Wireshark/tshark installieren (fuer Notebook 02 — PCAP/Kommunikationsmatrix)
 
 ## Entscheidungen und Fixes
 
@@ -47,6 +46,15 @@ Reihenfolge:
 - **EC2 gestoppt:** `i-045a2d0eeb338b290` ist im Zustand `stopped`. Analyse laeuft lokal.
 - **Groq-Analyse:** Rate-Limiting war konstant (67/100 pro Slot, nicht zufaellig) →
   erklaerbar durch 30-RPM-Limit des Free Tiers; als Befund dokumentierbar.
+- **Datenaufbereitung erledigt:** `data/process_raw_data.py` erzeugt 8 saubere
+  Dateien in `data/processed/` (4 Parquet fuer Layer 3, 4 CSV fuer Layer 1).
+  Backup der Rohdaten in `data/raw_backup/` (lokal, nicht in Git).
+- **PCAP-Dateien lokal:** EC2 kurz hochgefahren, alle 9 PCAP-Files
+  (`data/layer2/capture_*.pcap`) heruntergeladen, EC2 wieder gestoppt.
+- **Prof-Punkte aus Treffen:** DNSSEC, Visualisierungen, Gegenpruefen, andere IPs
+  in PCAP, Kommunikationsmatrix — alle in `notes/analysis_plan.md` zugeordnet.
+- **Analyse-PRP erstellt:** `notes/analysis_plan.md` ist das Master-Dokument
+  fuer die gesamte Analyse-Phase.
 
 ### Session 2026-05-04
 - **Cron-Fix:** `SHELL=/bin/bash` in Crontab — `source` funktioniert nicht in
