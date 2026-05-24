@@ -1,0 +1,8 @@
+endpoint,provider_kategorien,behauptete_region,rtt_icmp_median_ms,rtt_tcp_median_ms,unique_ips_18d,dns_ttl_median_s,anycast_likely,cdn_hypothese,tls_version,tls_handshake_ms,median_hops,traceroute_reach_pct,dnssec
+api.deepgram.com,"STT/deepgram, TTS/deepgram",USA (Anycast),139.5,140.2,9,10.0,True,"AWS, other",TLSv1.3,142.02,18.0,94.4,Zone NICHT signiert
+api.groq.com,LLM/groq,USA (LPU),1.3,1.7,2,246.0,False,Cloudflare,TLSv1.3,6.86,10.0,94.4,Zone NICHT signiert
+api.mistral.ai,LLM/mistral,EU/Frankreich,1.0,2.0,2,232.0,False,Cloudflare,TLSv1.3,6.4,10.0,94.4,Zone NICHT signiert
+api.openai.com,"LLM/openai, TTS/openai",USA,1.2,2.3,2,28.0,False,Cloudflare,TLSv1.3,6.26,10.0,94.4,Zone NICHT signiert
+api.rev.ai,STT/revai,USA,,141.8,19,60.0,False,"AWS, other",TLSv1.2,289.34,25.0,0.0,Zone NICHT signiert
+italynorth.stt.speech.microsoft.com,STT/azure,Italy North,10.4,12.4,1,10.0,False,Azure-MS,TLSv1.3,15.3,25.0,0.0,Zone NICHT signiert
+italynorth.tts.speech.microsoft.com,TTS/azure,Italy North,10.4,16.0,1,10.0,False,Azure-MS,TLSv1.3,17.01,25.0,0.0,Zone NICHT signiert
