@@ -107,17 +107,20 @@ pip install jupyter matplotlib seaborn scipy dnspython
 
 ## 5. Notebook-Struktur (Uebersicht)
 
+> Status-Stand 2026-05-24: 4 von 8 Notebooks fertig. Detail-Befunde siehe `analysis/README.md`.
+
 ```
 analysis/
-├── _helpers.py                    Provider-Map, gemeinsame Plot-Funktionen
-├── 00_data_quality.ipynb          Initialer Sanity-Check der processed-Daten
-├── 01_layer1_infrastructure.ipynb DNS, Ping, TLS, Traceroute + DNSSEC
-├── 02_pcap_communication.ipynb    PCAP-Analyse: IPs, ASNs, Kommunikationsmatrix
-├── 03_layer3_stt.ipynb            STT-Vergleich (Deepgram, Rev.ai, Azure)
-├── 04_layer3_llm.ipynb            LLM-Vergleich (OpenAI, Groq, Mistral)
-├── 05_layer3_tts.ipynb            TTS-Vergleich (Deepgram, OpenAI, Azure)
-├── 06_cross_layer_correlation.ipynb Kernbefund: L1 vs L3, L2 vs L3
-└── 07_e2e_pipeline.ipynb          Sequentielle Pipeline-Latenz, Provider-Mix
+├── _helpers.py                          [FERTIG] Provider-Map, Farben, Lader
+├── _pcap_helpers.py                     [FERTIG] tshark + ASN-Lookup
+├── 00_data_quality.ipynb                [FERTIG] Sanity-Check, 4 Bugs gefixt
+├── 01_layer1_infrastructure.ipynb       [FERTIG] DNS/Ping/TLS/TR/DNSSEC
+├── 02_pcap_communication.ipynb          [FERTIG] IPs/ASNs/Submetriken/Heatmap
+├── 03_layer3_stt.ipynb                  [FERTIG] STT — Deepgram bester, Azure langsamster
+├── 04_layer3_llm.ipynb                  [OFFEN]  LLM-Vergleich + Token-Rate
+├── 05_layer3_tts.ipynb                  [OFFEN]  TTS-Vergleich
+├── 06_cross_layer_correlation.ipynb     [OFFEN]  Kernbefund (Direkt vs Cloudflare-fronted)
+└── 07_e2e_pipeline.ipynb                [OFFEN]  27 Kombinationen, 1-Sek-Budget
 ```
 
 Empfohlene Reihenfolge: **00 → 01 → 02 → 03 → 04 → 05 → 06 → 07**.
@@ -454,12 +457,17 @@ und zeigen, wie die Providerwahl die Gesamtlatenz beeinflusst.
 
 | Prof-Punkt | Wo behandelt | Status |
 |------------|--------------|--------|
-| 1. DNSSEC | NB 01, Abschnitt 1.5 | offen |
-| 2. Visualisierungen | NB 03-07 (alle Notebooks) | offen |
-| 3. Rohdaten aufbereiten | `data/process_raw_data.py` | erledigt |
-| 4. Gegenpruefen | NB 06 (Cross-Layer), NB 00 (Quality) | offen |
-| 5. Andere IPs in PCAP | NB 02, Abschnitt 2.1, 2.5 | offen |
-| 6. Kommunikationsmatrix | NB 02, Abschnitt 2.4 | offen |
+| 1. DNSSEC | NB 01, §5 + `data/layer1_extra/dnssec.csv` | **erledigt** (0/6 Hauptzonen signiert) |
+| 2. Visualisierungen | NB 01-03 fertig (13 Plots), NB 04-07 ausstehend | teilweise erledigt |
+| 3. Rohdaten aufbereiten | `data/process_raw_data.py` (am 24.05. zusaetzlich gefixt) | erledigt |
+| 4. Gegenpruefen | NB 00 (Quality), NB 02 (TLS Cross-Check PCAP vs Lokal) | teilweise erledigt — NB 06 fehlt |
+| 5. Andere IPs in PCAP | NB 02, §3 | **erledigt** (0/9 mit Nebenkommunikation) |
+| 6. Kommunikationsmatrix | NB 02, §2 + `figures/02_communication_matrix.pdf` | **erledigt** |
+
+**Bonus-Befunde aus dieser Phase (ueber Prof-Punkte hinaus):**
+- Cloudflare-Fronting fuer 4/9 Provider (DNS + PCAP-Bestaetigung)
+- Rev.ai TLS 1.2 als einziger Provider → +140 ms Connect-Overhead-Erklaerung
+- STT-Engine schlaegt Netzwerk-Region: Deepgram-Nova-3 in US schlaegt Azure-Italy
 
 ---
 

@@ -179,3 +179,85 @@ liefern DS-Records → Methodik valide.
 seine Hauptzone DNSSEC-signiert. DNS-Antwort-Spoofing ist gegen alle 9 Endpoints
 prinzipiell moeglich — eine sicherheitsrelevante Beobachtung, die in der
 Diskussion erwaehnt werden sollte.
+
+---
+
+## 5. Befunde aus NB 02 (PCAP-Analyse), Stand 2026-05-24
+
+### 5.1 Vier ASNs decken alle 9 Provider
+- **AS 13335 Cloudflare** (4/9): openai_llm, openai_tts, groq_llm, mistral_llm
+- **AS 8075 Microsoft** (2/9): azure_stt, azure_tts
+- **AS 12129 123NET** (2/9): deepgram_stt, deepgram_tts (kleiner US-ISP fuer Anycast-Edges)
+- **AS 16509 Amazon AWS** (1/9): revai_stt (Prefix 44.192.0.0/10 → US-West Oregon)
+
+### 5.2 Keine Nebenkommunikation in keinem PCAP
+0 von 9 Providern hat innerhalb einer Cold-Start-Messung mehr als eine ASN kontaktiert.
+Keine Telemetrie-Endpoints, keine Auth-Server-Roundtrips zu Dritten, keine
+CDN-Asset-Loads. Ein API-Aufruf erzeugt genau eine TCP/TLS-Verbindung.
+
+**Caveat:** Single-Slot-PCAP (04.05.) → zeitliche Variation nicht erfasst. Innerhalb
+der einen TLS-Session koennte vieles passieren (h2-Multiplexing, Token-Refresh).
+
+### 5.3 TLS-Konfiguration stabil ueber 3 Wochen
+Cross-Check PCAP (04.05. EC2) vs. lokal (24.05. EC2): identische TLS-Versionen
+und Cipher-Suites fuer alle 7 Endpoints. Rev.ai bestaetigt TLS 1.2 mit
+ECDHE-RSA-AES128-GCM-SHA256, alle anderen TLS 1.3 mit TLS_AES_256_GCM_SHA384.
+
+### 5.4 Cross-Layer-Modell `connect ≈ RTT × N_RTTs` bricht bei Cloudflare-fronted
+**WICHTIG fuer NB 06:**
+
+| Klasse | Provider | Modell |
+|--------|----------|--------|
+| Direkt-gehostet | deepgram_stt/tts, revai_stt, azure_stt/tts | `connect ≈ RTT × N_RTTs + Server-Konstante` |
+| Cloudflare-fronted | groq, mistral, openai (LLM+TTS) | `connect ≈ Edge-RTT + Edge-Forwarding-Konstante` |
+
+Bei Cloudflare-fronted Providern misst die RTT die Distanz zum Edge in Frankfurt (~1-2 ms), nicht zum Backend. Die "echte" Backend-RTT ist unmessbar. NB 06 muss diese zwei Klassen separat modellieren.
+
+Beispiel: openai_llm hat RTT=1.2ms und app_data_start_ms=135.8ms → 114 RTTs (Unsinn). Tatsaechlich: 1 Edge-RTT (1.2ms) + 130ms Cloudflare-Backend-Forwarding.
+
+### 5.5 Submetriken-Zerlegung pro Provider (Single-Capture 04.05.)
+
+| Provider | TCP-HS | TLS-HS | Proto-Setup | App-Data-Start |
+|----------|-------:|-------:|------------:|---------------:|
+| azure_stt | 11.4 | 13.0 | **238.4** | 263.7 |
+| azure_tts | 11.3 | 12.7 | 81.4 | 106.2 |
+| deepgram_stt | 101.8 | 103.7 | 124.6 | 331.0 |
+| deepgram_tts | 101.5 | 103.2 | 248.8 | 454.4 |
+| groq_llm | 1.6 | 4.8 | 51.6 | 58.5 |
+| mistral_llm | 1.1 | 2.8 | 50.6 | 55.1 |
+| openai_llm | 1.2 | 4.6 | **129.1** | 135.8 |
+| openai_tts | 1.1 | 2.5 | 48.2 | 52.3 |
+| revai_stt | 142.2 | **142.3** | 394.1 | 679.6 |
+
+Auffaelligkeiten:
+- **azure_stt 238 ms Proto-Setup** = Subscription-Lookup vor STT-Stream
+- **revai_stt 142 ms TLS-HS** = exakt 1 RTT mehr als TLS-1.3 (Beweis fuer TLS-1.2-Penalty)
+- **openai_llm 129 ms Proto-Setup** = Cloudflare-Backend-Forwarding zum echten LLM
+
+---
+
+## 6. Befunde aus NB 03 (STT-Layer-3), Stand 2026-05-24
+
+### 6.1 TTFT-Reihenfolge wider Erwartung
+- Deepgram: 587 ms (schnellster, trotz US-Hosting!)
+- Rev.ai: 1404 ms
+- Azure: 1719 ms (langsamster, trotz EU-Hosting!)
+
+Erklaerung: bei Azure dominieren 1670 ms Server-Processing (97 % der TTFT), bei Deepgram nur 150 ms (26 %).
+
+### 6.2 Zwei Latenz-Profile
+
+| Provider | Connect/TTFT | Bottleneck | Optimierungs-Hebel |
+|----------|-------------:|------------|--------------------|
+| deepgram | 74 % | Netzwerk | EU-Hosting / Persistent Connections → TTFT auf ~150 ms |
+| revai | 42 % | beide | EU-Hosting + Modell-Wechsel |
+| azure | 3 % | Server | nur Modell-/API-Variante hilft |
+
+### 6.3 Cold-Start-Methodik validiert
+Lineare Regression Median(ttft) vs run-Index liefert fuer alle 3 Provider slopes |s| < 0.03 ms/run. Keine Connection-Reuse-Artefakte, kein TCP-Caching.
+
+### 6.4 Keine Tageszeit-/Wochenvariation
+Heatmaps Stunde × Wochentag sind flach. Infrastruktur ist gut dimensioniert.
+
+### 6.5 Drift ueber 18 Tage minimal
+Azure und Rev.ai sehr stabil. Deepgram ±30 ms Tagesvariation wegen Anycast-Edge-Wechsel zwischen 123NET-PoPs.
