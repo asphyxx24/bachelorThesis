@@ -1,21 +1,27 @@
 # Handoff — Aktueller Arbeitsstand
 
-> Letzte Aktualisierung: 2026-05-22 (Session: Kampagne gestoppt, EC2 gestoppt, Analyse-Phase beginnt)
+> Letzte Aktualisierung: 2026-05-24 (Session: NB 00 Data Quality + Aufbereitung neu, Ersatzmessungen auf EC2)
 
 ## Letzter Stand
 
-**Kampagne abgeschlossen.** Gelaufen von 2026-05-04 12:00 UTC bis 2026-05-22 12:00 UTC (18 Tage, 4 Tage laenger als geplant).
-Alle Cron-Jobs deaktiviert, EC2-Instanz gestoppt. Alle Daten lokal und auf GitHub vorhanden.
+**Notebook 00 (Data Quality) abgeschlossen.** Datensatz ist makellos aufbereitet,
+alle Anomalien dokumentiert in `data/processed/known_anomalies.md`. EC2 wurde
+kurz hochgefahren fuer drei Ersatzmessungen (TLS, TCP-Ping, DNSSEC), danach wieder
+gestoppt.
 
-**Finale Datenmenge:**
-- Layer 3: 145 Slots, 128.580 Messungen gesamt, 123.019 erfolgreich
-- Layer 1: 91 Dateien (DNS, Ping, TLS, Traceroute)
-- Layer 2: 10 PCAP-Analysen (alle 9 Provider)
+**Datenmenge (nach Aufbereitungs-Fix):**
+- Layer 3: 42.016 STT + 37.734 LLM + 43.489 TTS Erfolge + 7.261 Errors
+- Layer 1: 819 ping, 819 dns, 162 tls (alt, leer), 162 traceroute
+- Layer 1 Extra (neu am 24.05.): tls.csv (7×5), ping_tcp.csv (7×10), dnssec.csv (7)
+- Layer 2: 10 PCAP-Dateien (lokal, fuer NB 02)
 
-**Datenqualitaet:**
-- 7 von 9 Providern: 0-0,1% Fehlerrate (perfekt)
-- Groq: 34% Fehler (HTTP 429, Free-Tier 30-RPM-Limit) — aber gleichmaessig verteilt (67/100 pro Slot, kein Slot leer), 9.452 valide Messungen, voll nutzbar
-- Mistral: 4,3% Fehler (HTTP 429, Kapazitaet), 13.762 valide Messungen
+**Datenqualitaet (nach Fix):**
+- 0 % NaN in allen Layer-3-Dateien (vorher 4,3 / 2,4 / 1,0 %)
+- Rev.ai STT: **neue Erkenntnis** 10,16 % Fehlerrate (1.473 Connection-Failures
+  waren frueher als stille NaN verborgen, jetzt in errors)
+- Mistral LLM: 4,79 % Fehler, 6 dokumentierte Stress-Slots
+- Groq LLM: 34,97 % Fehler (Free-Tier-RPM-Limit, gleichmaessig verteilt)
+- Alle anderen Provider: <0,1 % Fehler
 
 **Kosten (tatsaechlich, 18 Tage):**
 - Deepgram (STT+TTS): $21,33 von $200 Guthaben
@@ -28,17 +34,38 @@ Alle Cron-Jobs deaktiviert, EC2-Instanz gestoppt. Alle Daten lokal und auf GitHu
 
 ## Aktuelle Fokus-Aufgabe
 
-**Phase 10: Analyse** — Jupyter Notebooks lokal aufsetzen und Daten auswerten.
+**Phase 10: Analyse** — Notebook 00 fertig, Notebook 01 (Layer-1-Infrastruktur)
+ist der naechste Schritt. Es kann jetzt die neuen `data/layer1_extra/`-Dateien
+ebenso nutzen wie die bestehenden Layer-1-CSVs.
 
-**Master-Plan fuer die Analyse:** `notes/analysis_plan.md` (PRP, 2026-05-22)
-Das Dokument enthaelt die 8 geplanten Notebooks mit Inputs, Methoden und erwarteten
-Outputs. Naechster konkreter Schritt: `00_data_quality.ipynb` aufsetzen.
+**Master-Plan fuer die Analyse:** `notes/analysis_plan.md`
+**Anomalien-Doku (Pflichtlektuere vor jedem neuen NB):** `data/processed/known_anomalies.md`
 
-Voraussetzungen vor Start:
-- `pip install jupyter matplotlib seaborn scipy dnspython`
-- Wireshark/tshark installieren (fuer Notebook 02 — PCAP/Kommunikationsmatrix)
+Voraussetzungen sind erfuellt:
+- jupyter, matplotlib, seaborn, scipy, dnspython installiert
+- Wireshark/tshark noch offen (erst fuer Notebook 02 noetig)
 
 ## Entscheidungen und Fixes
+
+### Session 2026-05-24
+- **Notebook 00 (Data Quality)** in `analysis/00_data_quality.ipynb` aufgesetzt und ausgefuehrt.
+- **`analysis/_helpers.py`** zentralisiert Provider-Map, Farben, Datenlader fuer alle Notebooks.
+- **`data/process_raw_data.py` gefixt** (4 Bugs, siehe `known_anomalies.md` Abschnitt 1):
+  - Slot-Summary-Zeilen ueberspringen
+  - `error=""` ohne Timing als Error werten
+  - `api`-Naming auch in errors via `API_RENAME` normalisieren
+  - Rev.ai-Pings mit `packet_loss=100` statt skip
+- **EC2 kurz hochgefahren** fuer drei Ersatzmessungen (Layer-1-TLS war zu 100% NaN):
+  - `data/layer1_extra/tls.csv` — TLS-Handshake, Versionen, Ciphers, ALPN (7 Endpoints x 5 Runs)
+  - `data/layer1_extra/ping_tcp.csv` — TCP-SYN-Ping (funktioniert auch fuer Rev.ai)
+  - `data/layer1_extra/dnssec.csv` — DNSSEC-Status pro Zone
+  - EC2 danach wieder gestoppt (Kosten ~2 Cent).
+- **Neue Befunde aus Aufbereitung + Ersatzmessungen:**
+  - Rev.ai STT hat 10,16% Fehlerrate (vorher 0% verborgen in NaN)
+  - Rev.ai ist einziger Provider mit **TLS 1.2** statt TLS 1.3 → 2-RTT-Handshake erklaert ~140ms Mehr-Overhead
+  - Keiner der 6 Provider-Hauptzonen ist DNSSEC-signiert (Antwort auf Prof-Punkt 1)
+  - OpenAI/Groq/Mistral haben 1-2ms RTT aus EC2 Frankfurt → vermutlich Cloudflare-Edge im selben RZ
+- **Anomalien-Dokumentation** in `data/processed/known_anomalies.md` — Pflichtlektuere fuer alle nachfolgenden Notebooks.
 
 ### Session 2026-05-22
 - **Kampagne gestoppt:** Alle Cron-Jobs per `crontab -r` entfernt.
@@ -86,9 +113,9 @@ Voraussetzungen vor Start:
 | Instance ID | `i-045a2d0eeb338b290` |
 | Typ | t3.small (2 vCPU, 2 GB RAM) |
 | Region | eu-central-1 (Frankfurt) |
-| IP | `35.159.112.40` (bei Neustart neue IP) |
-| Status | **STOPPED** (seit 2026-05-22) |
-| SSH | `ssh -i ~/.ssh/thesis-key.pem ubuntu@35.159.112.40` |
+| IP | bei Neustart neue IP (zuletzt 2026-05-24: `63.178.41.35`) |
+| Status | **STOPPED** (seit 2026-05-24, nach Ersatzmessungen) |
+| SSH | `ssh -i ~/.ssh/thesis-key.pem ubuntu@<aktuelle-IP>` |
 | Repo | `~/thesis` (via SSH Deploy Key, Push-berechtigt) |
 
 ## Provider-Matrix (FINAL)
@@ -112,9 +139,14 @@ Voraussetzungen vor Start:
 3. ~~Betreuer-Treffen~~ — Dienstag 2026-05-05
 4. ~~Kampagne Monitoring~~ — abgeschlossen
 5. ~~Kampagne stoppen + EC2 stoppen~~ — erledigt (2026-05-22)
-6. **Analyse** in Jupyter Notebooks (Phase 10) — **NAECHSTE AUFGABE**
-7. **E2E-Validierung** (manuelle Pipeline-Runs, 1 Tag)
-8. **Thesis schreiben** (~3-4 Wochen)
+6. ~~NB 00 Data Quality + Aufbereitungs-Fix + Ersatzmessungen~~ — erledigt (2026-05-24)
+7. **NB 01 Layer-1-Infrastruktur** (DNS/Ping/TLS/Traceroute + DNSSEC + Anycast-Analyse) — **NAECHSTE AUFGABE**
+8. **NB 02 PCAP & Kommunikationsmatrix** (braucht Wireshark/tshark, Prof-Punkte 5+6)
+9. **NB 03-05** Layer-3 STT/LLM/TTS
+10. **NB 06** Cross-Layer-Korrelation (Kernbefund)
+11. **NB 07** End-to-End-Pipeline
+12. **E2E-Validierung** (manuelle Pipeline-Runs, 1 Tag)
+13. **Thesis schreiben** (~3-4 Wochen)
 
 ## Relevante Dateien
 
@@ -131,5 +163,9 @@ Voraussetzungen vor Start:
 | `measurements/layer2/analyze_pcaps.py` | tshark-Analyse der PCAP-Dateien |
 | `data/layer2/analysis_summary.json` | Layer-2 Analyse-Ergebnisse (JSON) |
 | `measurements/config.py` | Endpoints aller 9 Provider |
+| `measurements/layer1_extra/` | Ersatzmess-Skripte (TLS, TCP-Ping, DNSSEC) |
 | `.env.example` | Benoetigte Umgebungsvariablen |
-| `analysis/` | Jupyter Notebooks fuer Phase 10 |
+| `analysis/_helpers.py` | Zentrale Provider-Map + Farben + Datenlader |
+| `analysis/00_data_quality.ipynb` | Notebook 00 (erledigt) |
+| `data/processed/known_anomalies.md` | **Pflichtlektuere** vor jedem neuen NB |
+| `data/layer1_extra/` | tls.csv, ping_tcp.csv, dnssec.csv (Ersatzmessungen 24.05.) |

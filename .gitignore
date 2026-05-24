@@ -19,3 +19,6 @@ venv/
 
 # Jupyter
 .ipynb_checkpoints/
+
+# Lokales Backup der Rohdaten (laut HANDOFF.md nicht in Git)
+data/raw_backup/

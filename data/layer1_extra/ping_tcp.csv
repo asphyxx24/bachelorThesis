@@ -1,0 +1,8 @@
+endpoint,n,n_ok,min_ms,median_ms,mean_ms,max_ms,stdev_ms
+api.deepgram.com,10,10,139.756,140.207,140.832,144.639,1.677
+api.rev.ai,10,10,140.751,141.762,141.949,144.156,1.138
+italynorth.stt.speech.microsoft.com,10,10,12.044,12.392,12.865,15.786,1.132
+api.openai.com,10,10,1.924,2.291,2.857,7.411,1.648
+api.groq.com,10,10,1.279,1.659,1.74,2.615,0.417
+api.mistral.ai,10,10,1.582,1.983,1.97,2.287,0.222
+italynorth.tts.speech.microsoft.com,10,10,13.566,15.981,16.061,19.321,1.903

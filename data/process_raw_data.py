@@ -71,9 +71,23 @@ for f in sorted(L3_DIR.glob("*.jsonl")):
             if api not in CATEGORY_MAP:
                 continue
 
-            if d.get("error"):
-                # HTTP-Status aus dem Error-String extrahieren
-                err_str = str(d["error"])
+            # Slot-Summary-Zeilen ueberspringen (Aggregate mit mean/p50/p95/p99),
+            # die NICHT pro Run sind und deshalb nicht in die Per-Run-Tabelle gehoeren.
+            if "stats" in d:
+                continue
+
+            # Welches Timing-Feld ist fuer diese Kategorie das primaere?
+            primary_timing = "ttfa_ms" if api in TTS_APIS else "ttft_ms"
+
+            # Errors erkennen:
+            # - explizit gesetzt: error="HTTP 500 ..." -> klassischer Fehler
+            # - leerer String error="" UND kein Timing -> Connection-Failure ohne Server-Antwort
+            err_val = d.get("error", None)
+            has_error = (err_val is not None and err_val != "") or \
+                        (err_val == "" and d.get(primary_timing) is None)
+
+            if has_error:
+                err_str = str(err_val) if err_val else "<empty error: connection failure>"
                 http_status = None
                 if err_str.startswith("HTTP "):
                     try:
@@ -82,7 +96,7 @@ for f in sorted(L3_DIR.glob("*.jsonl")):
                         pass
                 err_rows.append({
                     "ts":          d.get("ts"),
-                    "api":         api,
+                    "api":         API_RENAME.get(api, api),  # deepgram_tts -> deepgram etc.
                     "category":    CATEGORY_MAP[api],
                     "http_status": http_status,
                     "error_msg":   err_str[:120],
@@ -162,15 +176,27 @@ for f in sorted(L1_DIR.glob("*.jsonl")):
             }
 
             if typ == "ping":
+                # ICMP-geblockte Endpoints (Rev.ai) trotzdem als Zeile erfassen,
+                # damit sie in Vollstaendigkeits-Tabellen sichtbar bleiben.
+                # Markierung: packet_loss=100, RTT-Felder NaN, icmp_blocked=True.
                 if dat.get("icmp_blocked"):
-                    continue
-                ping_rows.append({**base,
-                    "avg_ms":       dat.get("avg_ms"),
-                    "min_ms":       dat.get("min_ms"),
-                    "max_ms":       dat.get("max_ms"),
-                    "mdev_ms":      dat.get("mdev_ms"),
-                    "packet_loss":  dat.get("packet_loss"),
-                })
+                    ping_rows.append({**base,
+                        "avg_ms":        None,
+                        "min_ms":        None,
+                        "max_ms":        None,
+                        "mdev_ms":       None,
+                        "packet_loss":   100,
+                        "icmp_blocked":  True,
+                    })
+                else:
+                    ping_rows.append({**base,
+                        "avg_ms":        dat.get("avg_ms"),
+                        "min_ms":        dat.get("min_ms"),
+                        "max_ms":        dat.get("max_ms"),
+                        "mdev_ms":       dat.get("mdev_ms"),
+                        "packet_loss":   dat.get("packet_loss"),
+                        "icmp_blocked":  False,
+                    })
 
             elif typ == "dns":
                 ips = [ip for ip in dat.get("ips", []) if not ip.endswith(".")]
