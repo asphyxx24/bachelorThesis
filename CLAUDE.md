@@ -39,10 +39,6 @@ wie Deepgram und Azure.
 
 Amazon Polly: optionaler Exkurs (Intra-Cloud-Referenz), nicht Hauptprovider.
 
-**ACHTUNG vor Kampagnenstart:** Rev.ai hat nur $1 Free Tier (~800 Messungen).
-Für die volle 14-Tage-Kampagne (11.200 Messungen) müssen ~$13 nachgeladen werden.
-→ rev.ai Dashboard → Billing → Add Funds
-
 ## Messdesign
 
 - **Cold-Start:** Jede Messung baut eine neue TCP+TLS-Verbindung auf (kein Connection Pooling)
@@ -55,9 +51,12 @@ Für die volle 14-Tage-Kampagne (11.200 Messungen) müssen ~$13 nachgeladen werd
 
 ## Aktueller Stand
 
-Siehe `HANDOFF.md` für den aktuellen Session-Stand.
+**Phase 10 (Analyse) abgeschlossen** — alle 8 Notebooks fertig, 35 Figures, 7 Tabellen.
+Nächste Phase: **Phase 12 (Thesis schreiben)**.
+
+Siehe `HANDOFF.md` für den aktuellen Session-Stand und Prof-Meeting-Vorbereitung.
+Siehe `analysis/README.md` für Quick-Reference aller Notebooks und Befunde.
 Siehe `notes/implementation_plan.md` für die vollständige Checkliste.
-Siehe `notes/cost_analysis.md` für die detaillierte Kostenanalyse.
 
 ## Betreuer-Feedback (2026-04-09, Prof. Wählisch)
 
@@ -108,8 +107,8 @@ Siehe `notes/literature.md` fuer die vollstaendige Literatursammlung.
 
 | Command | Wann | Zweck |
 |---------|------|-------|
-| `/prime` | Session-Start | Liest HANDOFF + git log + Datenstand, gibt kurzes Briefing |
+| `/prime` | Session-Start | Liest HANDOFF + git log, gibt kurzes Briefing |
 | `/handoff` | Session-Ende | Aktualisiert HANDOFF.md mit aktuellem Arbeitsstand |
-| `/analyze` | Analyse-Phase | Jupyter Notebook Analyse-Unterstützung |
 | `/write` | Schreib-Phase | Thesis-Abschnitte schreiben oder überarbeiten |
 | `/explain <Thema>` | Jederzeit | Konzept oder Entscheidung verständlich erklären |
+| `/analyze` | Falls nötig | Jupyter Notebook Analyse-Unterstützung |
