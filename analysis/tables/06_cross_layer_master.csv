@@ -1,0 +1,10 @@
+category,provider,class,protocol,tls,n_rtts_model,ping_median,connect_median,effective_N,overhead_k_ms
+STT,deepgram,Direkt,WebSocket,TLS 1.3,3,139.5,437.0,3.13,18.5
+STT,revai,Direkt,WebSocket,TLS 1.2,4,141.8,592.7,4.18,25.7
+STT,azure,Direkt,WebSocket,TLS 1.3,3,10.4,48.4,4.67,17.3
+LLM,openai,CDN,HTTPS+SSE,TLS 1.3,3,1.2,9.3,7.84,
+LLM,groq,CDN,HTTPS+SSE,TLS 1.3,3,1.3,9.4,7.08,
+LLM,mistral,CDN,HTTPS+SSE,TLS 1.3,3,1.0,9.0,9.18,
+TTS,deepgram,Direkt,HTTPS Stream,TLS 1.3,2,139.5,283.7,2.03,4.7
+TTS,openai,CDN,HTTPS Stream,TLS 1.3,3,1.2,9.4,7.93,
+TTS,azure,Direkt,HTTPS Stream,TLS 1.3,3,10.4,34.4,3.3,3.1

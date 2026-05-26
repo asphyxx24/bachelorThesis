@@ -4,7 +4,7 @@
 > 1. `data/processed/known_anomalies.md` (Caveats, Bugs, Stress-Slots)
 > 2. `notes/analysis_plan.md` (Master-Plan, Notebook-Konzepte)
 >
-> Status-Stand: 2026-05-24, 4 von 8 Notebooks fertig.
+> Status-Stand: 2026-05-26, 8 von 8 Notebooks fertig. Analyse-Phase abgeschlossen.
 
 ## Struktur
 
@@ -16,11 +16,11 @@ analysis/
 ├── 01_layer1_infrastructure.ipynb  [FERTIG] DNS/Ping/TLS/Traceroute/DNSSEC
 ├── 02_pcap_communication.ipynb     [FERTIG] PCAP → IPs/ASNs/Submetriken
 ├── 03_layer3_stt.ipynb        [FERTIG] STT-Vergleich (Deepgram, Rev.ai, Azure)
-├── 04_layer3_llm.ipynb        [OFFEN] LLM-Vergleich (OpenAI, Groq, Mistral)
-├── 05_layer3_tts.ipynb        [OFFEN] TTS-Vergleich (Deepgram, OpenAI, Azure)
-├── 06_cross_layer_correlation.ipynb  [OFFEN] Kernbefund-Korrelation
-├── 07_e2e_pipeline.ipynb      [OFFEN] Sequentielle Pipeline-Latenz
-├── figures/                   PNG + PDF Exports
+├── 04_layer3_llm.ipynb        [FERTIG] LLM-Vergleich (OpenAI, Groq, Mistral)
+├── 05_layer3_tts.ipynb        [FERTIG] TTS-Vergleich (Deepgram, OpenAI, Azure)
+├── 06_cross_layer_correlation.ipynb  [FERTIG] Kernbefund-Korrelation
+├── 07_e2e_pipeline.ipynb      [FERTIG] Sequentielle Pipeline-Latenz
+├── figures/                   PNG + PDF Exports (Ordner 01–07 pro Notebook)
 └── tables/                    CSV Exports fuer die Thesis
 ```
 
@@ -81,28 +81,51 @@ analysis/
 
 **Outputs:** `figures/03_stt_violin`, `03_stt_cdf`, `03_stt_heatmap_zeit`, `03_stt_drift`, `03_stt_warmup`, `03_stt_connect_anteil`, `tables/03_stt_statistics.csv`
 
-### NB 04 — Layer-3 LLM (OFFEN, naechster Schritt)
+### NB 04 — Layer-3 LLM
 **Zweck:** OpenAI vs Groq vs Mistral. Spezifika: `headers_ms`, `ttl_ms`, Token-Rate, Groq-Rate-Limit als Befund.
 
 **Eingaben:** `data/processed/layer3_llm.parquet` (37.734 Erfolge)
 
-**Erwartete Befunde:**
-- Groq sollte extrem hohe Token-Rate haben (LPU-Hardware)
-- Groq 35 % Rate-Limit-Fehler (Free-Tier 30 RPM) — als Produktcharakteristik dokumentieren
-- Mistral 4,8 % Fehler in Stress-Slots
-- OpenAI vermutlich am variabelsten (groesseres Modell, variabler Output)
+**Befunde:**
+- **Groq LPU**: `gen_ms` p50 = 7 ms vs Mistral 33 ms vs OpenAI 89 ms → Faktor 13× Hardware-Unterschied
+- Groq 34,97 % HTTP-429-Fehler (Free-Tier 30 RPM) — Produktcharakteristik, kein Qualitaetsproblem
+- Mistral 6 Stress-Slots mit <50 Runs (Worst Case: 2 Runs in einem Slot, 2026-05-19 18h)
+- Alle LLM-Provider Cloudflare-fronted → connect ~9 ms, TTFT bestimmt durch Backend-Inferenz
 
-### NB 05 — Layer-3 TTS (OFFEN)
-**Zweck:** Deepgram vs OpenAI vs Azure. Fokus auf `ttfa_ms`.
+**Outputs:** `figures/04_llm/` (8 Plots), `tables/04_llm_statistics.csv`
 
-**Erwartung:** Azure schnellster (EU-Region, einfache Engine).
+### NB 05 — Layer-3 TTS
+**Zweck:** Deepgram vs OpenAI vs Azure. Fokus auf `ttfa_ms` (connect-inklusiv).
 
-### NB 06 — Cross-Layer-Korrelation (OFFEN, KERNBEFUND)
+**Befunde:**
+- **Azure TTFA 65 ms** gewinnt klar (EU-Region + schnelle Engine) — Inversion zu STT
+- OpenAI TTS trotz Cloudflare-Edge-Naehe (connect 9 ms) langsamster (ttfa 938 ms, Backend dominiert)
+- TTS-Cold-Start-Architektur: `connect_ms` via separate Verbindung → `ttfa` enthaelt connect der echten Request-Verbindung
+
+**Outputs:** `figures/05_tts/` (7 Plots), `tables/05_tts_statistics.csv`
+
+### NB 06 — Cross-Layer-Korrelation (KERNBEFUND)
 **Zweck:** Hauptthese der Arbeit empirisch belegen: Layer-1 erklaert Layer-3.
-Achtung: Cloudflare-fronted vs Direkt-Provider getrennt behandeln (siehe NB 02 §7.5).
 
-### NB 07 — E2E-Pipeline (OFFEN)
+**Befunde:**
+- `connect_ms ≈ N_RTTs × ping_median + k` mit **r = 0.9992** fuer Direct-TLS-1.3-Provider
+- N_RTTs: HTTPS TLS1.3 = 2, WebSocket TLS1.3 = 3, WebSocket TLS1.2 (Rev.ai) = 4 (+1 RTT Penalty = +142 ms)
+- Cloudflare-fronted: Modell bricht — Edge-RTT ~1 ms, aber Backend-Latenz nicht messbar
+- k ≈ 5–26 ms = Python/Kernel-Software-Overhead (distanzunabhaengig)
+
+**Outputs:** `figures/06_cross_layer/` (5 Plots), `tables/06_cross_layer_master.csv`
+
+### NB 07 — E2E-Pipeline
 **Zweck:** Alle 27 Provider-Kombinationen (3 STT × 3 LLM × 3 TTS) rechnerisch durchspielen, 1-Sekunden-Budget pruefen.
+
+**Befunde:**
+- **0/27 Kombinationen** unterschreiten das 1-Sekunden-Budget im Cold-Start
+- Beste Kombination Streaming: Deepgram+Groq+Azure = **1 157 ms**
+- STT dominiert in allen 27 Kombinationen (Ø 68 % der E2E-Latenz)
+- Mit persistenten Verbindungen (Warm): Deepgram+Groq+Azure ≈ **676 ms** (unter 1s)
+- Cold-Start ist ein reines Session-Start-Problem; in Produktion erreichbar
+
+**Outputs:** `figures/07_e2e/` (4 Plots), `tables/07_pipeline_combinations.csv`
 
 ## Tools
 

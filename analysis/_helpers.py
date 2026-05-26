@@ -91,16 +91,30 @@ def load_layer1(kind: str) -> pd.DataFrame:
 # --------------------------------------------------------------------------
 # Plot-Export
 # --------------------------------------------------------------------------
+_TOPIC_DIRS = {
+    "01": "01_layer1",
+    "02": "02_pcap",
+    "03": "03_stt",
+    "04": "04_llm",
+    "05": "05_tts",
+    "06": "06_cross_layer",
+    "07": "07_e2e",
+}
+
+
 def save_figure(fig, name: str) -> None:
-    """Speichert ein Figure als PNG (Notebook-Vorschau) + PDF (Thesis-Embed).
+    """Speichert ein Figure als PNG + PDF in figures/<topic>/png/ bzw. pdf/.
 
     Konvention: 'name' ohne Extension, mit Notebook-Praefix
-    (z.B. '01_ping_rtt_boxplot'). Zielordner: analysis/figures/.
+    (z.B. '04_llm_ttft_violin' → figures/04_llm/png/ + pdf/).
     """
+    prefix = name[:2]
+    topic = _TOPIC_DIRS.get(prefix, "misc")
     for ext in ("png", "pdf"):
-        out = FIGURES_DIR / f"{name}.{ext}"
+        out = FIGURES_DIR / topic / ext / f"{name}.{ext}"
+        out.parent.mkdir(parents=True, exist_ok=True)
         fig.savefig(out, bbox_inches="tight", dpi=150)
-    print(f"  saved figures/{name}.{{png,pdf}}")
+    print(f"  saved figures/{topic}/{{png,pdf}}/{name}")
 
 
 def save_table(df: pd.DataFrame, name: str, **csv_kwargs) -> None:
