@@ -132,7 +132,26 @@
       "PowerShell(ssh -i \"$env:USERPROFILE\\\\.ssh\\\\thesis-key.pem\" ubuntu@35.159.112.40 \"cd ~/thesis && git pull -q && source .venv/bin/activate && python measurements/layer3/run.py --dry-run --api stt 2>&1\")",
       "PowerShell(ssh -i \"$env:USERPROFILE\\\\.ssh\\\\thesis-key.pem\" ubuntu@35.159.112.40 \"cd ~/thesis && source .venv/bin/activate && python measurements/layer1/run.py --dry-run 2>&1\")",
       "PowerShell(ssh -i \"$env:USERPROFILE\\\\.ssh\\\\thesis-key.pem\" ubuntu@35.159.112.40 \"cd ~/thesis && source .venv/bin/activate && python measurements/layer3/run.py --n 1 --api llm --tag test 2>&1 && echo '---' && ls -la data/layer3/ 2>&1\")",
-      "PowerShell(ssh -i \"$env:USERPROFILE\\\\.ssh\\\\thesis-key.pem\" ubuntu@35.159.112.40 \"ssh-keygen -t ed25519 -f ~/.ssh/github_deploy -N '' -q && cat ~/.ssh/github_deploy.pub\")"
+      "PowerShell(ssh -i \"$env:USERPROFILE\\\\.ssh\\\\thesis-key.pem\" ubuntu@35.159.112.40 \"ssh-keygen -t ed25519 -f ~/.ssh/github_deploy -N '' -q && cat ~/.ssh/github_deploy.pub\")",
+      "Bash(git -C \"C:\\\\Users\\\\anton\\\\Desktop\\\\bachelorThesis\" log --pretty=format:\"%h %ad %s\" --date=short -- \"*.md\")",
+      "Bash(Select-Object -Property FullName, Name)",
+      "Bash(scp *)",
+      "Bash(git stash *)",
+      "Bash(git fetch *)",
+      "Bash(python3 *)",
+      "Bash(/c/Users/anton/AppData/Local/Programs/Python/Python312/python.exe *)",
+      "Bash(aws ec2 stop-instances *)",
+      "Bash(aws ec2 start-instances *)",
+      "Bash(aws ec2 *)",
+      "Bash(tshark --version)",
+      "Bash(jupyter nbconvert *)",
+      "Bash(winget --version)",
+      "Bash(\"/c/Program Files/Wireshark/tshark.exe\" --version)",
+      "Bash(\"/c/Program Files/Wireshark/tshark.exe\" -G fields)",
+      "Bash(\"/c/Program Files/Wireshark/tshark.exe\" -r data/layer2/capture_openai_llm_20260504_1125.pcap -Y \"tls.handshake\" -T fields -e tls.handshake.type -e tls.handshake.version -e tls.handshake.ciphersuite)",
+      "Bash(\"/c/Program Files/Wireshark/tshark.exe\" -r data/layer2/capture_openai_llm_20260504_1125.pcap -T fields -E \"separator=|\" -E \"header=n\" -e tls.handshake.type -e tls.handshake.version -e tls.record.version -e tls.handshake.extensions_supported_version -e tls.handshake.ciphersuite -e tls.handshake.extensions_alpn_str -Y \"tls.handshake\")",
+      "Bash(\"/c/Program Files/Wireshark/tshark.exe\" -r data/layer2/capture_openai_llm_20260504_1125.pcap -Y \"tls.handshake\" -T fields -e tls.handshake.type -e tls.handshake.extensions.supported_version -e tls.handshake.ciphersuite)",
+      "Bash(\"C:/Program Files/Wireshark/tshark.exe\" --version)"
     ]
   }
 }
