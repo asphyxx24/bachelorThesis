@@ -1,128 +1,56 @@
 # Handoff — Aktueller Arbeitsstand
 
-> Letzte Aktualisierung: 2026-05-26 (Session: NB 07 E2E-Pipeline, Commit, Prof-Meeting-Vorbereitung)
+> Letzte Aktualisierung: 2026-06-08 (Session: Juni-Daten validiert + Analyse migriert + Figures geschärft + Repo aufgeräumt)
 
 ## TL;DR
 
-**Analyse-Phase vollständig abgeschlossen.** Alle 8 Notebooks (NB 00–07) fertig, 35 Figures, 7 Statistik-Tabellen. Nächste Phase: **Thesis schreiben (Phase 12)**. Phase 11 (E2E-Validierung auf EC2) wird übersprungen — Median-Addition ist methodisch ausreichend, Limitation wird in der Thesis benannt.
+Die **Juni-Kampagne (01.–07.06.2026)** ist die maßgebliche Datengrundlage (`data/`), unabhängig **validiert**, und die komplette Analyse läuft darauf. Alle drei Kernbefunde reproduzieren. Figures von 35 auf **19 starke** reduziert (Befund-Titel). Nächster Schritt: **Figure-Feinschliff + Prof-Aufbereitung**, dann Schreiben.
 
 ---
 
-## Drei Kernbefunde (das Wichtigste für Prof und Thesis)
+## Datenstand
 
-### 1. Cross-Layer-Modell (NB 06) — Kernbefund der Arbeit
-```
-connect_ms ≈ N_RTTs × ping_median + k
-slope = 1.013, intercept = 8.5 ms, r = 0.9992
-```
-Gilt für die 4 direkt-gehosteten Provider (Deepgram STT/TTS, Azure STT/TTS).  
-N_RTTs: HTTPS TLS 1.3 = 2, WebSocket TLS 1.3 = 3, WebSocket TLS 1.2 = 4 (+1 RTT Penalty).  
-**Bei Cloudflare-fronted Providern (4/9) bricht das Modell** — Edge-RTT ~1 ms, Backend nicht messbar.
+- **Maßgeblich:** `data/` — Juni-Kampagne, 7 Tage × 8 Slots = 56 Slots, n=100/Provider/Slot, 0 % NaN.
+- **Mai-Kampagne:** archiviert/gelöscht — nur noch in git-Historie (`e380b80` auf origin) abrufbar.
+- **Validierung (2026-06-08, EC2 i-045):** Layer 1 reproduziert 8/9 Provider <1 ms, TLS-Versionen 7/7 exakt; Layer 2 PCAP-Struktur bestätigt; Layer 3 Spot-Check connect_ms reproduziert. → Daten unabhängig bestätigt.
+- **Vantage-Point-Caveat:** Die Juni-L3-Kampagne lief auf einem **anderen AWS-Account** (nicht i-045), ebenfalls eu-central-1/Frankfurt. Nur Deepgram (Anycast) weicht ab. Siehe `data/processed/known_anomalies.md` Abschnitt 4.
 
-### 2. Engine-Speed schlägt Netzwerknähe (NB 03 + NB 05)
-- **STT:** Deepgram (USA, RTT 140 ms) schlägt Azure (EU, RTT 11 ms) — 587 ms vs 1 719 ms TTFT.  
-  Azure spart 130 ms Netzwerk, verliert aber 1 130 ms durch langsamere Engine.
-- **TTS (Inversion):** Azure (EU) gewinnt mit 65 ms TTFA. Deepgram 551 ms, OpenAI 938 ms.  
-  → Welcher Layer "gewinnt", hängt allein von der Backend-Engine ab, nicht vom Standort.
+## Drei Kernbefunde (Juni)
 
-### 3. Cold-Start-Voice-Pipeline verfehlt 1-Sekunde (NB 07)
-```
-Beste Kombination (Streaming):  deepgram + groq + azure = 1 157 ms
-Beste Kombination (Batch):      azure + groq + azure   = 1 901 ms
-0/27 Kombinationen unter 1 000 ms (Cold-Start)
-```
-Mit persistenten Verbindungen (Warm): ~676 ms → **unter 1 s möglich, aber kein Cold-Start**.
+1. **Cross-Layer-Modell:** `connect_ms ≈ N_RTTs × ping + k` — slope 1.006, k 10.7 ms, **r=0.999** (4 direkte Provider). Bricht bei Cloudflare-fronted (4/9).
+2. **Engine schlägt Netzwerknähe:** Deepgram (US) STT-TTFT 575 ms < Azure (EU) 1715 ms — Azure verliert durch 97 % Server-Processing. Bei TTS dreht es sich um (Azure gewinnt, TTFA 67 ms).
+3. **Cold-Start-Pipeline verfehlt 1 s:** 0/27 Kombinationen < 1000 ms; beste Streaming-Kombi deepgram+groq+azure = 1134 ms. Warm-Schätzung ~666 ms (Future Work).
 
----
+## Notebooks & Figures
 
-## Stand der Notebooks
+- **8/8 Notebooks** (00–07) auf Juni gerechnet, lauffähig (`.venv` + `requirements.txt`).
+- **19 Hauptteil-Figures** (Befund als Titel, n/CI). 16 gelöscht (Stabilitäts-Checks + redundante Violins).
+- NB02 läuft lokal ohne tshark (scapy + layer1_extra + dnspython).
+- Befunde: `notes/findings.md` · Gerüst: `notes/thesis_outline.md`.
 
-| NB | Status | Hauptbefund | Figures |
-|----|--------|-------------|---------|
-| 00 Data Quality | FERTIG | 0 % NaN, Rev.ai 10 % Error-Rate | — |
-| 01 Layer-1 | FERTIG | 3 RTT-Klassen, Rev.ai TLS 1.2, 0/6 DNSSEC | 3 |
-| 02 PCAP | FERTIG | Cloudflare 4/9, Null Nebenkommunikation | 2 |
-| 03 STT | FERTIG | Deepgram schnellster trotz USA | 6 |
-| 04 LLM | FERTIG | Groq 13× schneller (LPU), 35 % Groq-Errors | 8 |
-| 05 TTS | FERTIG | Azure TTFA 65 ms gewinnt klar | 7 |
-| 06 Cross-Layer | FERTIG | r=0.9992, TLS-1.2-Penalty +142 ms | 5 |
-| 07 E2E-Pipeline | FERTIG | 0/27 unter 1 s, STT dominiert (Ø 68 %) | 4 |
+## Offene Punkte
 
----
+| Punkt | Status |
+|-------|--------|
+| Figure-Feinschliff (z.B. Cross-Layer CDN-Zoom-Inset) | offen, optional |
+| `zusammenfassung_prof.pdf` (Prof-Übersichtsgrafik) | noch nicht überarbeitet |
+| `findings.md`/`outline` für Prof aufbereiten | offen |
+| Thesis-Text schreiben | bewusst ans Ende verschoben |
 
-## Offene Phasen
+## Cleanup-Erinnerungen (extern, nur du)
 
-| Phase | Was | Empfehlung |
-|-------|-----|------------|
-| ~~Phase 10 (Analyse)~~ | ~~NB 00–07~~ | **Fertig** |
-| Phase 11 (E2E-Validierung) | Echte Pipeline-Runs auf EC2 | **Überspringen** — Limitation in Thesis benennen |
-| **Phase 12 (Thesis schreiben)** | ~3–4 Wochen Schreibarbeit | **Nächster Schritt** |
+- **AWS Access Key** (User `claude`, Account 365916940756) **löschen** — stand im Chat.
+- **AWS Console-Passwort ändern.**
+- **Andere-Account-Instanz** prüfen/stoppen (falls Juni-Mess-Instanz noch läuft → Kosten).
 
----
+## AWS EC2 (Validierungs-Instanz)
 
-## Prof-Meeting-Vorbereitung (2026-05-26)
-
-### Empfohlene Figures zum Zeigen (Priorität hoch → niedrig)
-
-1. **`06_cross_layer_scatter.png`** — DER Kernbefund. Scatter ping × N_RTTs vs connect_ms, r=0.999. Klar, überzeugend, direkt antwort auf "Was ist die Contribution?".
-2. **`07_e2e_budget.png`** — 1-Sekunden-Budget-Plot. Alle 27 Kombinationen, 0/27 unter 1 s. Praktische Relevanz sofort sichtbar.
-3. **`03_stt_connect_anteil.png`** — Engine > Netzwerk bei STT. Deepgram (USA) schlägt Azure (EU). Überraschendster Befund.
-4. **`02_communication_matrix.png`** — Cloudflare-Fronting bei 4/9 Providern. Erklärt warum das Modell dort bricht.
-5. **`06_tls12_penalty.png`** — Rev.ai TLS 1.2 Penalty, +142 ms exakt quantifiziert.
-
-### Antworten auf erwartete Prof-Fragen
-
-**"Warum Cold-Start?"**  
-→ Cold-Start misst den Overhead einer neuen Gesprächssession. Relevant für: jeder Kaltstart einer Voice-App, nach Inaktivität, bei Serverless-Deployments. Warm-Connection-Verhalten ist Future Work.
-
-**"Was ist die Contribution?"**  
-→ Drei Beiträge: (1) Cross-Layer-Modell empirisch validiert (r=0.999), (2) Cloudflare-Fronting-Effekt quantifiziert, (3) Engine-Speed > EU-Region als nachgewiesener Gegensatz zur intuitiven Erwartung.
-
-**"Warum nur 9 Provider?"**  
-→ Kostenlimit + methodische Konsistenz (alle mit identischen Inputs, alle Cold-Start, alle Raw-WebSocket bei STT). Rev.ai ersetzte AssemblyAI wegen inkompatibler Streaming-Semantik.
-
-**"Validierung?"**  
-→ Layer-2-PCAP als unabhängige Cross-Validierung der Layer-3-Messungen. TLS-Versionen und Submetriken stimmen über beide Methoden überein.
-
----
-
-## Kerndaten (Thesis-Referenz)
-
-### Provider-Matrix mit Messwerten
-
-| Provider | Kategorie | RTT | Hosting | connect_ms | Hauptmetrik |
-|----------|-----------|-----|---------|-----------|-------------|
-| Deepgram | STT | 140 ms | USA (Anycast, AS 12129) | 437 ms | ttft = 587 ms |
-| Rev.ai | STT | 142 ms | USA (AWS, AS 16509) | 593 ms | ttft = 1 404 ms |
-| Azure | STT | 11 ms | Italy North (AS 8075) | 48 ms | ttft = 1 719 ms |
-| Groq | LLM | 1 ms | Cloudflare FRA (AS 13335) | 9 ms | ttft = 67 ms |
-| Mistral | LLM | 1 ms | Cloudflare FRA (AS 13335) | 9 ms | ttft = 232 ms |
-| OpenAI | LLM | 1 ms | Cloudflare FRA (AS 13335) | 9 ms | ttft = 526 ms |
-| Azure | TTS | 11 ms | Italy North (AS 8075) | 34 ms | ttfa = 65 ms |
-| Deepgram | TTS | 140 ms | USA (Anycast, AS 12129) | 284 ms | ttfa = 551 ms |
-| OpenAI | TTS | 1 ms | Cloudflare FRA (AS 13335) | 9 ms | ttfa = 938 ms |
-
-### E2E Top-5 (Streaming Cold-Start, Median)
-
-| Rang | Kombination | E2E (ms) |
-|------|-------------|----------|
-| 1 | deepgram + groq + azure | 1 157 |
-| 2 | deepgram + mistral + azure | 1 322 |
-| 3 | deepgram + openai + azure | 1 616 |
-| 4 | deepgram + groq + deepgram | 1 642 |
-| 5 | deepgram + mistral + deepgram | 1 807 |
-
----
-
-## Wichtige Konventionen (für Phase 12)
-
-- **Metriken STT:** `ttft_ms` ist POST-connect. Gesamt-Cold-Start = `connect_ms + ttft_ms`.
-- **Metriken LLM/TTS:** `ttft_ms` und `ttfa_ms` sind connect-inklusiv (separate `_measure_connect()`).
-- **Figures einbetten:** immer PDF-Version aus `analysis/figures/NN_topic/pdf/`.
-- **Tabellen:** `analysis/tables/` — CSV-Dateien, direkt als LaTeX-Input nutzbar.
-- **Figures-Naming:** `NN_name.pdf` — NN = Notebook-Nummer, name = Beschreibung.
-
----
+| | Wert |
+|-|------|
+| Instance ID | `i-045a2d0eeb338b290` (thesis-measurement, eu-central-1b) |
+| Status | **STOPPED** (nach Validierung 2026-06-08) |
+| Zugang | AWS CLI (`.venv/bin/aws`) + SSH-Key `~/.ssh/thesis-ec2` (Public-Key liegt in authorized_keys) |
+| Start | `.venv/bin/aws ec2 start-instances --instance-ids i-045a2d0eeb338b290 --region eu-central-1` |
 
 ## Relevante Dateien
 
@@ -130,20 +58,8 @@ Mit persistenten Verbindungen (Warm): ~676 ms → **unter 1 s möglich, aber kei
 |-------|--------|
 | `CLAUDE.md` | Projektkontext, Forschungsfrage, Provider-Matrix, Metrik-Definitionen |
 | `HANDOFF.md` | **Diese Datei** |
-| `analysis/README.md` | Quick-Reference aller Notebooks + Befunde |
-| `data/processed/known_anomalies.md` | Bekannte Anomalien (Rev.ai Errors, Groq Rate-Limit, Mistral Stress-Slots) |
+| `data/processed/known_anomalies.md` | Juni-Anomalien + Vantage-Point-Caveat |
+| `notes/findings.md` | 13 Befunde mit Juni-Zahlen |
+| `notes/thesis_outline.md` | Kapitelgerüst |
 | `notes/literature.md` | Literatursammlung |
-| `notes/briefing_prof.md` | Briefing für Prof. Wählisch |
-| `analysis/tables/` | Alle Statistik-CSVs (03–07) |
-| `analysis/figures/` | Alle Plots (PNG + PDF, nach Notebook geordnet) |
-
----
-
-## AWS EC2 (nur bei Bedarf für Phase 11)
-
-| | Wert |
-|-|------|
-| Instance ID | `i-045a2d0eeb338b290` |
-| Status | **STOPPED** (seit 2026-05-24) |
-| Start | `aws ec2 start-instances --instance-ids i-045a2d0eeb338b290 --region eu-central-1` |
-| SSH | `ssh -i ~/.ssh/thesis-key.pem ubuntu@<IP-nach-Start>` |
+| `measurements/` | Mess-Skripte (Methodik, Reproduzierbarkeit) |

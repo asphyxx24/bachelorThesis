@@ -47,16 +47,18 @@ Amazon Polly: optionaler Exkurs (Intra-Cloud-Referenz), nicht Hauptprovider.
   - STT: `measurements/layer3/sample.wav` — "Good morning. I would like to know the current weather forecast for Frankfurt." (~5s)
   - LLM: "Reply in one short sentence: What is the capital of Germany?"
   - TTS: "Good morning! How can I assist you today?"
-- **Kampagne:** n=100 pro Zeitschlitz, 8 Slots/Tag (alle 3h), 14 Tage
+- **Kampagne (maßgeblich):** Juni 01.–07.06.2026, n=100 pro Zeitschlitz, 8 Slots/Tag (alle 3h), 7 Tage (= 56 Slots). Gemessen aus AWS eu-central-1 (anderer Account als die Validierungs-Instanz i-045; Vantage-Point-Caveat s. `data/processed/known_anomalies.md`).
 
 ## Aktueller Stand
 
-**Phase 10 (Analyse) abgeschlossen** — alle 8 Notebooks fertig, 35 Figures, 7 Tabellen.
-Nächste Phase: **Phase 12 (Thesis schreiben)**.
+**Juni-Daten validiert, Analyse migriert, Figures geschärft.** Alle 8 Notebooks (00–07)
+rechnen auf der Juni-Kampagne (`data/`); 19 Hauptteil-Figures mit Befund-Titeln; alle drei
+Kernbefunde reproduzieren (Cross-Layer r=0.999, Engine>Netzwerk, E2E 0/27 unter 1 s).
+Nächster Schritt: **Figure-Feinschliff + Prof-Aufbereitung**, dann Schreiben.
 
-Siehe `HANDOFF.md` für den aktuellen Session-Stand und Prof-Meeting-Vorbereitung.
-Siehe `analysis/README.md` für Quick-Reference aller Notebooks und Befunde.
-Siehe `notes/implementation_plan.md` für die vollständige Checkliste.
+Siehe `HANDOFF.md` für den aktuellen Session-Stand.
+Siehe `notes/findings.md` für die Befunde (Juni-Zahlen) und `notes/thesis_outline.md` für das Kapitelgerüst.
+Siehe `data/processed/known_anomalies.md` für Anomalien + Vantage-Point-Caveat.
 
 ## Betreuer-Feedback (2026-04-09, Prof. Wählisch)
 

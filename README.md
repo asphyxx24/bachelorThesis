@@ -48,22 +48,21 @@ measurements/
   lib/             Shared: JSONL-Output, Statistik
   config.py        Alle Provider-Endpoints
 
-data/              Messergebnisse (JSONL)
-  layer1/
-  layer2/
-  layer3/
-  archive/         Alte explorative Messungen
+data/              Messergebnisse Juni-Kampagne 2026
+  layer1/  layer1_extra/  layer2/  layer3/
+  processed/       aufbereitete Parquet/CSV + known_anomalies.md
 
-analysis/          Jupyter Notebooks
-notes/             Forschungsnotizen, Implementierungsplan
+analysis/          Jupyter Notebooks (00-07) + figures/ + tables/
+notes/             findings.md, thesis_outline.md, literature.md
 ```
 
 ## Schnellstart
 
 ```bash
 pip install -r requirements.txt
-cp .env.example .env
-# API-Keys in .env eintragen
+# .env mit den 6 API-Keys anlegen:
+#   DEEPGRAM_API_KEY, REVAI_API_KEY, AZURE_SPEECH_KEY,
+#   OPENAI_API_KEY, GROQ_API_KEY, MISTRAL_API_KEY
 
 # Layer 1 testen (keine Keys noetig)
 python measurements/layer1/run.py --dry-run
