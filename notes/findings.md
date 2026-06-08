@@ -17,8 +17,8 @@
 | F4 | Cloudflare-Fronting 4/9 (groq/mistral/openai) ~1 ms Edge | L2 | 02_communication_matrix | ✅ |
 | F5 | Keine Nebenkommunikation (1 Call = 1 Backend-ASN) | L2 | 02_communication_matrix | ✅ |
 | F6 | **Engine > Netzwerk**: Deepgram(US) schlägt Azure(EU) bei STT | L3 | 03_stt_connect_anteil | ✅ |
-| F7 | Groq LPU schnellster LLM (TTFT 68 ms) | L3 | 04_llm_ttft_violin | ✅ |
-| F8 | TTS-Inversion: Azure(EU) gewinnt (TTFA 67 ms) | L3 | 05_tts_ttfa_violin | ✅ |
+| F7 | Groq LPU schnellster LLM (TTFT 68 ms) | L3 | 04_llm_ttft_cdf | ✅ |
+| F8 | TTS-Inversion: Azure(EU) gewinnt (TTFA 67 ms) | L3 | 05_tts_ttfa_cdf | ✅ |
 | F9 | Cross-Layer-Modell `connect ≈ N_RTT × ping` (r=0.999) | L1+L3 | 06_cross_layer_scatter | ✅ |
 | F10 | Cold-Start-Pipeline verfehlt 1 s (0/27 Kombis) | E2E | 07_e2e_budget | ✅ |
 

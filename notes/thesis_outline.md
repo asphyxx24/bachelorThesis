@@ -50,8 +50,8 @@ Voice-Pipeline?
 | 5.1 Layer 1 — Infrastruktur | RTT-Klassen, TLS-Versionen, DNSSEC, ASN | 01 | 01_ping_rtt_boxplot, 01_tls_handshake |
 | 5.2 Layer 2 — Protokoll | Cloudflare-Fronting, Submetriken, keine Nebenkomm. | 02 | 02_communication_matrix |
 | 5.3 Layer 3 — STT | Engine vs. Netzwerk (Deepgram US schlägt Azure EU) | 03 | 03_stt_connect_anteil |
-| 5.4 Layer 3 — LLM | Groq LPU schnellster, Cloudflare-Cluster | 04 | 04_llm_ttft_violin |
-| 5.5 Layer 3 — TTS | Azure-Inversion (EU gewinnt) | 05 | 05_tts_ttfa_violin |
+| 5.4 Layer 3 — LLM | Groq LPU schnellster, Cloudflare-Cluster | 04 | 04_llm_ttft_cdf |
+| 5.5 Layer 3 — TTS | Azure-Inversion (EU gewinnt) | 05 | 05_tts_ttfa_cdf |
 | 5.6 Cross-Layer-Modell | connect ≈ N_RTT × ping, r≈0.999 | 06 | 06_cross_layer_scatter |
 | 5.7 E2E-Pipeline | 1-s-Budget, 0/27 unter 1 s | 07 | 07_e2e_budget |
 
