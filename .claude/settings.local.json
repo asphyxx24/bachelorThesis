@@ -139,6 +139,8 @@
       "Bash(git stash *)",
       "Bash(git fetch *)",
       "Bash(python3 *)",
+      "Bash(/Users/praktika/Documents/anton/bachelorThesis/.venv/bin/python *)",
+      "Bash(/Users/praktika/Documents/anton/bachelorThesis/.venv/bin/python3 *)",
       "Bash(/c/Users/anton/AppData/Local/Programs/Python/Python312/python.exe *)",
       "Bash(aws ec2 stop-instances *)",
       "Bash(aws ec2 start-instances *)",
@@ -151,7 +153,11 @@
       "Bash(\"/c/Program Files/Wireshark/tshark.exe\" -r data/layer2/capture_openai_llm_20260504_1125.pcap -Y \"tls.handshake\" -T fields -e tls.handshake.type -e tls.handshake.version -e tls.handshake.ciphersuite)",
       "Bash(\"/c/Program Files/Wireshark/tshark.exe\" -r data/layer2/capture_openai_llm_20260504_1125.pcap -T fields -E \"separator=|\" -E \"header=n\" -e tls.handshake.type -e tls.handshake.version -e tls.record.version -e tls.handshake.extensions_supported_version -e tls.handshake.ciphersuite -e tls.handshake.extensions_alpn_str -Y \"tls.handshake\")",
       "Bash(\"/c/Program Files/Wireshark/tshark.exe\" -r data/layer2/capture_openai_llm_20260504_1125.pcap -Y \"tls.handshake\" -T fields -e tls.handshake.type -e tls.handshake.extensions.supported_version -e tls.handshake.ciphersuite)",
-      "Bash(\"C:/Program Files/Wireshark/tshark.exe\" --version)"
+      "Bash(\"C:/Program Files/Wireshark/tshark.exe\" --version)",
+      "Read(//Users/praktika/.claude/**)",
+      "Read(//Users/praktika/Library/Jupyter/**)",
+      "Bash(find / -maxdepth 7 -name \"activate\" -path \"*bin*\")",
+      "Bash(pip3 list *)"
     ]
   }
 }

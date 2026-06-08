@@ -1,6 +1,6 @@
 # Bachelorarbeit — Messinfrastruktur
 
-**Titel:** Kommerzielle Cloud-AI-APIs unter der Lupe: Netzwerk-, Protokoll- und Latenzanalyse einer Echtzeit-Voice-Pipeline
+**Arbeitstitel:** Engine schlägt Geografie: Netzwerk-, Protokoll- und Latenzanalyse kommerzieller Cloud-AI-APIs einer Echtzeit-Voice-Pipeline aus EU-Perspektive
 
 **Autor:** Anton Rusik
 **Betreuer:** Prof. Dr. Matthias Wählisch, TU Dresden
@@ -10,9 +10,10 @@
 
 ## Forschungsfrage
 
-> Welche Netzwerk- und Infrastruktureigenschaften (RTT, Protokoll, Hosting-Region) erklären
-> die beobachteten Latenzunterschiede zwischen kommerziellen Cloud-AI-APIs (STT, LLM, TTS)
-> aus EU-Perspektive?
+> In welchem Maße erklären Netzwerk- und Infrastruktureigenschaften (RTT, Protokoll, Hosting-Region)
+> — im Vergleich zur Backend-Verarbeitung der Engine — die Latenzunterschiede zwischen kommerziellen
+> Cloud-AI-APIs (STT, LLM, TTS) aus EU-Perspektive, und wie wirkt sich die Provider-Wahl auf die
+> Gesamtlatenz einer sequenziellen Cold-Start-Voice-Pipeline aus?
 
 ## Provider-Matrix
 
@@ -23,7 +24,7 @@
 | STT | Azure | Standard Neural | Italien (Italy North) | WebSocket |
 | LLM | OpenAI | gpt-4o-mini | USA | HTTPS+SSE |
 | LLM | Groq | llama-3.1-8b-instant | USA (LPU) | HTTPS+SSE |
-| LLM | Mistral | mistral-small-4 | EU/Frankreich | HTTPS+SSE |
+| LLM | Mistral | mistral-small-2603 | EU/Frankreich | HTTPS+SSE |
 | TTS | Deepgram | Aura-2 | USA (Anycast) | HTTPS Streaming |
 | TTS | OpenAI | tts-1 | USA | HTTPS Streaming |
 | TTS | Azure | Standard Neural | Italien (Italy North) | HTTPS Streaming |

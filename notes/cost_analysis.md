@@ -2,6 +2,10 @@
 
 > Stand: 2026-05-03. Basiert auf aktuellen Preisen der Provider-Webseiten.
 > AssemblyAI durch Rev.ai ersetzt (Grund: methodische Konsistenz).
+>
+> **⚠️ Korrektur 2026-06-08:** Dieses Dokument ist die ursprüngliche **14-Tage-Budgetplanung**.
+> Die Kampagne lief tatsächlich **7 Tage** (5.600 Calls/Provider statt 11.200) → reale Volumina
+> und Kosten ca. **halbiert**. Die Zahlen unten sind die Planungs-Obergrenze, nicht die Ist-Kosten.
 
 ## Kampagnen-Parameter
 

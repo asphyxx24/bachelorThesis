@@ -11,7 +11,7 @@
 ### Palumbo, Aceto, Botta (2019/2021) — "Cloud-to-User Latency: Azure and AWS"
 - **Publiziert:** IEEE GLOBECOM 2019 + Computer Networks (Elsevier, 2021)
 - **Methodik:** 14-taegige Kampagne, 25 Vantage Points, AWS + Azure
-- **Relevanz:** Fast identisches Messdesign wie unsere Arbeit (14 Tage, AWS, Azure)
+- **Relevanz:** Sehr ähnliches Messdesign (AWS, Azure, Vantage-Point-Kampagne; unsere Kampagne lief 7 Tage)
 - **Link:** https://ieeexplore.ieee.org/document/9013343/
 
 ### Charyyev, Arslan, Gunes (2020) — "Cloud Datacenters vs Edge Servers"

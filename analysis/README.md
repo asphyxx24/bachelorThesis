@@ -55,7 +55,7 @@ analysis/
 ### NB 02 — PCAP & Kommunikationsmatrix
 **Zweck:** Aus den 9 PCAPs alle kontaktierten IPs + ASNs extrahieren, Submetriken-Zerlegung.
 
-**Eingaben:** `data/layer2/capture_*.pcap` (9 Dateien vom 04.05.) + `data/layer2/analysis_summary.json`
+**Eingaben:** `data/layer2/capture_*.pcap` (9 Dateien vom 08.06.) + `data/layer2/analysis_summary.json`
 
 **Befunde:**
 - 4 ASNs decken alle 9 Provider ab: Cloudflare (4×), Microsoft (2×), 123NET (Deepgram, 2×), Amazon (Rev.ai)
@@ -68,12 +68,12 @@ analysis/
 ### NB 03 — Layer-3 STT-Vergleich
 **Zweck:** Deepgram vs Rev.ai vs Azure: Quantile, Verteilungen, Zeitverhalten, Connect/Server-Anteil.
 
-**Eingaben:** `data/processed/layer3_stt.parquet` (42.016 Erfolge)
+**Eingaben:** `data/processed/layer3_stt.parquet` (16.227 Erfolge)
 
 **Befunde (ueberraschend!):**
-- Deepgram trotz US-Hosting **schnellster** in TTFT (587 ms median)
-- Azure trotz EU-Hosting **langsamster** (1719 ms median, 97 % Server-Processing)
-- Rev.ai im Mittelfeld (1404 ms), Schwaeche in beiden Phasen
+- Deepgram trotz US-Hosting **schnellster** in TTFT (575 ms median)
+- Azure trotz EU-Hosting **langsamster** (1715 ms median, 97 % Server-Processing)
+- Rev.ai im Mittelfeld (1420 ms), Schwaeche in beiden Phasen
 - Cold-Start-Methodik validiert (Warm-up-slopes nahe 0)
 - Keine Tageszeit-/Wochenvariation
 
@@ -84,12 +84,12 @@ analysis/
 ### NB 04 — Layer-3 LLM
 **Zweck:** OpenAI vs Groq vs Mistral. Spezifika: `headers_ms`, `ttl_ms`, Token-Rate, Groq-Rate-Limit als Befund.
 
-**Eingaben:** `data/processed/layer3_llm.parquet` (37.734 Erfolge)
+**Eingaben:** `data/processed/layer3_llm.parquet` (14.729 Erfolge)
 
 **Befunde:**
-- **Groq LPU**: `gen_ms` p50 = 7 ms vs Mistral 33 ms vs OpenAI 89 ms → Faktor 13× Hardware-Unterschied
-- Groq 34,97 % HTTP-429-Fehler (Free-Tier 30 RPM) — Produktcharakteristik, kein Qualitaetsproblem
-- Mistral 6 Stress-Slots mit <50 Runs (Worst Case: 2 Runs in einem Slot, 2026-05-19 18h)
+- **Groq LPU**: `gen_ms` p50 = 7 ms vs Mistral 31 ms vs OpenAI 89 ms → Faktor 13× Hardware-Unterschied
+- Groq 32,9 % HTTP-429-Fehler (Free-Tier 30 RPM) — Produktcharakteristik, kein Qualitaetsproblem
+- Mistral 3 Stress-Slots mit <50 Runs (Worst Case: 15 Runs, 2026-06-04 15h)
 - Alle LLM-Provider Cloudflare-fronted → connect ~9 ms, TTFT bestimmt durch Backend-Inferenz
 
 **Outputs:** `figures/04_llm/` (8 Plots), `tables/04_llm_statistics.csv`
@@ -98,8 +98,8 @@ analysis/
 **Zweck:** Deepgram vs OpenAI vs Azure. Fokus auf `ttfa_ms` (connect-inklusiv).
 
 **Befunde:**
-- **Azure TTFA 65 ms** gewinnt klar (EU-Region + schnelle Engine) — Inversion zu STT
-- OpenAI TTS trotz Cloudflare-Edge-Naehe (connect 9 ms) langsamster (ttfa 938 ms, Backend dominiert)
+- **Azure TTFA 67 ms** gewinnt klar (EU-Region + schnelle Engine) — Inversion zu STT
+- OpenAI TTS trotz Cloudflare-Edge-Naehe (connect 9 ms) langsamster (ttfa 954 ms, Backend dominiert)
 - TTS-Cold-Start-Architektur: `connect_ms` via separate Verbindung → `ttfa` enthaelt connect der echten Request-Verbindung
 
 **Outputs:** `figures/05_tts/` (7 Plots), `tables/05_tts_statistics.csv`
@@ -108,8 +108,8 @@ analysis/
 **Zweck:** Hauptthese der Arbeit empirisch belegen: Layer-1 erklaert Layer-3.
 
 **Befunde:**
-- `connect_ms ≈ N_RTTs × ping_median + k` mit **r = 0.9992** fuer Direct-TLS-1.3-Provider
-- N_RTTs: HTTPS TLS1.3 = 2, WebSocket TLS1.3 = 3, WebSocket TLS1.2 (Rev.ai) = 4 (+1 RTT Penalty = +142 ms)
+- `connect_ms ≈ N_RTTs × ping_median + k` mit **slope 1.006, k 10.7 ms, r = 0.999** (4 direkte TLS-1.3-Punkte; r wegen n=4 nicht als Gütemaß lesen)
+- N_RTTs: HTTPS TLS1.3 = 2, WebSocket TLS1.3 = 3, WebSocket TLS1.2 (Rev.ai) = 4 (+1 RTT Penalty = +153 ms)
 - Cloudflare-fronted: Modell bricht — Edge-RTT ~1 ms, aber Backend-Latenz nicht messbar
 - k ≈ 5–26 ms = Python/Kernel-Software-Overhead (distanzunabhaengig)
 
@@ -120,9 +120,9 @@ analysis/
 
 **Befunde:**
 - **0/27 Kombinationen** unterschreiten das 1-Sekunden-Budget im Cold-Start
-- Beste Kombination Streaming: Deepgram+Groq+Azure = **1 157 ms**
-- STT dominiert in allen 27 Kombinationen (Ø 68 % der E2E-Latenz)
-- Mit persistenten Verbindungen (Warm): Deepgram+Groq+Azure ≈ **676 ms** (unter 1s)
+- Beste Kombination Streaming: Deepgram+Groq+Azure = **1 134 ms**
+- STT dominiert in allen 27 Kombinationen (Ø 67 % der E2E-Latenz)
+- Mit persistenten Verbindungen (Warm): Deepgram+Groq+Azure ≈ **666 ms** (unter 1s)
 - Cold-Start ist ein reines Session-Start-Problem; in Produktion erreichbar
 
 **Outputs:** `figures/07_e2e/` (4 Plots), `tables/07_pipeline_combinations.csv`

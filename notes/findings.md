@@ -13,7 +13,7 @@
 | V3 | Keine 1:1-Kopie; interne RTT-Struktur konsistent | Validierung | this session | ✅ |
 | F1 | Drei RTT-Klassen (CF ~1 / Azure-IT ~10 / US ~140 ms) | L1 | 01_ping_rtt_boxplot | ✅ |
 | F2 | Rev.ai TLS 1.2 → +1-RTT-Penalty (+153 ms) | L1 | 06_tls12_penalty | ✅ |
-| F3 | DNSSEC 0/7 Zonen signiert | L1 | `dnssec.csv` | ✅ |
+| F3 | DNSSEC 0/6 Zonen signiert (7 Endpoints, microsoft.com doppelt) | L1 | `dnssec.csv` | ✅ |
 | F4 | Cloudflare-Fronting 4/9 (groq/mistral/openai) ~1 ms Edge | L2 | 02_communication_matrix | ✅ |
 | F5 | Keine Nebenkommunikation (1 Call = 1 Backend-ASN) | L2 | 02_communication_matrix | ✅ |
 | F6 | **Engine > Netzwerk**: Deepgram(US) schlägt Azure(EU) bei STT | L3 | 03_stt_connect_anteil | ✅ |

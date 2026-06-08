@@ -79,7 +79,7 @@ Stabilitäts-Plots einbeziehen, in deskriptiver Statistik auf Quantil-Verzerrung
 - **TLS-Versionen (7/7 bestätigt):** Rev.ai = **TLS 1.2** (ECDHE-RSA-AES128-GCM-SHA256),
   alle anderen TLS 1.3 (TLS_AES_256_GCM_SHA384). Rev.ais TLS-1.2-Handshake ≈ 2 RTT
   (~287 ms) gegen 1 RTT bei TLS 1.3 → +1-RTT-Penalty.
-- **DNSSEC:** 0/7 Zonen signiert (`data/layer1_extra/dnssec.csv`) — unverändert ggü. Mai.
+- **DNSSEC:** 0/6 Zonen signiert (7 Endpoints, microsoft.com doppelt; `data/layer1_extra/dnssec.csv`) — unverändert ggü. Mai.
 
 ---
 

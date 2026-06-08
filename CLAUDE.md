@@ -2,16 +2,19 @@
 
 @HANDOFF.md
 
-**Titel:** Kommerzielle Cloud-AI-APIs unter der Lupe: Netzwerk-, Protokoll- und Latenzanalyse einer Echtzeit-Voice-Pipeline
+**Arbeitstitel (Stand 2026-06-08, noch nicht angemeldet):** Engine schlägt Geografie: Netzwerk-, Protokoll- und Latenzanalyse kommerzieller Cloud-AI-APIs einer Echtzeit-Voice-Pipeline aus EU-Perspektive
 **Autor:** Anton Rusik | **Betreuer:** Prof. Dr. Matthias Wählisch, TU Dresden
 **Vantage Point:** AWS EC2 eu-central-1 (Frankfurt) | **Deadline:** flexibel
 
 ## Forschungsfrage
 
-Welche Netzwerk- und Infrastruktureigenschaften (RTT, Protokoll, Hosting-Region) erklären
-die beobachteten Latenzunterschiede zwischen kommerziellen Cloud-AI-APIs (STT, LLM, TTS)
-aus EU-Perspektive — und wie beeinflusst die Provider-Wahl die Gesamtlatenz einer
-sequenziellen Voice-Pipeline?
+In welchem Maße erklären Netzwerk- und Infrastruktureigenschaften (RTT, Protokoll, Hosting-Region)
+— *im Vergleich zur Backend-Verarbeitung der Engine* — die Latenzunterschiede zwischen kommerziellen
+Cloud-AI-APIs (STT, LLM, TTS) aus EU-Perspektive, und wie wirkt sich die Provider-Wahl auf die
+Gesamtlatenz einer sequenziellen Cold-Start-Voice-Pipeline aus?
+
+> Geschärft 2026-06-08: in *beide* Richtungen beantwortbar — „Netzwerk erklärt weniger als die Engine"
+> ist eine gültige Antwort. Teilfragen + Begründung in `notes/thesis_outline.md`.
 
 ## Drei-Schichten-Architektur
 
@@ -28,7 +31,7 @@ sequenziellen Voice-Pipeline?
 | STT | Azure | Standard Neural | Italien (Italy North) | WebSocket |
 | LLM | OpenAI | gpt-4o-mini | USA (GPU) | HTTPS+SSE |
 | LLM | Groq | llama-3.1-8b-instant | USA (LPU) | HTTPS+SSE |
-| LLM | Mistral | mistral-small-4 | EU/Frankreich | HTTPS+SSE |
+| LLM | Mistral | mistral-small-2603 | EU/Frankreich | HTTPS+SSE |
 | TTS | Deepgram | Aura-2 | USA (Anycast) | HTTPS Streaming |
 | TTS | OpenAI | tts-1 | USA | HTTPS Streaming |
 | TTS | Azure | Standard Neural | Italien (Italy North) | HTTPS Streaming |
@@ -51,14 +54,15 @@ Amazon Polly: optionaler Exkurs (Intra-Cloud-Referenz), nicht Hauptprovider.
 
 ## Aktueller Stand
 
-**Juni-Daten validiert, Analyse migriert, Figures geschärft.** Alle 8 Notebooks (00–07)
-rechnen auf der Juni-Kampagne (`data/`); 19 Hauptteil-Figures mit Befund-Titeln; alle drei
-Kernbefunde reproduzieren (Cross-Layer r=0.999, Engine>Netzwerk, E2E 0/27 unter 1 s).
-Nächster Schritt: **Figure-Feinschliff + Prof-Aufbereitung**, dann Schreiben.
+**Audit + Reframe abgeschlossen (2026-06-08).** Kernbefund neu gerahmt: **„Engine schlägt
+Geografie"** (STT/TTS-Inversion) ist die Contribution; das Cross-Layer-Modell (r=0.999, n=4)
+ist Methoden-Baustein. Alle 8 Notebooks auf Juni; Doku-Zahlen synchronisiert.
+**Nächster Schritt: inhaltliche Audit-Punkte (Welle 1: A6 Monte-Carlo, A8 Verfügbarkeit,
+A7 Batch), dann Methodik-Kapitel schreiben.**
 
-Siehe `HANDOFF.md` für den aktuellen Session-Stand.
-Siehe `notes/findings.md` für die Befunde (Juni-Zahlen) und `notes/thesis_outline.md` für das Kapitelgerüst.
-Siehe `data/processed/known_anomalies.md` für Anomalien + Vantage-Point-Caveat.
+Siehe `HANDOFF.md` (⭐ „Hier morgen weitermachen"-Block) für Session-Stand + nächsten Schritt.
+Siehe `PRUEFER_AUDIT_2026-06-08.md` (Findings) + `STANDORTBESTIMMUNG_2026-06-08.md` (Strategie/Reframe).
+Siehe `notes/spickzettel_prof.md` (Prof-Gespräch) · `notes/findings.md` (Befunde) · `notes/thesis_outline.md` (Gerüst).
 
 ## Betreuer-Feedback (2026-04-09, Prof. Wählisch)
 
@@ -72,14 +76,21 @@ Cross-Layer-Korrelation (Layer 1 Ping × 3 ≈ Layer 3 connect_ms) und die Zerle
 ### connect_ms — Zerlegung in Submetriken
 
 `connect_ms` misst die Zeit von TCP SYN bis "Applikation kann Daten senden".
-Seit der Layer-2-Analyse (2026-05-04) wird connect_ms in drei Submetriken zerlegt:
+Seit der Layer-2-Analyse wird connect_ms in drei Submetriken zerlegt (Werte aus dem Juni-PCAP,
+`data/layer2/*_20260608_*.pcap`, n=1/Provider, STT-WebSocket):
 
-| Submetrik | Was sie misst | Quelle | Beispiel Deepgram | Beispiel Azure |
-|-----------|--------------|--------|-------------------|----------------|
-| `tcp_hs_ms` | TCP SYN → SYN-ACK (1 RTT) | Layer 2 | 102ms | 11ms |
-| `tls_hs_ms` | TLS ClientHello → Finished | Layer 2 | 106ms (1 RTT) | 16ms (1 RTT) |
-| `proto_setup_ms` | WebSocket/HTTP + Session-Init | Layer 2 | 123ms (1 RTT) | 237ms (~224ms Server) |
-| **connect_ms** | **Summe** | **Layer 3** | **337ms (~3 RTTs)** | **265ms (3 RTTs + Server)** |
+| Submetrik | Was sie misst | Quelle | Deepgram STT | Azure STT |
+|-----------|--------------|--------|--------------|-----------|
+| `tcp_hs_ms` | TCP SYN → SYN-ACK (1 RTT) | Layer 2 | 148 ms | 18 ms |
+| `tls_hs_ms` | TLS ClientHello → ServerHello (1 RTT) | Layer 2 | 150 ms | 13 ms |
+| `proto_setup_ms` | WebSocket-Upgrade + Session-Init (1 RTT) | Layer 2 | 180 ms | 13 ms |
+| **connect_ms** | **TCP+TLS+WS bis „App kann senden"** | **Layer 3 (Median)** | **425 ms (≈3 RTTs)** | **49 ms (≈3 RTTs)** |
+
+> PCAP-Summe: Deepgram ≈ 478 ms, Azure ≈ 44 ms — deckt sich mit dem Layer-3-Median bis auf
+> Deepgrams Anycast-RTT-Schwankung (PCAP-RTT 148 ms vs. Kampagnen-RTT ~138 ms).
+> **Korrektur ggü. Mai-Fassung (337 / 265 ms):** Azure hat KEINEN ~224-ms-„Server"-Anteil im
+> connect — das war eine Fehlinterpretation der Audio-Sendelücke. Azures STT-Connect ist ein
+> sauberer ~3-RTT-Handshake (~49 ms), exakt wie der Layer-3-Median zeigt.
 
 Referenz: "Layered Performance Analysis of TLS 1.3 Handshakes" (arXiv 2603.11006)
 verwendet die gleiche Zerlegungslogik (TCP → TLS → TLS-to-Application Delay).
