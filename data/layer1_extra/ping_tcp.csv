@@ -1,8 +1,8 @@
 endpoint,n,n_ok,min_ms,median_ms,mean_ms,max_ms,stdev_ms
-api.deepgram.com,10,10,139.756,140.207,140.832,144.639,1.677
-api.rev.ai,10,10,140.751,141.762,141.949,144.156,1.138
-italynorth.stt.speech.microsoft.com,10,10,12.044,12.392,12.865,15.786,1.132
-api.openai.com,10,10,1.924,2.291,2.857,7.411,1.648
-api.groq.com,10,10,1.279,1.659,1.74,2.615,0.417
-api.mistral.ai,10,10,1.582,1.983,1.97,2.287,0.222
-italynorth.tts.speech.microsoft.com,10,10,13.566,15.981,16.061,19.321,1.903
+api.deepgram.com,70,70,126.082,133.972,134.016,149.549,4.375
+api.groq.com,70,70,1.301,1.780,1.865,2.845,0.417
+api.mistral.ai,70,70,1.481,1.988,1.979,2.330,0.212
+api.openai.com,70,70,1.861,2.298,2.762,7.826,1.497
+api.rev.ai,70,70,136.646,144.239,144.601,155.139,3.842
+italynorth.stt.speech.microsoft.com,70,70,11.518,12.532,12.840,16.736,1.073
+italynorth.tts.speech.microsoft.com,70,70,13.343,16.401,16.293,20.413,1.813

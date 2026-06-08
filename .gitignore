@@ -22,3 +22,6 @@ venv/
 
 # Lokales Backup der Rohdaten (laut HANDOFF.md nicht in Git)
 data/raw_backup/
+
+# Archivierte Mai-Kampagne (2026-06-08): bereits in git-Historie, nicht doppelt tracken
+data_archive_2026-05/
