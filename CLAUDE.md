@@ -100,10 +100,23 @@ verwendet die gleiche Zerlegungslogik (TCP → TLS → TLS-to-Application Delay)
 
 | Metrik | Kategorie | Bedeutung |
 |--------|-----------|-----------|
-| `ttft_ms` | STT, LLM | Time to First Token — connect + Verarbeitung |
-| `ttfa_ms` | TTS | Time to First Audio — connect + Verarbeitung |
+| `ttft_ms` (STT) | STT | Time to First Token, gemessen **ab erstem Audio-Chunk** (`t_first_chunk`), also **NACH** dem Connect → **connect-EXKLUSIV**. STT-Cold-Start = `connect_ms + ttft_ms`. |
+| `ttft_ms` (LLM) | LLM | Time to First Token, gemessen ab Request-Absenden über eine frische Verbindung → **connect-INKLUSIV** (enthält den Verbindungsaufbau; `connect_ms` ist hier nur eine separate Referenz-Messung). |
+| `ttfa_ms` | TTS | Time to First Audio, analog LLM → **connect-INKLUSIV**. |
 | `total_ms` | alle | Gesamtdauer bis Antwort vollstaendig |
 | `ttl_ms` | LLM | Time to Last Token (nur LLM) |
+
+> **Wichtig — `ttft`/`ttfa` ist NICHT einheitlich „connect + Verarbeitung".** Diese verbreitete
+> Fehlinterpretation lässt korrekte Zahlen falsch aussehen. Verifiziert im Messcode:
+> - **STT:** `ttft = t_first_final − t_first_chunk`, und `t_first_chunk` liegt **nach** `t_ws_connected`
+>   → connect-**exklusiv**. Der STT-Cold-Start ist `connect_ms + ttft_ms`.
+> - **LLM/TTS:** `ttft = t_first_content − t_req` über eine **frische** Verbindung → connect-**inklusiv**;
+>   das separate `connect_ms` ist dort nur eine Referenz-Messung (Wegwerf-Socket).
+>
+> **Folge für die E2E-Pipeline:** `stt_connect + stt_ttft + llm_ttft + tts_ttfa` ist korrekt und zählt
+> connect **nicht** doppelt — STT trägt connect + ttft (ttft ist post-connect), LLM/TTS tragen nur
+> ttft/ttfa (connect bereits enthalten). Cross-Provider wird nie rohes `connect_ms` verglichen, sondern
+> nur der user-perceived Cold-Start (s. Audit-Punkt A3).
 
 Siehe `notes/literature.md` fuer die vollstaendige Literatursammlung.
 
