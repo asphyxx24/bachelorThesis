@@ -107,6 +107,21 @@ Stabilitäts-Plots einbeziehen, in deskriptiver Statistik auf Quantil-Verzerrung
 
 ---
 
+## 5.1 STT `total_ms` ist NICHT cross-Provider vergleichbar (A7, 2026-06-09)
+
+- **Ursache:** Die STT-Empfangsschleifen brechen unterschiedlich ab. Deepgram
+  (`stt_deepgram.py:74-90`) liest bis zum WebSocket-Close → **~3,4 s Leerlauf-Tail nach dem
+  letzten Final**; Azure (`stt_azure.py:128`) und Rev.ai (`stt_revai.py:77`) returnen beim
+  ersten Final. Median `total_ms`: Deepgram 4350 ms / Azure 1769 ms / Rev.ai 2117 ms.
+- **Folge:** Das frühere E2E-„Batch"-Szenario (`stt_total + llm + tts`) maß bei Deepgram den
+  Tail mit. Die „Streaming spart 3350 ms"-Aussage war ein **Schleifen-Artefakt** (Δ Deepgram
+  3351 ms, Azure 4 ms), kein Provider-Effekt. Der Tail ist **kein** Audio-Transfer
+  (`send_ms` ≈ 137 ms).
+- **Konsequenz (NB07):** Batch-Szenario **gestrichen**; `total_ms` wird nur provider-intern
+  interpretiert; E2E ausschließlich Streaming (`stt_connect + stt_ttft + llm_ttft + tts_ttfa`).
+
+---
+
 ## 6. Befunde, die aus der Analyse re-derived werden (NICHT hier dokumentiert)
 
 Die eigentlichen Ergebnisse (TTFT-Reihenfolge, Cross-Layer-Modell r≈0.999, E2E-Budget,

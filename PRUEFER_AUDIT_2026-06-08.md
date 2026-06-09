@@ -98,6 +98,7 @@ Diese Punkte sind durch unabhängige Nachrechnung aus den Rohdaten **confirmed**
 - *Beleg:* `stt_deepgram.py:74-90` (kein return) vs `stt_azure.py:128`/`stt_revai.py:77` (return); `07_pipeline_combinations.csv` (deepgram batch 4485).
 - *Prof-Frage:* „Deepgram total_ms ist 4,3 s bei ttft 0,6 s — was passiert in den 3,7 s, und warum hat Azure die Lücke nicht? Ist Ihr Batch-Szenario ein Provider-Vergleich oder ein Schleifen-Artefakt?"
 - *Fix:* total_ms NUR provider-intern interpretieren. Batch-Szenario entweder Deepgram-Tail bereinigen oder **ganz streichen** und nur Streaming-E2E berichten (das ist ohnehin die realistische Voice-Pipeline). In der Auswertung behebbar, kein Neumessen.
+- ✅ **ERLEDIGT (2026-06-09): Batch-Szenario gestrichen.** NB07 entfernt `batch_e2e`/`stt_total_ms` aus Combos, CSV, Stacked-Bar, Budget; `07_e2e_stream_vs_batch`-Figure gelöscht; Methodik-Hinweis im Notebook-Intro + `known_anomalies.md §5.1` + `findings.md F10`. Nur noch Streaming-E2E (0/27 < 1 s, beste Kombi 1134 ms).
 
 **A8 — Verfügbarkeit ignoriert: "beste" Pipeline nutzt Groq mit 33 % Ausfall (Statistik-Finding)**
 - *Problem:* Alle Mediane nur über Erfolge. Groq-Bestmarke (68 ms) beruht auf 3755/5600 Versuchen (32,9 % Fehler, alle HTTP 429). Die "beste E2E-Kombi" deepgram+groq+azure kommt real nur in ~67 % der Fälle zustande. Groq-Erfolge clustern zudem am Slot-Anfang (Survivorship: Erfolg-Run-Median 38 vs Fehler 64).
@@ -184,7 +185,7 @@ Was zur fertigen Thesis fehlt bzw. der Audit selbst übersah (Vollständigkeits-
 8. **Methodik-Kapitel zuerst schreiben** — inkl. connect_ms-Asymmetrie-Tabelle, STT-Dump-Deklaration (A4), Metrik-Definitionen.
 9. **Monte-Carlo-E2E** (A6): median-of-sum + p90/p95 mit CI aus den Parquets (read-only, 5 Zeilen).
 10. **STT-Real-Time-Sensitivität** (A4): Gedankenrechnung "STT parallel zum Sprechen" → wie kippt der 67-%-Anteil?
-11. **Verfügbarkeits-Dimension** (A8) in E2E-Tabelle; Batch-Szenario streichen oder Deepgram-Tail bereinigen (A7).
+11. **Verfügbarkeits-Dimension** (A8) in E2E-Tabelle; ~~Batch-Szenario streichen (A7)~~ ✅ erledigt 2026-06-09.
 12. **WER/Inhaltskorrektheit** (A14) + Mistral-Degeneration-Recheck (A10) + token_count-Klarstellung (A11).
 13. **Statistik:** IQR/p90 in alle Vergleichsaussagen; Mann-Whitney/Bootstrap-CI für die 3 Kernvergleiche.
 14. **Related Work** zu echtem Fließtext mit Abgrenzungsabsatz; **Diskussion/Limitations**; dann Einleitung/Grundlagen/Fazit.

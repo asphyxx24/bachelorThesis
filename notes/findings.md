@@ -57,8 +57,9 @@
 - **Caveat:** bricht bei Cloudflare-fronted Providern (effektives N_RTTs 7–180 = Unsinn → Edge-RTT ~1 ms misst nicht den Backend).
 
 ### F10 — E2E Cold-Start verfehlt 1 s ✅ (Juni bestätigt)
-- **0/27 Kombinationen < 1000 ms** (Streaming UND Batch).
-- **Beste Streaming-Kombi:** Deepgram + Groq + Azure = **1134 ms** (stt_conn 425 + stt_ttft 575 + llm 68 + tts 67). Beste Batch: Azure+Groq+Azure = 1904 ms.
+- **0/27 Kombinationen < 1000 ms** (Cold-Start Streaming).
+- **Beste Streaming-Kombi:** Deepgram + Groq + Azure = **1134 ms** (stt_conn 425 + stt_ttft 575 + llm 68 + tts 67).
+- **Batch-Szenario gestrichen (A7):** Der frühere „Streaming spart 3350 ms"-Vergleich war ein Mess-Artefakt — Deepgrams `total_ms` enthält einen ~3,4 s WS-Close-Leerlauf-Tail (kein Audio-Transfer, `send_ms`≈137 ms), Azure/Rev.ai brechen beim ersten Final ab. `total_ms` daher nur provider-intern, E2E nur Streaming.
 - **STT dominiert** im Schnitt **67,4 %** der E2E-Latenz (27/27 Kombis STT-dominiert).
 - **Warm-Schätzung** (ohne stt_connect): Deepgram+Groq+Azure ≈ **666 ms** → unter 1 s nur mit persistenten Verbindungen möglich (Future Work).
 

@@ -11,8 +11,8 @@ Großer **Prüfer-Audit** (49 Agenten, read-only) + **Strategie-Urteil** gelaufe
 ## ⭐ HIER MORGEN WEITERMACHEN
 
 **Audit-Analyse-Punkte, Welle 1 (E2E-Robustheit — höchster Hebel):**
-1. **Zuerst A7 entscheiden** (offen, AskUserQuestion gestern abgebrochen): Batch-Szenario **streichen** (Empfehlung — der „spart 3350 ms" ist ein Deepgram-Schleifen-Artefakt) ODER Deepgram-Tail bereinigen.
-2. **A6 — Monte-Carlo statt Median-Addition:** in NB07 die empirischen Verteilungen falten → median-of-sum + p90/p95 (entschärft „Mediane sind nicht additiv").
+1. ✅ **A7 erledigt (2026-06-09): Batch-Szenario gestrichen.** NB07 nur noch Streaming-E2E (`batch_e2e`/`stt_total_ms` raus, `07_e2e_stream_vs_batch`-Figure gelöscht, neu gerendert); `total_ms`-Tail-Artefakt dokumentiert in `known_anomalies.md §5.1` + `findings.md F10`.
+2. **→ JETZT: A6 — Monte-Carlo statt Median-Addition:** in NB07 die empirischen Verteilungen falten → median-of-sum + p90/p95 (entschärft „Mediane sind nicht additiv").
 3. **A8 — Verfügbarkeits-Spalte:** neben jeden E2E-Latenz-Median die Joint-Completion-Probability (Groq nur ~67 % erfolgreich).
 
 Danach **Welle 2** (A10 Mistral-Degeneration aus Roh-JSONL, A12 Phantom-57.-Slot) und **Welle 3** (A4 STT-Pacing-Sensitivität). Dann **Schreiben** (Methodik-Kapitel zuerst).
@@ -35,8 +35,8 @@ Danach **Welle 2** (A10 Mistral-Degeneration aus Roh-JSONL, A12 Phantom-57.-Slot
 
 | Bucket | Punkte | Stand |
 |---|---|---|
-| ✅ **Erledigt** | A1-Zahlen · A3-Doku · connect_ms-Submetrik (Juni-PCAP) · 13 Stale-Werte · NB07 „14→7 Tage" | fertig diese Session |
-| 🔧 **Analyse — NÄCHSTER SCHRITT** | **A6** Monte-Carlo · **A8** Verfügbarkeit · **A7** Batch · **A10** Mistral-Degen · **A12** Phantom-Slot · **A4** STT-Pacing | Welle 1/2/3 (s.o.) |
+| ✅ **Erledigt** | A1-Zahlen · A3-Doku · connect_ms-Submetrik (Juni-PCAP) · 13 Stale-Werte · NB07 „14→7 Tage" · **A7 Batch gestrichen (09.06.)** | A7 fertig 2026-06-09 |
+| 🔧 **Analyse — NÄCHSTER SCHRITT** | **A6** Monte-Carlo · **A8** Verfügbarkeit · **A10** Mistral-Degen · **A12** Phantom-Slot · **A4** STT-Pacing | Welle 1/2/3 (s.o.) |
 | ✍️ **Schreibphase** | A2 Limitations · A5 1s-Budget vs Jacoby · A9 Layer-2 nur Struktur · A11 token=Chunk · A13 TTS-Playback | beim Schreiben |
 | ❌ **Nicht machbar → Limitation** | A14 WER | keine Transkript-Texte gespeichert (nur Längen) |
 
@@ -71,9 +71,9 @@ Vollständige Findings + Belege: **`PRUEFER_AUDIT_2026-06-08.md`** (§4 Angriffs
 - **Morgen optional:** NB 01–06 zur Sicherheit frisch neu rendern (sind aber inhaltlich korrekt).
 - Reframe-Folge: beim Schreiben „r=0.999" aus den Cross-Layer-Plot-Titeln nehmen (A1).
 
-## Offene Entscheidungen (gestern abgebrochen)
+## Offene Entscheidungen
 
-- **A7:** Batch streichen *(Empfehlung)* vs. Deepgram-Tail bereinigen.
+- ✅ **A7 entschieden (09.06.):** Batch gestrichen (nur noch Streaming-E2E).
 - **Scope:** Welle 1 zuerst *(Empfehlung)* vs. alle drei Wellen am Stück.
 
 ## Cleanup-Erinnerungen (extern, nur du)

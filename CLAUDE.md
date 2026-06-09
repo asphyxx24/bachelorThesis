@@ -57,8 +57,9 @@ Amazon Polly: optionaler Exkurs (Intra-Cloud-Referenz), nicht Hauptprovider.
 **Audit + Reframe abgeschlossen (2026-06-08).** Kernbefund neu gerahmt: **„Engine schlägt
 Geografie"** (STT/TTS-Inversion) ist die Contribution; das Cross-Layer-Modell (r=0.999, n=4)
 ist Methoden-Baustein. Alle 8 Notebooks auf Juni; Doku-Zahlen synchronisiert.
-**Nächster Schritt: inhaltliche Audit-Punkte (Welle 1: A6 Monte-Carlo, A8 Verfügbarkeit,
-A7 Batch), dann Methodik-Kapitel schreiben.**
+**A7 (Batch-Szenario gestrichen) erledigt 2026-06-09 — NB07 nur noch Streaming-E2E.
+Nächster Schritt: restliche Welle-1-Audit-Punkte (A6 Monte-Carlo, A8 Verfügbarkeit),
+dann Methodik-Kapitel schreiben.**
 
 Siehe `HANDOFF.md` (⭐ „Hier morgen weitermachen"-Block) für Session-Stand + nächsten Schritt.
 Siehe `PRUEFER_AUDIT_2026-06-08.md` (Findings) + `STANDORTBESTIMMUNG_2026-06-08.md` (Strategie/Reframe).
