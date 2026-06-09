@@ -10,17 +10,19 @@ Diese Figur seziert einen einzelnen Verbindungsaufbau paketgenau aus dem PCAP-Mi
 
 ## Was auf der Figur zu sehen ist
 
-Beide Bilder folgen demselben zweiteiligen Aufbau: oben Block (A) eine Paket-Timeline mit **gebrochener x-Achse**, unten Block (B) ein **Inter-Arrival-Stem** mit Log-Achse. Farbe kodiert immer die **Paketrichtung**, nicht den Provider: Blau (`#1f6fb2`) = Client→Server (Upload), Orange-Braun (`#c44e1b`) = Server→Client (Download). Gefüllte Kreise = Pakete mit Payload, hohle Kreise mit weißem Kern = reine ACKs ohne Nutzdaten.
+Beide Bilder folgen demselben **dreiteiligen** Aufbau (drei vertikal getrennte Panels): **(A1)** ein Handshake-Zoom, **(A2)** die volle, *ungebrochene* lineare Zeitachse bis zum ersten Audio, **(B)** ein **Inter-Arrival-Stem** mit Log-Achse. Farbe kodiert immer die **Paketrichtung**, nicht den Provider: Blau (`#1f6fb2`) = Client→Server (Upload), Orange-Braun (`#c44e1b`) = Server→Client (Download). Gefüllte Kreise = Pakete mit Payload, hohle Kreise mit weißem Kern = reine ACKs ohne Nutzdaten. Je Panel zwei waagrechte y-Spuren: oben „Client→Server", unten „Server→Client".
 
-**Block (A) — Timeline (gebrochene x-Achse, linear):**
-- Zwei waagrechte y-Spuren: oben „Client→Server", unten „Server→Client". Jedes Paket ist ein Punkt auf seiner Richtungsspur, chronologisch von links (SYN bei 0 ms) nach rechts.
-- Die x-Achse ist „Zeit seit SYN [ms]" und in **Panels gebrochen** (diagonale `//`-Bruchmarken zwischen den Panels), damit Handshake-Detail und Audio-Burst beide lesbar bleiben, obwohl Hunderte ms dazwischen liegen.
-- **Azure** hat drei Panels: (A1) Handshake-Detail 0–95 ms linear, (A2) die komprimierte Client-Sendelücke ~90–446 ms, (A3) Audio-Burst ~444–470 ms. **Deepgram** hat nur zwei Panels: (A1) Handshake-Detail 0–465 ms (breiter, weil RTT-dominiert), (A3) Audio-Burst ~470–660 ms — **kein** Lücken-Panel, weil es keine Client-Lücke gibt.
-- Dezente Hintergrundbänder benennen die Phasen: hellblau „TCP-Handshake (1 RTT)", hellgrün „TLS-1.3-Handshake (1 RTT)", beige „WS-Upgrade / Session-Init", bei Azure zusätzlich rosa „Client-Sendelücke (keine Pakete)" und hellblau „Audio-Upload (Burst)".
-- Gepunktete vertikale Linien mit gedrehten Labels markieren die Schlüsselereignisse: **SYN, SYN-ACK, ClientHello, ServerHello**.
-- Eine **grün gestrichelte** vertikale Linie markiert `connect_ms` (App sendebereit) mit Label „connect_ms ≈ 50 ms" (Azure) bzw. „≈ 425 ms" (Deepgram) — bewusst getrennt von `app_data_start`.
-- Ein grauer Doppelpfeil unter Panel A1 zeigt die Inter-Arrival-Zeit SYN→SYN-ACK an („IAT Δ 18,5 ms = 1 RTT" bei Azure, „148,4 ms = 1 RTT" bei Deepgram) — die direkte, quantitative Antwort auf die Prof-Vorgabe „Inter-Arrival sichtbar".
-- Im Audio-Burst-Panel markiert eine blau gestrichelte Linie `app_data_start` (446 ms bei Azure, 478 ms bei Deepgram) mit dem Hinweis „dichte Client-Pakete (IAT meist < 0,1 ms)".
+**Panel (A1) — Handshake-Zoom (linear, TCP/TLS getrennt):**
+- Zeigt nur die ersten ~55 ms (Azure) bzw. ~330 ms (Deepgram, RTT-dominiert), damit der Handshake groß und lesbar ist; jedes Paket ist ein Punkt auf seiner Richtungsspur, chronologisch ab SYN bei 0 ms.
+- Dezente Hintergrundbänder benennen die drei Phasen **getrennt**: „TCP-Handshake (1 RTT)", „TLS-1.3-Handshake (1 RTT)", „WS-Upgrade / Session-Init".
+- Gepunktete vertikale Linien markieren die Schlüsselpakete **SYN, SYN-ACK, ClientHello, ServerHello** (per Leader-Linie auseinandergezogen, weil SYN-ACK ~18,5 ms und ClientHello ~19,2 ms fast deckungsgleich liegen).
+- Ein grauer Doppelpfeil zeigt die Inter-Arrival-Zeit SYN→SYN-ACK quantitativ: „Δ 18,5 ms = 1 RTT" (Azure) bzw. „148,4 ms = 1 RTT" (Deepgram) — die direkte Antwort auf die Prof-Vorgabe „Inter-Arrival sichtbar".
+
+**Panel (A2) — volle, ungebrochene Zeitachse (das Kernbild):**
+- Dieselbe lineare Achse „Zeit seit SYN [ms]", aber bis zum ersten Audio-Paket (~470 ms Azure / ~510 ms Deepgram) — **ohne Bruch**, sodass die Abstände maßstabsgetreu bleiben.
+- Eine **grün gestrichelte** Linie markiert `connect_ms` (App sendebereit, ~49 ms Azure / ~425 ms Deepgram), eine **blau gestrichelte** Linie `app_data_start` (~446 ms / ~478 ms) — bewusst getrennt.
+- Bei **Azure** klafft zwischen beiden Linien ein **buchstäblich leerer Raum ohne ein einziges Paket** — die ~358-ms-Client-Sendelücke, beschriftet „~358 ms CLIENT wartet — kein Server-Processing". Dass dort keine Pakete liegen, ist der Beweis: der Server tut nichts, der Client sendet nur verzögert.
+- Bei **Deepgram** fehlt diese Lücke; (A2) ist als „lückenloser, RTT-dominierter Aufbau" beschriftet — `connect_ms` und `app_data_start` liegen dicht beieinander, jede Pause davor ist genau eine RTT.
 
 **Block (B) — Inter-Arrival-Stem (Log-Achse):**
 - x-Achse: „Paket-Index (chronologisch, ab SYN)" — jedes Paket ein Punkt in Reihenfolge.
