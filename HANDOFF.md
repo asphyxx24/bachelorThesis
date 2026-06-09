@@ -12,8 +12,8 @@ Großer **Prüfer-Audit** (49 Agenten, read-only) + **Strategie-Urteil** gelaufe
 
 **Audit-Analyse-Punkte, Welle 1 (E2E-Robustheit — höchster Hebel):**
 1. ✅ **A7 erledigt (2026-06-09): Batch-Szenario gestrichen.** NB07 nur noch Streaming-E2E (`batch_e2e`/`stt_total_ms` raus, `07_e2e_stream_vs_batch`-Figure gelöscht, neu gerendert); `total_ms`-Tail-Artefakt dokumentiert in `known_anomalies.md §5.1` + `findings.md F10`.
-2. **→ JETZT: A6 — Monte-Carlo statt Median-Addition:** in NB07 die empirischen Verteilungen falten → median-of-sum + p90/p95 (entschärft „Mediane sind nicht additiv").
-3. **A8 — Verfügbarkeits-Spalte:** neben jeden E2E-Latenz-Median die Joint-Completion-Probability (Groq nur ~67 % erfolgreich).
+2. ✅ **A6 erledigt (2026-06-09): Monte-Carlo statt Median-Addition.** NB07 §6 — Faltung der empirischen Verteilungen (N=20 000, seed=42). median-of-sum weicht <1,4 % von der Median-Addition ab (validiert), aber p90/p95 = 1273/1350 ms & nur ~24 % der Einzel-Runs < 1 s. Tabelle `07_pipeline_montecarlo.csv` + Figure `07_e2e_montecarlo` + Befund 7.6.
+3. **→ JETZT: A8 — Verfügbarkeits-Spalte:** neben jeden E2E-Latenz-Median die Joint-Completion-Probability (Groq nur ~67 % erfolgreich).
 
 Danach **Welle 2** (A10 Mistral-Degeneration aus Roh-JSONL, A12 Phantom-57.-Slot) und **Welle 3** (A4 STT-Pacing-Sensitivität). Dann **Schreiben** (Methodik-Kapitel zuerst).
 
@@ -35,8 +35,8 @@ Danach **Welle 2** (A10 Mistral-Degeneration aus Roh-JSONL, A12 Phantom-57.-Slot
 
 | Bucket | Punkte | Stand |
 |---|---|---|
-| ✅ **Erledigt** | A1-Zahlen · A3-Doku · connect_ms-Submetrik (Juni-PCAP) · 13 Stale-Werte · NB07 „14→7 Tage" · **A7 Batch gestrichen (09.06.)** | A7 fertig 2026-06-09 |
-| 🔧 **Analyse — NÄCHSTER SCHRITT** | **A6** Monte-Carlo · **A8** Verfügbarkeit · **A10** Mistral-Degen · **A12** Phantom-Slot · **A4** STT-Pacing | Welle 1/2/3 (s.o.) |
+| ✅ **Erledigt** | A1-Zahlen · A3-Doku · connect_ms-Submetrik (Juni-PCAP) · 13 Stale-Werte · NB07 „14→7 Tage" · **A7 Batch gestrichen** · **A6 Monte-Carlo** (09.06.) | A7+A6 fertig 2026-06-09 |
+| 🔧 **Analyse — NÄCHSTER SCHRITT** | **A8** Verfügbarkeit · **A10** Mistral-Degen · **A12** Phantom-Slot · **A4** STT-Pacing | Welle 1 (nur noch A8) / 2 / 3 |
 | ✍️ **Schreibphase** | A2 Limitations · A5 1s-Budget vs Jacoby · A9 Layer-2 nur Struktur · A11 token=Chunk · A13 TTS-Playback | beim Schreiben |
 | ❌ **Nicht machbar → Limitation** | A14 WER | keine Transkript-Texte gespeichert (nur Längen) |
 
@@ -55,7 +55,7 @@ Vollständige Findings + Belege: **`PRUEFER_AUDIT_2026-06-08.md`** (§4 Angriffs
 
 1. **Engine schlägt Netzwerknähe (Kern):** Deepgram (US, RTT 138) STT-TTFT **575 ms** < Azure (EU, RTT 10) **1715 ms** (56/56 Slots). TTS-Inversion: Azure gewinnt TTFA **67 ms** vs Deepgram 557 vs OpenAI 954.
 2. **Cross-Layer-Modell (Baustein):** `connect_ms ≈ N_RTTs × ping + k`, slope 1.006, k 10.7 ms (4 direkte Provider, n=4). Bricht bei Cloudflare (4/9).
-3. **Cold-Start-Pipeline verfehlt 1 s:** beste Streaming-Kombi deepgram+groq+azure **1134 ms**, 0/27 < 1000 ms. Warm ~666 ms. *(Caveat: Median-Addition — A6 fixt das.)*
+3. **Cold-Start-Pipeline verfehlt 1 s:** beste Streaming-Kombi deepgram+groq+azure **1134 ms**, 0/27 < 1000 ms. Warm ~666 ms. *(A6 erledigt: Monte-Carlo bestätigt Median-Addition <1,4 %; p90/p95 = 1273/1350 ms, nur ~24 % Einzel-Runs < 1 s.)*
 
 ## Datenstand
 

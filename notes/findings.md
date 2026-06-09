@@ -59,6 +59,7 @@
 ### F10 — E2E Cold-Start verfehlt 1 s ✅ (Juni bestätigt)
 - **0/27 Kombinationen < 1000 ms** (Cold-Start Streaming).
 - **Beste Streaming-Kombi:** Deepgram + Groq + Azure = **1134 ms** (stt_conn 425 + stt_ttft 575 + llm 68 + tts 67).
+- **Monte-Carlo-Validierung (A6, N=20 000):** `median-of-sum` weicht nur **~1,4 % im Mittel** (max 3,7 %, beste Kombi +0,9 %) von der Median-Addition ab → Schätzer trägt. Aber p90 **~1273 ms** / p95 **~1350 ms** und nur **~24 % der Einzel-Runs < 1 s** (~76 % > 1 s) → das „verfehlt 1 s" gilt erst recht pro Einzel-Lauf. Median-Addition bleibt benannte Limitation. Tabelle `07_pipeline_montecarlo.csv`, Figure `07_e2e_montecarlo`.
 - **Batch-Szenario gestrichen (A7):** Der frühere „Streaming spart 3350 ms"-Vergleich war ein Mess-Artefakt — Deepgrams `total_ms` enthält einen ~3,4 s WS-Close-Leerlauf-Tail (kein Audio-Transfer, `send_ms`≈137 ms), Azure/Rev.ai brechen beim ersten Final ab. `total_ms` daher nur provider-intern, E2E nur Streaming.
 - **STT dominiert** im Schnitt **67,4 %** der E2E-Latenz (27/27 Kombis STT-dominiert).
 - **Warm-Schätzung** (ohne stt_connect): Deepgram+Groq+Azure ≈ **666 ms** → unter 1 s nur mit persistenten Verbindungen möglich (Future Work).

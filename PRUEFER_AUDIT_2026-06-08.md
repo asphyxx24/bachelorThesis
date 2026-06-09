@@ -92,6 +92,7 @@ Diese Punkte sind durch unabhängige Nachrechnung aus den Rohdaten **confirmed**
 - *Beleg:* `07_e2e_pipeline.ipynb` CELL[4]; `run.py:241-242` (choices ohne e2e).
 - *Prof-Frage:* „Haben Sie die Pipeline je als Ganzes gemessen, oder addieren Sie drei Mediane? Wo ist das Konfidenzintervall der 1134 ms?"
 - *Fix:* Monte-Carlo-Faltung der empirischen Verteilungen (5 Zeilen, kein neues Geld) → liefert median-of-sum + p90/p95. Belegt sogar, dass Sum-of-Medians konservativ ist (Abweichung <1 %). Median-Addition als bewusste, benannte Limitation. Ein einziger echter E2E-Lauf (n=20) auf EC2 würde 1134 ms massiv absichern.
+- ✅ **ERLEDIGT (2026-06-09):** NB07 §6 — Monte-Carlo-Faltung (N=20 000, seed=42, STT connect+ttft je Run gepaart, Stufen unabhängig). Ergebnis: |median-of-sum − sum-of-medians| Mittel **1,4 %** / max 3,7 % (beste Kombi +0,9 %) → Median-Addition validiert; 0/27 median-of-sum < 1 s; beste Kombi p90 **1273** / p95 **1350 ms**, nur **24 % der Einzel-Runs < 1 s** (Audit-„~76 %" bestätigt). Tabelle `07_pipeline_montecarlo.csv`, Figure `07_e2e_montecarlo`, Befund 7.6. Unabhängigkeits-Annahme als Limitation benannt.
 
 **A7 — STT total_ms cross-Provider unbrauchbar, verseucht alle Batch-E2E-Zahlen (E4, confirmed 3/3)**
 - *Problem:* Deepgrams `_recv_finals` bricht NICHT beim ersten Final ab, sondern liest bis WS-Close (~3374 ms Leerlauf-Tail). Azure/Rev.ai returnen beim ersten Final. Median total_ms: Deepgram 4350 / Azure 1769 / Rev.ai 2117. Die "Streaming spart 3350 ms"-Aussage IST der Deepgram-Tail (Batch−Stream-Delta = exakt 3351 ms bei Deepgram, 4 ms bei Azure) — ein Schleifen-Artefakt, kein echter Batch-vs-Streaming-Effekt. send_ms ist nur 137 ms, die Tail-Begründung "Audio-Transfer ~4 s" im NB07 ist falsch.
@@ -183,7 +184,7 @@ Was zur fertigen Thesis fehlt bzw. der Audit selbst übersah (Vollständigkeits-
 ### Für die fertige Thesis (mehr Arbeit)
 
 8. **Methodik-Kapitel zuerst schreiben** — inkl. connect_ms-Asymmetrie-Tabelle, STT-Dump-Deklaration (A4), Metrik-Definitionen.
-9. **Monte-Carlo-E2E** (A6): median-of-sum + p90/p95 mit CI aus den Parquets (read-only, 5 Zeilen).
+9. ~~**Monte-Carlo-E2E** (A6): median-of-sum + p90/p95 mit CI aus den Parquets~~ ✅ erledigt 2026-06-09 (NB07 §6).
 10. **STT-Real-Time-Sensitivität** (A4): Gedankenrechnung "STT parallel zum Sprechen" → wie kippt der 67-%-Anteil?
 11. **Verfügbarkeits-Dimension** (A8) in E2E-Tabelle; ~~Batch-Szenario streichen (A7)~~ ✅ erledigt 2026-06-09.
 12. **WER/Inhaltskorrektheit** (A14) + Mistral-Degeneration-Recheck (A10) + token_count-Klarstellung (A11).

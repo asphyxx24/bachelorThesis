@@ -100,7 +100,7 @@ einer sequenziellen Cold-Start-Voice-Pipeline aus?
 | **5.4 KERNBEFUND — Die Inversion (TTS)** | *Gleicher* EU-Provider Azure gewinnt jetzt (ttfa 67 < 557 < 954) → isoliert den Engine-Effekt | 05 | 05_tts_ttfa_cdf |
 | 5.5 Layer 3 — LLM | Groq LPU schnellster; Cloudflare-Cluster; **Verfügbarkeit neben Latenz** (Groq 33 % 429) | 04 | 04_llm_ttft_cdf |
 | 5.6 Cross-Layer-Heuristik (Methoden-Baustein, ~½ Seite) | connect ≈ N_RTT × ping für die 4 direkten Provider; **n=4-Limitation offen, kein r-Hero** | 06 | 06_cross_layer_scatter |
-| 5.7 E2E — illustrative Implikation | Streaming-Budget, **Monte-Carlo-CI statt Median-Addition**; Batch-Szenario gestrichen | 07 | 07_e2e_budget |
+| 5.7 E2E — illustrative Implikation | Streaming-Budget, **Monte-Carlo-CI statt Median-Addition** (Δ<1,4 %, p90/p95, ~24 % Runs<1 s); Batch-Szenario gestrichen | 07 | 07_e2e_budget, 07_e2e_montecarlo |
 
 ## 6. Diskussion
 - **Hauptbefund (C1): Engine-Speed > Netzwerknähe** — die Region erklärt die Latenz *nicht*;
