@@ -1,21 +1,21 @@
 # Handoff — Aktueller Arbeitsstand
 
-> Letzte Aktualisierung: 2026-06-08 (Session: **Multi-Agent-Audit + strategischer Reframe + Doku-Sync + Submetrik/Figure-Fix**)
+> Letzte Aktualisierung: 2026-06-09 (Session: **Welle 1 komplett — A7 Batch gestrichen + A6 Monte-Carlo + A8 Verfügbarkeit, alles in NB07**)
 
 ## TL;DR
 
-Großer **Prüfer-Audit** (49 Agenten, read-only) + **Strategie-Urteil** gelaufen. Ergebnis: Substanz tragfähig, aber **falsch gerahmt** → **Contribution umgedreht** (Reframe): **„Engine schlägt Geografie" ist jetzt der Kernbefund**, das Cross-Layer-Modell (r=0.999, n=4) wird zum Methoden-Baustein. Doku-Zahlen auf Juni synchronisiert, Submetrik-Tabelle + NB07-Figure gefixt. **Nächster Schritt: die inhaltlichen Audit-Punkte abarbeiten (Welle 1), dann schreiben.**
+**Welle 1 der Audit-Punkte abgeschlossen (alle in NB07, fehlerfrei neu gerendert):** **A7** Batch-Szenario gestrichen (war ein `total_ms`-Tail-Artefakt) → nur noch Streaming-E2E. **A6** Monte-Carlo-Faltung validiert die Median-Addition (Δ<1,4 %) und zeigt p90/p95 + „nur ~24 % der Einzel-Runs <1 s". **A8** Verfügbarkeit/Joint-Completion → Latenz-vs-Zuverlässigkeit-Pareto-Front (LLM ist der Hebel: groq 67 % → mistral 96 % → openai 99,9 %). Vorgeschichte: großer Prüfer-Audit + Reframe auf **„Engine schlägt Geografie"**. **Nächster Schritt: Welle 2 (A10 Mistral-Degen, A12 Phantom-Slot), dann schreiben.**
 
 ---
 
 ## ⭐ HIER MORGEN WEITERMACHEN
 
-**Audit-Analyse-Punkte, Welle 1 (E2E-Robustheit — höchster Hebel):**
-1. ✅ **A7 erledigt (2026-06-09): Batch-Szenario gestrichen.** NB07 nur noch Streaming-E2E (`batch_e2e`/`stt_total_ms` raus, `07_e2e_stream_vs_batch`-Figure gelöscht, neu gerendert); `total_ms`-Tail-Artefakt dokumentiert in `known_anomalies.md §5.1` + `findings.md F10`.
-2. ✅ **A6 erledigt (2026-06-09): Monte-Carlo statt Median-Addition.** NB07 §6 — Faltung der empirischen Verteilungen (N=20 000, seed=42). median-of-sum weicht <1,4 % von der Median-Addition ab (validiert), aber p90/p95 = 1273/1350 ms & nur ~24 % der Einzel-Runs < 1 s. Tabelle `07_pipeline_montecarlo.csv` + Figure `07_e2e_montecarlo` + Befund 7.6.
-3. **→ JETZT: A8 — Verfügbarkeits-Spalte:** neben jeden E2E-Latenz-Median die Joint-Completion-Probability (Groq nur ~67 % erfolgreich).
+**Welle 1 (E2E-Robustheit) ✅ KOMPLETT (2026-06-09) — A7 + A6 + A8 alle erledigt:**
+1. ✅ **A7: Batch-Szenario gestrichen.** NB07 nur noch Streaming-E2E (`batch_e2e`/`stt_total_ms` raus, `07_e2e_stream_vs_batch`-Figure gelöscht); `total_ms`-Tail-Artefakt dokumentiert in `known_anomalies.md §5.1` + `findings.md F10`.
+2. ✅ **A6: Monte-Carlo statt Median-Addition.** NB07 §6 (N=20 000, seed=42). median-of-sum weicht <1,4 % ab (validiert), aber p90/p95 = 1273/1350 ms & nur ~24 % der Einzel-Runs < 1 s. `07_pipeline_montecarlo.csv` + `07_e2e_montecarlo` + Befund 8.6.
+3. ✅ **A8: Verfügbarkeit/Joint-Completion.** NB07 §7 — Verfügbarkeit je Provider (Groq 67,1 %, Rev.ai 89,8 %, Mistral 96,0 %, Rest ≥99,96 %). Latenz-vs-Zuverlässigkeit-Pareto-Front (LLM ist der Hebel): groq 1134 ms/67 % → mistral 1297/96 % → openai 1608/99,9 %. `07_pipeline_availability.csv` + `07_e2e_availability` + Befund 8.7.
 
-Danach **Welle 2** (A10 Mistral-Degeneration aus Roh-JSONL, A12 Phantom-57.-Slot) und **Welle 3** (A4 STT-Pacing-Sensitivität). Dann **Schreiben** (Methodik-Kapitel zuerst).
+**→ JETZT: Welle 2** — **A10** (Mistral-Degeneration aus Roh-JSONL — `token_count` nicht im Parquet) + **A12** (Phantom-57.-Slot: nach `tag` statt Timestamp gruppieren). Danach **Welle 3** (A4 STT-Pacing-Sensitivität, analytisch). Dann **Schreiben** (Methodik-Kapitel zuerst).
 
 > ⚠️ Vor NB07/NB04-Edits: sicherstellen, dass der **parallele Chat** nicht mitten in `analysis/` steckt (Kollisionsgefahr).
 > ⚠️ Uncommitted: diese Session hat viele Dateien geändert, **noch nicht committet** — ggf. `git status` / committen.
@@ -35,8 +35,8 @@ Danach **Welle 2** (A10 Mistral-Degeneration aus Roh-JSONL, A12 Phantom-57.-Slot
 
 | Bucket | Punkte | Stand |
 |---|---|---|
-| ✅ **Erledigt** | A1-Zahlen · A3-Doku · connect_ms-Submetrik (Juni-PCAP) · 13 Stale-Werte · NB07 „14→7 Tage" · **A7 Batch gestrichen** · **A6 Monte-Carlo** (09.06.) | A7+A6 fertig 2026-06-09 |
-| 🔧 **Analyse — NÄCHSTER SCHRITT** | **A8** Verfügbarkeit · **A10** Mistral-Degen · **A12** Phantom-Slot · **A4** STT-Pacing | Welle 1 (nur noch A8) / 2 / 3 |
+| ✅ **Erledigt** | A1-Zahlen · A3-Doku · connect_ms-Submetrik · 13 Stale-Werte · NB07 „14→7 Tage" · **Welle 1: A7 Batch · A6 Monte-Carlo · A8 Verfügbarkeit** (09.06.) | Welle 1 komplett 2026-06-09 |
+| 🔧 **Analyse — NÄCHSTER SCHRITT** | **A10** Mistral-Degen · **A12** Phantom-Slot (Welle 2) · **A4** STT-Pacing (Welle 3) | Welle 2 / 3 |
 | ✍️ **Schreibphase** | A2 Limitations · A5 1s-Budget vs Jacoby · A9 Layer-2 nur Struktur · A11 token=Chunk · A13 TTS-Playback | beim Schreiben |
 | ❌ **Nicht machbar → Limitation** | A14 WER | keine Transkript-Texte gespeichert (nur Längen) |
 

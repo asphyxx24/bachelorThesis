@@ -64,6 +64,18 @@
 - **STT dominiert** im Schnitt **67,4 %** der E2E-Latenz (27/27 Kombis STT-dominiert).
 - **Warm-Schätzung** (ohne stt_connect): Deepgram+Groq+Azure ≈ **666 ms** → unter 1 s nur mit persistenten Verbindungen möglich (Future Work).
 
+### F11 — Latenz vs. Zuverlässigkeit: die schnellste Pipeline ist nicht die zuverlässigste ✅ (A8, NEU)
+- **Verfügbarkeit = Erfolg/(Erfolg+Fehler)** aus `layer3_errors.parquet`: Groq **67,1 %** · Rev.ai 89,8 % · Mistral 96,0 % · Rest ≥99,96 %.
+- **Joint-Completion** je Kombi = P(STT)·P(LLM)·P(TTS). **Pareto-Front** (alle deepgram+azure, nur LLM variiert → LLM ist der Hebel):
+
+  | Kombi | Latenz | Joint-Completion |
+  |---|---:|---:|
+  | deepgram+**groq**+azure | 1134 ms | **67,0 %** |
+  | deepgram+**mistral**+azure | 1297 ms (+163) | **95,9 %** |
+  | deepgram+**openai**+azure | 1608 ms (+474) | **99,9 %** |
+
+- Die Latenz-Bestmarke (Groq) läuft real nur in **~67 %** der Fälle durch. Groq-429 = Free-Tier-Quota (kein Latenzfehler), gehört aber offen neben die Latenz. **Empfehlung:** Mistral als robustere Default-Wahl. Tabelle `07_pipeline_availability.csv`, Figure `07_e2e_availability`, Befund NB07 §8.7.
+
 ---
 
 ## Anomalien/Caveats (→ `data/processed/known_anomalies.md`)

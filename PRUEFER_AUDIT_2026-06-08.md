@@ -106,6 +106,7 @@ Diese Punkte sind durch unabhängige Nachrechnung aus den Rohdaten **confirmed**
 - *Beleg:* `layer3_errors.parquet` (groq 1845 LLM-Fehler); `07_pipeline_combinations.csv` ohne Verfügbarkeits-Spalte.
 - *Prof-Frage:* „Ihre beste Pipeline nutzt Groq, das ein Drittel der Anfragen ablehnt. Ist eine 1134-ms-Pipeline, die nur in 67 % der Fälle durchläuft, wirklich die beste?"
 - *Fix:* Verfügbarkeits-Spalte neben jeden Latenz-Median. Joint completion probability in der E2E-Tabelle. Erklären, dass Groq-429 ein Free-Tier-Quota-Problem ist (konstant 67/Slot), kein Latenzproblem. Mistral (4 % Fehler) als robustere Alternative anbieten.
+- ✅ **ERLEDIGT (2026-06-09):** NB07 §7 — Verfügbarkeit `Erfolg/(Erfolg+Fehler)` je Provider (Groq 67,1 %, Rev.ai 89,8 %, Mistral 96,0 %, Rest ≥99,96 %) + Joint-Completion je Kombi. Latenz-vs-Zuverlässigkeit-Scatter mit Pareto-Front (Figure `07_e2e_availability`, Tabelle `07_pipeline_availability.csv`, Befund 8.7): deepgram+azure-Front, LLM ist der Hebel — groq 1134 ms/67 % → mistral 1297 ms/96 % → openai 1608 ms/99,9 %. Groq-429 als Tarif-Problem eingeordnet, Mistral als Default empfohlen.
 
 **A9 — Layer-2 als "unabhängige Validierung" ist brüchig (E-Findings, high)**
 - *Problem:* PCAPs vom 8.6., **andere Instanz/AWS-Account**, ~19 h nach Kampagnenende, n=1/Provider. Für LLM/TTS keyt der Analyzer auf das Wegwerf-SYN → rtts_to_ready=180 (unsinnig). Rev.ai-Capture (einziger TLS-1.2-Provider!) kaputt. NB02 nutzt scapy, dokumentiert aber tshark (`_pcap_helpers.py:25` Windows-hardcoded Pfad, toter Code).
@@ -186,7 +187,7 @@ Was zur fertigen Thesis fehlt bzw. der Audit selbst übersah (Vollständigkeits-
 8. **Methodik-Kapitel zuerst schreiben** — inkl. connect_ms-Asymmetrie-Tabelle, STT-Dump-Deklaration (A4), Metrik-Definitionen.
 9. ~~**Monte-Carlo-E2E** (A6): median-of-sum + p90/p95 mit CI aus den Parquets~~ ✅ erledigt 2026-06-09 (NB07 §6).
 10. **STT-Real-Time-Sensitivität** (A4): Gedankenrechnung "STT parallel zum Sprechen" → wie kippt der 67-%-Anteil?
-11. **Verfügbarkeits-Dimension** (A8) in E2E-Tabelle; ~~Batch-Szenario streichen (A7)~~ ✅ erledigt 2026-06-09.
+11. ~~**Verfügbarkeits-Dimension** (A8) in E2E-Tabelle~~ ✅ + ~~Batch-Szenario streichen (A7)~~ ✅ erledigt 2026-06-09 → **Welle 1 komplett (A6+A7+A8)**.
 12. **WER/Inhaltskorrektheit** (A14) + Mistral-Degeneration-Recheck (A10) + token_count-Klarstellung (A11).
 13. **Statistik:** IQR/p90 in alle Vergleichsaussagen; Mann-Whitney/Bootstrap-CI für die 3 Kernvergleiche.
 14. **Related Work** zu echtem Fließtext mit Abgrenzungsabsatz; **Diskussion/Limitations**; dann Einleitung/Grundlagen/Fazit.
