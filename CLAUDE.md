@@ -1,141 +1,96 @@
-# Bachelorarbeit — Messinfrastruktur
+# Bachelorarbeit — Messinfrastruktur (Neuaufbau)
 
-@HANDOFF.md
+> **Stand 2026-06-14: Neuanfang.** Skripte, Setup und **alle Messungen** werden von Grund auf neu
+> gebaut. Lebende Referenz + aktueller Status: **`NEUANFANG.md`**. Alles Frühere liegt in **`archived/`**
+> (nur Nachschlagewerk, nicht mehr Grundlage). Leitprinzip: **erst Methodik schriftlich, dann Code,
+> dann messen.**
 
-**Arbeitstitel (Stand 2026-06-08, noch nicht angemeldet):** Engine schlägt Geografie: Netzwerk-, Protokoll- und Latenzanalyse kommerzieller Cloud-AI-APIs einer Echtzeit-Voice-Pipeline aus EU-Perspektive
-**Autor:** Anton Rusik | **Betreuer:** Prof. Dr. Matthias Wählisch, TU Dresden
-**Vantage Point:** AWS EC2 eu-central-1 (Frankfurt) | **Deadline:** flexibel
+**Arbeitstitel (nicht angemeldet, frei änderbar):** Engine schlägt Geografie: Netzwerk-, Protokoll-
+und Latenzanalyse kommerzieller Cloud-AI-APIs einer Echtzeit-Voice-Pipeline aus EU-Perspektive
+**Autor:** Anton Rusik · **Betreuer:** Prof. Dr. Matthias Wählisch, TU Dresden
+**Vantage Point:** AWS EC2 `eu-central-1` (Frankfurt)
+
+## Warum der Neuanfang
+
+Prof. Wählisch: inhaltlich ausreichend, aber er **vertraut den Daten nicht**, weil Methodik/Setup/
+Struktur nicht dargelegt sind (u.a. „3 Anbieter mit niedriger Layer-1-Latenz, nicht erklärt"). Es ist
+ein Dokumentations-/Verständnisproblem, kein „Zahlen falsch"-Problem. Begründung + erhaltenes Wissen
+(Reframe, Audit-Spec, Provider-Rationale) stehen in `NEUANFANG.md`.
 
 ## Forschungsfrage
 
-In welchem Maße erklären Netzwerk- und Infrastruktureigenschaften (RTT, Protokoll, Hosting-Region)
-— *im Vergleich zur Backend-Verarbeitung der Engine* — die Latenzunterschiede zwischen kommerziellen
-Cloud-AI-APIs (STT, LLM, TTS) aus EU-Perspektive, und wie wirkt sich die Provider-Wahl auf die
-Gesamtlatenz einer sequenziellen Cold-Start-Voice-Pipeline aus?
+> In welchem Maße erklären Netzwerk- und Infrastruktureigenschaften (RTT, Protokoll, Hosting-Region)
+> — *im Vergleich zur Backend-Verarbeitung der Engine* — die Latenzunterschiede zwischen kommerziellen
+> Cloud-AI-APIs (STT, LLM, TTS) aus EU-Perspektive, und wie wirkt sich die Provider-Wahl auf die
+> Gesamtlatenz einer sequenziellen Cold-Start-Voice-Pipeline aus?
 
-> Geschärft 2026-06-08: in *beide* Richtungen beantwortbar — „Netzwerk erklärt weniger als die Engine"
-> ist eine gültige Antwort. Teilfragen + Begründung in `notes/thesis_outline.md`.
+In beide Richtungen beantwortbar — „Netzwerk erklärt *weniger* als die Engine" ist eine gültige Antwort.
+
+## Contribution
+
+- **C1 (Kern) — „Engine schlägt Geografie":** Aus EU-Sicht dominiert die Backend-Engine, nicht die
+  Netzwerknähe. Schärfster Beleg: **STT/TTS-Inversion** desselben Providers (Azure verliert bei STT,
+  gewinnt bei TTS).
+- **C2 — Drei-Schichten-Methodik + Cloudflare-/Edge-Grenze.**
+- **C3 (Methoden-Baustein) — Ping-basierte connect-Klassen-Heuristik** (`r` bewusst **nicht** als Gütemaß).
 
 ## Drei-Schichten-Architektur
 
-- **Layer 1 (Infrastruktur):** DNS, Ping, TLS, Traceroute — Code in `measurements/layer1/`
-- **Layer 2 (Paketaufzeichnung):** tcpdump/PCAP — Code in `measurements/layer2/`, Captures fuer alle 9 Provider
-- **Layer 3 (API-Latenz):** Cold-Start connect_ms / ttft_ms / total_ms — Code in `measurements/layer3/`
+- **Layer 1 (Infrastruktur):** DNS, RTT/Ping (**TCP primär**, ICMP zur Validierung), TLS, Traceroute
+  → misst Netzwerk-Nähe zum **Host**.
+- **Layer 2 (Paketaufzeichnung):** tcpdump/PCAP, **N≈30 Cold-Starts/Anbieter** → **Eichung** der
+  App-Timer (Handshake-Überlappung) + **Zusatzinfo** (Inter-Arrival-Time, Retransmits, Round-Trips),
+  die Layer 3 nicht sehen kann.
+- **Layer 3 (API-Latenz):** Cold-Start — atomare connect-Submetriken + `ttft`/`ttfa`/`total`
+  → misst Engine-Verarbeitung über die volle **URL**.
 
-## Provider-Matrix (FINAL, Stand 2026-05-03)
+## Provider-Matrix (gleiche 9, alle 3 Kategorien — Rationale in `setup/anbieter_auswahl.md`)
 
-| Kategorie | Provider | Modell | Region | Protokoll |
-|-----------|----------|--------|--------|-----------|
+| Kategorie | Anbieter | Modell | Region (deklariert) | Protokoll |
+|-----------|----------|--------|---------------------|-----------|
 | STT | Deepgram | Nova-3 | USA (Anycast) | WebSocket |
 | STT | Rev.ai | English | USA | WebSocket |
 | STT | Azure | Standard Neural | Italien (Italy North) | WebSocket |
-| LLM | OpenAI | gpt-4o-mini | USA (GPU) | HTTPS+SSE |
-| LLM | Groq | llama-3.1-8b-instant | USA (LPU) | HTTPS+SSE |
-| LLM | Mistral | mistral-small-2603 | EU/Frankreich | HTTPS+SSE |
+| LLM | OpenAI | gpt-4o-mini | USA (GPU) | HTTPS + SSE |
+| LLM | Groq | llama-3.1-8b-instant | USA (LPU) | HTTPS + SSE |
+| LLM | Mistral | mistral-small-2603 | EU / Frankreich | HTTPS + SSE |
 | TTS | Deepgram | Aura-2 | USA (Anycast) | HTTPS Streaming |
 | TTS | OpenAI | tts-1 | USA | HTTPS Streaming |
 | TTS | Azure | Standard Neural | Italien (Italy North) | HTTPS Streaming |
 
-AssemblyAI wurde durch Rev.ai ersetzt (2026-05-03): AssemblyAIs Streaming-API erfordert
-Echtzeit-Pacing, was die Messmethodik inkonsistent machte. Rev.ai akzeptiert Audio-Dump
-wie Deepgram und Azure.
+## Messdesign (Kurzfassung — Details in `setup/messprotokoll.md`)
 
-Amazon Polly: optionaler Exkurs (Intra-Cloud-Referenz), nicht Hauptprovider.
+- **Cold-Start:** jede Messung neue TCP+TLS-Verbindung, kein Pooling. STT ohne SDK (raw WebSocket).
+- **Feste Inputs** je Kategorie (fairer Vergleich).
+- **Kampagne:** 7 Tage × **8 UTC-Slots** (`00/03/06/09/12/15/18/21h`) × **n=100**, **interleaved**
+  (Round-Robin, Startreihenfolge je Runde rotieren) = 56 Slots, 5.600/Endpunkt, 50.400 gesamt.
+- **`connect_ms` abgeschafft** → atomare Submetriken (`tcp_handshake_ms`, `tls_handshake_ms`,
+  `ws_upgrade_ms`); „connect total" nur abgeleitete Summe.
 
-## Messdesign
+## Metrik-Asymmetrie (war die zentrale Verwirrungsquelle — explizit deklariert)
 
-- **Cold-Start:** Jede Messung baut eine neue TCP+TLS-Verbindung auf (kein Connection Pooling)
-- **Raw WebSocket:** Alle STT-Provider werden ohne SDK gemessen (auch Azure) — direkte WebSocket-Verbindung
-- **Feste Inputs:** Identisch pro Kategorie für fairen Vergleich
-  - STT: `measurements/layer3/sample.wav` — "Good morning. I would like to know the current weather forecast for Frankfurt." (~5s)
-  - LLM: "Reply in one short sentence: What is the capital of Germany?"
-  - TTS: "Good morning! How can I assist you today?"
-- **Kampagne (maßgeblich):** Juni 01.–07.06.2026, n=100 pro Zeitschlitz, 8 Slots/Tag (alle 3h), 7 Tage (= 56 Slots). Gemessen aus AWS eu-central-1 (anderer Account als die Validierungs-Instanz i-045; Vantage-Point-Caveat s. `data/processed/known_anomalies.md`).
+- **STT:** `ttft` ab **erstem Audio-Chunk** (nach Connect) → **connect-EXKLUSIV**.
+  User-perceived STT-Cold-Start = `connect_total + stt_ttft`.
+- **LLM/TTS:** `ttft`/`ttfa` ab **Request-Absenden** über frische Verbindung → **connect-INKLUSIV**.
+- **E2E** zählt connect **nicht doppelt**: STT trägt connect + ttft, LLM/TTS tragen nur ttft/ttfa.
 
-## Aktueller Stand
+## Wichtige Dateien
 
-**Audit + Reframe abgeschlossen (2026-06-08).** Kernbefund neu gerahmt: **„Engine schlägt
-Geografie"** (STT/TTS-Inversion) ist die Contribution; das Cross-Layer-Modell (r=0.999, n=4)
-ist Methoden-Baustein. Alle 8 Notebooks auf Juni; Doku-Zahlen synchronisiert.
-**A7 (Batch-Szenario gestrichen) erledigt 2026-06-09 — NB07 nur noch Streaming-E2E.
-Nächster Schritt: restliche Welle-1-Audit-Punkte (A6 Monte-Carlo, A8 Verfügbarkeit),
-dann Methodik-Kapitel schreiben.**
-
-Siehe `HANDOFF.md` (⭐ „Hier morgen weitermachen"-Block) für Session-Stand + nächsten Schritt.
-Siehe `PRUEFER_AUDIT_2026-06-08.md` (Findings) + `STANDORTBESTIMMUNG_2026-06-08.md` (Strategie/Reframe).
-Siehe `notes/spickzettel_prof.md` (Prof-Gespräch) · `notes/findings.md` (Befunde) · `notes/thesis_outline.md` (Gerüst).
-
-## Betreuer-Feedback (2026-04-09, Prof. Wählisch)
-
-Hauptkritik: **"Methodik unklar"** — Was genau wird gemessen? Warum Cold-Start? Was ist die Contribution?
-Antwort: Cold-Start misst den Overhead jeder neuen Gesprächssession. Der Beitrag ist die
-Cross-Layer-Korrelation (Layer 1 Ping × 3 ≈ Layer 3 connect_ms) und die Zerlegung des
-1s-Latenzbudgets in Netzwerk vs. Verarbeitung.
-
-## Metrik-Definitionen
-
-### connect_ms — Zerlegung in Submetriken
-
-`connect_ms` misst die Zeit von TCP SYN bis "Applikation kann Daten senden".
-Seit der Layer-2-Analyse wird connect_ms in drei Submetriken zerlegt (Werte aus dem Juni-PCAP,
-`data/layer2/*_20260608_*.pcap`, n=1/Provider, STT-WebSocket):
-
-| Submetrik | Was sie misst | Quelle | Deepgram STT | Azure STT |
-|-----------|--------------|--------|--------------|-----------|
-| `tcp_hs_ms` | TCP SYN → SYN-ACK (1 RTT) | Layer 2 | 148 ms | 18 ms |
-| `tls_hs_ms` | TLS ClientHello → ServerHello (1 RTT) | Layer 2 | 150 ms | 13 ms |
-| `proto_setup_ms` | WebSocket-Upgrade + Session-Init (1 RTT) | Layer 2 | 180 ms | 13 ms |
-| **connect_ms** | **TCP+TLS+WS bis „App kann senden"** | **Layer 3 (Median)** | **425 ms (≈3 RTTs)** | **49 ms (≈3 RTTs)** |
-
-> PCAP-Summe: Deepgram ≈ 478 ms, Azure ≈ 44 ms — deckt sich mit dem Layer-3-Median bis auf
-> Deepgrams Anycast-RTT-Schwankung (PCAP-RTT 148 ms vs. Kampagnen-RTT ~138 ms).
-> **Korrektur ggü. Mai-Fassung (337 / 265 ms):** Azure hat KEINEN ~224-ms-„Server"-Anteil im
-> connect — das war eine Fehlinterpretation der Audio-Sendelücke. Azures STT-Connect ist ein
-> sauberer ~3-RTT-Handshake (~49 ms), exakt wie der Layer-3-Median zeigt.
-
-Referenz: "Layered Performance Analysis of TLS 1.3 Handshakes" (arXiv 2603.11006)
-verwendet die gleiche Zerlegungslogik (TCP → TLS → TLS-to-Application Delay).
-
-### Weitere Layer-3-Metriken
-
-| Metrik | Kategorie | Bedeutung |
-|--------|-----------|-----------|
-| `ttft_ms` (STT) | STT | Time to First Token, gemessen **ab erstem Audio-Chunk** (`t_first_chunk`), also **NACH** dem Connect → **connect-EXKLUSIV**. STT-Cold-Start = `connect_ms + ttft_ms`. |
-| `ttft_ms` (LLM) | LLM | Time to First Token, gemessen ab Request-Absenden über eine frische Verbindung → **connect-INKLUSIV** (enthält den Verbindungsaufbau; `connect_ms` ist hier nur eine separate Referenz-Messung). |
-| `ttfa_ms` | TTS | Time to First Audio, analog LLM → **connect-INKLUSIV**. |
-| `total_ms` | alle | Gesamtdauer bis Antwort vollstaendig |
-| `ttl_ms` | LLM | Time to Last Token (nur LLM) |
-
-> **Wichtig — `ttft`/`ttfa` ist NICHT einheitlich „connect + Verarbeitung".** Diese verbreitete
-> Fehlinterpretation lässt korrekte Zahlen falsch aussehen. Verifiziert im Messcode:
-> - **STT:** `ttft = t_first_final − t_first_chunk`, und `t_first_chunk` liegt **nach** `t_ws_connected`
->   → connect-**exklusiv**. Der STT-Cold-Start ist `connect_ms + ttft_ms`.
-> - **LLM/TTS:** `ttft = t_first_content − t_req` über eine **frische** Verbindung → connect-**inklusiv**;
->   das separate `connect_ms` ist dort nur eine Referenz-Messung (Wegwerf-Socket).
->
-> **Folge für die E2E-Pipeline:** `stt_connect + stt_ttft + llm_ttft + tts_ttfa` ist korrekt und zählt
-> connect **nicht** doppelt — STT trägt connect + ttft (ttft ist post-connect), LLM/TTS tragen nur
-> ttft/ttfa (connect bereits enthalten). Cross-Provider wird nie rohes `connect_ms` verglichen, sondern
-> nur der user-perceived Cold-Start (s. Audit-Punkt A3).
-
-Siehe `notes/literature.md` fuer die vollstaendige Literatursammlung.
-
-## JSONL-Datenformat
-
-```json
-// Layer 3
-{"ts":"2026-04-01T09:05:01Z","tag":"09h","run":0,"api":"deepgram","metric":"stt_ttft","ttft_ms":245.3,"total_ms":260.5,"connect_ms":312.1,"transcript_len":0}
-
-// Layer 1
-{"ts":"2026-04-01T09:00:00Z","endpoint":"api.deepgram.com","type":"ping","data":{"avg_ms":2.3,"min_ms":1.2,"max_ms":4.5}}
-```
+| Datei | Inhalt |
+|-------|--------|
+| `NEUANFANG.md` | **Lebende Referenz** — Warum/Was/Reihenfolge + aktueller Status |
+| `setup/anbieter_auswahl.md` | Welche Anbieter je Dienst, mit Begründung |
+| `setup/api_endpunkte.md` | Verifizierte Hosts, URLs, Pfade, Auth-Methoden |
+| `setup/messprotokoll.md` | **Methodik** — alle 3 Layer, Metriken, Kampagne, Fehlerbehandlung |
+| `setup/mess_kommandos.md` | Welcher Befehl misst was (CLI/Skript je Layer) |
+| `archived/` | Altes Material (Skripte, Daten, Notebooks, Audit) — nur Referenz |
 
 ## Commands
 
 | Command | Wann | Zweck |
 |---------|------|-------|
-| `/prime` | Session-Start | Liest HANDOFF + git log, gibt kurzes Briefing |
-| `/handoff` | Session-Ende | Aktualisiert HANDOFF.md mit aktuellem Arbeitsstand |
-| `/write` | Schreib-Phase | Thesis-Abschnitte schreiben oder überarbeiten |
-| `/explain <Thema>` | Jederzeit | Konzept oder Entscheidung verständlich erklären |
-| `/analyze` | Falls nötig | Jupyter Notebook Analyse-Unterstützung |
+| `/prime` | Session-Start | Liest Stand + git log, kurzes Briefing |
+| `/handoff` | Session-Ende | Aktualisiert den Arbeitsstand |
+| `/write` | Schreib-Phase | Thesis-Abschnitte schreiben/überarbeiten |
+| `/explain <Thema>` | Jederzeit | Konzept/Entscheidung verständlich erklären |
+| `/analyze` | Falls nötig | Analyse-/Notebook-Unterstützung |
