@@ -174,9 +174,16 @@ Setup besser können muss**. Die Punkte sind hier als Anforderungen umformuliert
   überall gefangen (dig/traceroute fehlen auf frischem Ubuntu!), ICMP/Traceroute auf aufgelöste IP
   (Cross-Check-Konsistenz), stderr/returncode-Auswertung, ASN-MOAS-Robustheit. **Offen/zu besprechen:**
   TCP-SYN-Traceroute `-T -p 443` (braucht sudo) und cwd-fester Output-Pfad.
-- **⭐ HIER WEITERMACHEN:** Mit Anton die Layer-1-Skripte durchgehen; dann Layer 2 (PCAP) + Layer 3
-  (Cold-Start-Runner) bauen. Danach: Pilot-Messung (1 Slot) gegen das Protokoll validieren → volle
-  Kampagne. (Block B/C/D des Audits beim Schreiben des Methodik-Kapitels einarbeiten.)
+- **2026-06-15:** ✅ **Layer-3 gebaut + ultracode-reviewt + DEPLOYED — Kampagne läuft.**
+  `measurements/layer3/`: `config.py`, `connect.py`, `llm.py`, `tts.py`, `stt.py`, `run.py` (+ `sample.wav`).
+  Alle 9 Endpunkte live mit echten Keys verifiziert; je Skript einzeln ultracode-reviewt (LLM 37, TTS+STT 65,
+  run.py 24 Agenten), bestätigte Fixes eingebaut. Auf **EC2 c6i.large** (eu-central-1, OpenSSL 3.0.13)
+  deployed, **cron** 8 UTC-Slots × n=100, erster Slot **2026-06-15 21:00 UTC**. Pilot bestätigt die These
+  live (FRA-RTTs ~1 ms Cloudflare / ~11 ms Azure / ~138 ms US, STT/TTS-Inversion, A1/A6). Doku:
+  **`setup/deployment.md`** + Layer-3-Tabelle in `mess_kommandos.md`. Erinnerung: [[l3-campaign-deployed]].
+- **⭐ HIER WEITERMACHEN (morgen):** **Daten-Validierung per ultracode** gegen echte Slot-Daten
+  (Messfehler/Methodik prüfen, Diurnal). Offene Aktionen: nach ~7 Tagen Instanz stoppen; **Layer 2 (PCAP)**
+  nachholen; WER/sample.wav-Provenienz (A14). (Audit-Block B/C/D beim Methodik-Kapitel einarbeiten.)
 
 ## 7. Externe Aufräum-Erinnerungen (aus altem HANDOFF, weiterhin offen)
 
