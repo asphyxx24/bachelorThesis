@@ -52,23 +52,26 @@ LLM = {
 # --- TTS-Endpunkte (HTTPS-Streaming) — für den späteren TTS-Caller ---
 TTS = {
     "deepgram": {"url": "https://api.deepgram.com/v1/speak?model=aura-2-asteria-en&encoding=mp3",
-                 "host": "api.deepgram.com", "key_env": "DEEPGRAM_API_KEY", "auth": "token"},
+                 "host": "api.deepgram.com", "model": "aura-2-asteria-en",
+                 "key_env": "DEEPGRAM_API_KEY", "auth": "token"},
     "openai":   {"url": "https://api.openai.com/v1/audio/speech",
-                 "host": "api.openai.com", "model": "tts-1", "key_env": "OPENAI_API_KEY", "auth": "bearer"},
+                 "host": "api.openai.com", "model": "tts-1", "voice": "alloy", "format": "mp3",
+                 "key_env": "OPENAI_API_KEY", "auth": "bearer"},
     "azure":    {"url": "https://italynorth.tts.speech.microsoft.com/cognitiveservices/v1",
-                 "host": "italynorth.tts.speech.microsoft.com", "voice": "en-US-JennyNeural",
-                 "key_env": "AZURE_SPEECH_KEY", "auth": "azure"},
+                 "host": "italynorth.tts.speech.microsoft.com", "model": "en-US-JennyNeural",
+                 "voice": "en-US-JennyNeural", "key_env": "AZURE_SPEECH_KEY", "auth": "azure"},
 }
 
 # --- STT-Endpunkte (WebSocket) — für den späteren STT-Caller ---
 STT = {
     "deepgram": {"url": ("wss://api.deepgram.com/v1/listen?model=nova-3&language=en"
                          "&encoding=linear16&sample_rate=16000&punctuate=true&interim_results=false"),
-                 "host": "api.deepgram.com", "key_env": "DEEPGRAM_API_KEY"},
+                 "host": "api.deepgram.com", "model": "nova-3", "key_env": "DEEPGRAM_API_KEY"},
     "revai":    {"url": ("wss://api.rev.ai/speechtotext/v1/stream"
                          "?content_type=audio/x-raw;layout=interleaved;rate=16000;format=S16LE;channels=1"),
-                 "host": "api.rev.ai", "key_env": "REVAI_ACCESS_TOKEN"},
+                 "host": "api.rev.ai", "model": "english", "key_env": "REVAI_ACCESS_TOKEN"},
     "azure":    {"url": ("wss://italynorth.stt.speech.microsoft.com/speech/recognition/"
                          "conversation/cognitiveservices/v1"),
-                 "host": "italynorth.stt.speech.microsoft.com", "key_env": "AZURE_SPEECH_KEY"},
+                 "host": "italynorth.stt.speech.microsoft.com", "model": "standard-neural",
+                 "key_env": "AZURE_SPEECH_KEY"},
 }
