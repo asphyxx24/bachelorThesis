@@ -23,6 +23,18 @@
   Mess-Last (Alternative `m6i.large` = mehr RAM, hier unnötig). **AMI, Kernel, vCPU, EBS-Typ, AZ werden
   fixiert** und im `run_meta` festgehalten (s. A5); **CPU-Steal-Time** pro Slot wird mitgeloggt → das
   Fehlen von Throttling wird **empirisch belegt**, nicht nur behauptet.
+- **IP-Version: durchgängig IPv4 (alle Schichten).** Mehrere Hosts (OpenAI/Groq/Mistral hinter
+  Cloudflare) sind **dual-stack** (A- *und* AAAA-Record). Layer 1 misst über `gethostbyname` ohnehin
+  IPv4; **Layer 3 wird ebenfalls auf IPv4 gezwungen** (httpx mit `local_address="0.0.0.0"`). Begründung:
+  Nur so messen **alle Schichten dieselbe Adresse/denselben Pfad** — sonst verglichen die Cross-Layer-
+  Brücke (`connect_total_ms ≈ N_RTTs × ping`) und die Edge-/Host-Klassifikation (ASN/Traceroute auf der
+  IPv4) eine **andere** IP als der eigentliche Mess-Request. Im ersten Echtlauf wählte httpx unkontrolliert
+  **IPv6** (`2606:4700:…`), während Layer 1 die IPv4 (`104.18.…`) maß — genau diese Inkonsistenz schließt
+  das Erzwingen. **Limitation (Diskussion):** Ein Dual-Stack-Client im Feld nähme evtl. IPv6 (Happy
+  Eyeballs); wir messen bewusst den IPv4-Pfad. Zum **selben** CDN-Edge ist die Latenz über v4 vs. v6
+  praktisch gleich, und die untersuchten Effekte (Engine vs. Geografie) sind um Größenordnungen größer →
+  Konsistenz wiegt schwerer als die Adressfamilien-Wahl. Keiner der 9 Hosts ist IPv6-only, das Erzwingen
+  ist also für alle sicher.
 
 ## Drei-Schichten-Architektur
 
