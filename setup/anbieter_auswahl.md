@@ -20,13 +20,13 @@ Pro Kategorie **3 Anbieter** → **9 Mess-Endpunkte** insgesamt.
 
 | Kategorie | Anbieter | Modell | Region (deklariert) | Protokoll |
 |-----------|----------|--------|---------------------|-----------|
-| **STT** | Deepgram | Nova-3 | USA (Anycast) | WebSocket |
+| **STT** | Deepgram | Nova-3 | USA (Multi-DC, DNS-Round-Robin) | WebSocket |
 | **STT** | Rev.ai | English | USA | WebSocket |
 | **STT** | Azure | Standard Neural | Italien (Italy North) | WebSocket |
 | **LLM** | OpenAI | gpt-4o-mini | USA (GPU) | HTTPS + SSE |
 | **LLM** | Groq | llama-3.1-8b-instant | USA (LPU) | HTTPS + SSE |
 | **LLM** | Mistral | mistral-small-2603 | EU / Frankreich | HTTPS + SSE |
-| **TTS** | Deepgram | Aura-2 | USA (Anycast) | HTTPS Streaming |
+| **TTS** | Deepgram | Aura-2 | USA (Multi-DC, DNS-Round-Robin) | HTTPS Streaming |
 | **TTS** | OpenAI | tts-1 | USA | HTTPS Streaming |
 | **TTS** | Azure | Standard Neural | Italien (Italy North) | HTTPS Streaming |
 
@@ -36,8 +36,10 @@ Pro Kategorie **3 Anbieter** → **9 Mess-Endpunkte** insgesamt.
 ## Begründung je Kategorie
 
 ### STT — Deepgram, Rev.ai, Azure
-- **Deepgram (Nova-3):** Marktführend bei Streaming-STT-Latenz, US-gehostet über Anycast → guter
-  Kontrast „weit weg, aber schnell".
+- **Deepgram (Nova-3):** Marktführend bei Streaming-STT-Latenz, US-gehostet über mehrere Rechenzentren
+  mit kurz-TTL-DNS-Round-Robin (rotiert `md1`/`sac1`/`sv1`, **kein** Anycast/GeoDNS) → guter
+  Kontrast „weit weg, aber schnell". Die RTT-Streuung (~102–148 ms) erklärt sich aus dem je Messung
+  verbundenen DC; deshalb wird die verbundene Ziel-IP pro Run mitgeloggt (s. `messprotokoll.md`, A5).
 - **Rev.ai (English):** Zweiter US-Anbieter, akzeptiert Audio-Dump (kein Echtzeit-Pacing nötig) →
   methodisch konsistent zu Deepgram/Azure. *(Ersetzt AssemblyAI, dessen Streaming-API Echtzeit-Pacing
   erzwang und die Methodik inkonsistent machte.)*

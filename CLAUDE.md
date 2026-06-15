@@ -48,13 +48,13 @@ In beide Richtungen beantwortbar — „Netzwerk erklärt *weniger* als die Engi
 
 | Kategorie | Anbieter | Modell | Region (deklariert) | Protokoll |
 |-----------|----------|--------|---------------------|-----------|
-| STT | Deepgram | Nova-3 | USA (Anycast) | WebSocket |
+| STT | Deepgram | Nova-3 | USA (Multi-DC, DNS-Round-Robin) | WebSocket |
 | STT | Rev.ai | English | USA | WebSocket |
 | STT | Azure | Standard Neural | Italien (Italy North) | WebSocket |
 | LLM | OpenAI | gpt-4o-mini | USA (GPU) | HTTPS + SSE |
 | LLM | Groq | llama-3.1-8b-instant | USA (LPU) | HTTPS + SSE |
 | LLM | Mistral | mistral-small-2603 | EU / Frankreich | HTTPS + SSE |
-| TTS | Deepgram | Aura-2 | USA (Anycast) | HTTPS Streaming |
+| TTS | Deepgram | Aura-2 | USA (Multi-DC, DNS-Round-Robin) | HTTPS Streaming |
 | TTS | OpenAI | tts-1 | USA | HTTPS Streaming |
 | TTS | Azure | Standard Neural | Italien (Italy North) | HTTPS Streaming |
 

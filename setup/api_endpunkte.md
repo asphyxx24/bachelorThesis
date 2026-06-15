@@ -43,6 +43,7 @@ Alle drei sprechen das **OpenAI-kompatible** `/chat/completions`-Schema, `stream
 
 ### OpenAI (gpt-4o-mini)
 - **URL:** `https://api.openai.com/v1/chat/completions`
+- **Modell (gepinnt):** `gpt-4o-mini-2024-07-18` (datierter Snapshot statt rollendem Alias `gpt-4o-mini`, s. Modell-Pinning A2)
 - **Auth:** Header `Authorization: Bearer <API_KEY>`
 - **Host:** `api.openai.com`
 
@@ -67,6 +68,9 @@ Alle drei sprechen das **OpenAI-kompatible** `/chat/completions`-Schema, `stream
 
 ### OpenAI (tts-1)
 - **URL:** `https://api.openai.com/v1/audio/speech`
+- **Body (gepinnt, A8):** `{"model":"tts-1","input":"<fester Text>","voice":"alloy","response_format":"mp3"}`
+  — `response_format` **explizit `mp3`** (= gleiches Format wie Deepgram/Azure → fairer Byte-/Latenz-Vergleich;
+  Default wäre sonst implizit und format-abhängig).
 - **Auth:** Header `Authorization: Bearer <API_KEY>`
 - **Host:** `api.openai.com`
 
@@ -78,13 +82,38 @@ Alle drei sprechen das **OpenAI-kompatible** `/chat/completions`-Schema, `stream
 
 ---
 
+## Modell-Pinning & Abrufdatum (A2)
+
+> **Reproduzierbarkeit:** Modell-IDs sind teils rollende Aliase — still aktualisierte Backends würden
+> den Headline-Befund unbemerkt nicht-reproduzierbar machen. Entscheidung (2026-06-15): **datierte
+> Snapshots verwenden, wo verfügbar**; alle übrigen bleiben notgedrungen rollend und werden als
+> **Limitation** benannt. **Zusätzlich loggt jeder LLM-Run das vom Server zurückgemeldete
+> `effective_model`** (aus `chunk.model` im SSE) → Drift wird *erkennbar*, nicht nur befürchtet.
+
+| Kategorie | Anbieter | Angefragte Modell-ID | Typ | datierter Snapshot? |
+|-----------|----------|----------------------|-----|---------------------|
+| STT | Deepgram | `nova-3` | **rollend** | nein verfügbar → Limitation |
+| STT | Rev.ai | `english` (Stream-Profil) | **rollend** | nein verfügbar → Limitation |
+| STT | Azure | Standard Neural (Endpoint-gebunden, keine Modell-ID im Request) | **rollend** | nein → Limitation |
+| LLM | OpenAI | `gpt-4o-mini-2024-07-18` | **gepinnt** ✓ | ja |
+| LLM | Groq | `llama-3.1-8b-instant` | **rollend** | nein verfügbar → Limitation |
+| LLM | Mistral | `mistral-small-2603` | **gepinnt** ✓ | ja (Datum im Alias) |
+| TTS | Deepgram | `aura-2-asteria-en` | **rollend** | nein verfügbar → Limitation |
+| TTS | OpenAI | `tts-1` | **rollend** | nein verfügbar → Limitation |
+| TTS | Azure | Voice `en-US-JennyNeural` | **rollend** (serverseitig versioniert) | nein → Limitation |
+
+- **Abrufdatum der IDs:** 2026-06-15 (gegen Provider-Docs zu verifizieren vor Kampagnenstart).
+- **Logging-Pflicht (in die L3-Skripte, A2 + A5):** angefragte ID **und** — wo verfügbar —
+  zurückgemeldete ID/Version pro Run roh ins JSONL (LLM: `chunk.model`; STT/TTS: opportunistisch
+  Response-Header). So ist je Sample belegbar, welche Modell-Version tatsächlich bedient hat.
+
 ## Host-Übersicht & DNS-Auflösung (Stand 2026-06-14)
 
 7 eindeutige Hosts (Deepgram und OpenAI je für STT/TTS bzw. LLM/TTS doppelt genutzt):
 
 | Host | Aufgelöste IPs / CNAME (2026-06-14) | erste Einordnung* |
 |------|-------------------------------------|-------------------|
-| `api.deepgram.com` | CNAME `api.sv1.deepgram.com` → `208.184.56.200` | dedizierte Deepgram-IP |
+| `api.deepgram.com` | CNAME `api.sv1.deepgram.com` → `208.184.56.200` | Multi-DC, kurz-TTL-Round-Robin (`md1`/`sac1`/`sv1`); IP = AS6461 (Zayo)-Transit, **nicht** dediziert |
 | `api.rev.ai` | `52.36.23.89`, `52.32.160.52`, `32.186.17.136` | AWS-Range (US-West/Oregon) |
 | `italynorth.stt.speech.microsoft.com` | → `*.italynorth.cloudapp.azure.com` → `4.232.100.212` | Azure Italy North |
 | `api.openai.com` | `172.66.0.243`, `162.159.140.245` | Cloudflare-Range |
@@ -96,6 +125,36 @@ Alle drei sprechen das **OpenAI-kompatible** `/chat/completions`-Schema, `stream
 > Dass OpenAI/Groq/Mistral in Cloudflare-Ranges auflösen, ist genau die Stelle, an der die spätere
 > Layer-1-/Edge-Auflösung ansetzen wird (Anycast/Edge vs. tatsächlicher Backend-Standort). Bewusst
 > hier nur als Rohbeobachtung festgehalten, nicht gedeutet.
+
+> **TLS-Fußnote (rev.ai):** `api.rev.ai` ist der **einzige** der 7 Hosts, der nur **TLS 1.2** aushandelt
+> (die übrigen 6 sprechen TLS 1.3) — ein echter Server-Befund, kein Mess-Artefakt. ⚠️ **Nicht** über
+> macOS-Python belegen: dessen LibreSSL-Bindung cappt auf TLS 1.2 und meldet *alle* Hosts fälschlich als
+> 1.2 (s. A1). Die TLS-Version wird ausschließlich auf der EC2 (echtes OpenSSL) bzw. via
+> `openssl s_client` verifiziert.
+
+## Terminierung (Edge/Host) — Klassifikation (A3)
+
+> **Single Source of Truth** für den zentralen Erklärschritt (Prof-Einwand „3 Anbieter mit ~1 ms RTT").
+> Klassifikator-Definition + Begründung: `messprotokoll.md` (§Layer 1 — Endpunkt-Terminierung).
+> **Edge-terminiert** gdw. **(a) TCP-RTT ≈ 1–2 ms aus FRA ∧ (b) IP in CDN-ASN ∧ (c) traceroute bricht
+> am CDN ab** — sonst **Host**. ⚠️ Werte unten sind aus DNS/ASN **vorläufig**; RTT + traceroute werden
+> auf der EC2 bestätigt.
+
+| Endpunkt (Host) | ASN / Org (vorläufig) | TCP-RTT FRA (vorläufig) | **Terminierung** | Begründung |
+|-----------------|-----------------------|-------------------------|------------------|------------|
+| `api.deepgram.com` | AS6461 Zayo / AS174 Cogent (Multi-DC) | ~102–148 ms | **Host** | hohe RTT (a✗), kein CDN-AS (b✗) — trotz „Anycast"-Label |
+| `api.rev.ai` | AS16509 Amazon (US-Oregon) | US, hoch (zu messen) | **Host** | AWS-Backend, kein CDN-AS |
+| `italynorth.stt.speech.microsoft.com` | AS8075 Microsoft (Italy North) | ~12 ms | **Host** | echtes EU-RZ, **kein** CDN-AS (b✗) — niedrige RTT ist real |
+| `italynorth.tts.speech.microsoft.com` | AS8075 Microsoft (Italy North) | ~12 ms | **Host** | echtes EU-RZ, **kein** CDN-AS (b✗) — niedrige RTT ist real |
+| `api.openai.com` | AS13335 Cloudflare | ~1–2 ms (zu bestätigen) | **Edge** | CDN-AS (b✓) + ~1 ms (a✓); Backend hinter Edge unbekannt |
+| `api.groq.com` | AS13335 Cloudflare | ~1–2 ms (zu bestätigen) | **Edge** | CDN-AS (b✓) + ~1 ms (a✓); Backend hinter Edge unbekannt |
+| `api.mistral.ai` | AS13335 Cloudflare | ~1–2 ms (zu bestätigen) | **Edge** | CDN-AS (b✓) + ~1 ms (a✓); **EU-Backend RTT-maskiert** (Limitation) |
+
+> **Lesart:** Niedrige RTT bedeutet **nicht** automatisch „Edge" — Azure (Italy North) hat ~12 ms und ist
+> **Host** (echtes EU-RZ, kein CDN-AS). Genau diese Trennung trägt die STT/TTS-Inversion: Azures Vorsprung
+> ist realer Backend-Standort, kein Edge-Artefakt. Umgekehrt ist Deepgram trotz „Anycast"-Label **Host**
+> (RTT zu hoch). Bei den drei Cloudflare-Edge-Anbietern misst die RTT den FRA-Edge, **nicht** das Backend
+> → Backend-Region via RTT nicht bestimmbar (betrifft v.a. Mistral als EU-LLM; s. Limitations).
 
 ## DNS-Resolver für Layer 1 (Multi-Resolver-Vergleich)
 

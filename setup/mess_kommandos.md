@@ -37,6 +37,9 @@ rtt_ms = (time.perf_counter() - t0) * 1000
 ping -c <count> -W 2 <host>
 ```
 → klassische ICMP-RTT (min/avg/max). Dient als **Cross-Check** gegen den TCP-Ping.
+> ⚠️ **Plattform-Notiz `-W`:** Unter **Linux** ist `-W` der Timeout in **Sekunden** (EC2-Kampagne →
+> `-W 2` korrekt), unter **macOS** in **Millisekunden**. Für lokale Vortests auf dem Mac stattdessen
+> `-t 5` (Gesamt-Timeout) bzw. `-W 2000` verwenden. Die Kampagne läuft ohnehin auf der EC2.
 
 ### DNS-Auflösung (Multi-Resolver-Vergleich)
 ```bash
@@ -64,11 +67,24 @@ curl -s -o /dev/null --connect-timeout 10 \
 ```python
 ctx = ssl.create_default_context()
 ctx.set_alpn_protocols(["h2", "http/1.1"])
+# WICHTIG: maximum_version NICHT cappen — sonst wird TLS 1.3 künstlich verhindert.
 sock  = socket.create_connection((host, 443), timeout=5.0)
 ssock = ctx.wrap_socket(sock, server_hostname=host)
 # → ssock.version()  ssock.cipher()  ssock.selected_alpn_protocol()  Zertifikat-CN
 ```
 → `tls_version`, Cipher-Suite, ausgehandeltes ALPN, Zertifikat-Common-Name + `tcp_connect_ms`/`tls_handshake_ms`.
+
+> ⚠️ **TLS-Versions-Footgun (A1) — verbindlich:** macOS-Python (System **und** projekt-`.venv`) ist
+> gegen **LibreSSL 2.8.3** gelinkt und cappt auf **TLS 1.2** → die Probe meldet **alle** Hosts fälschlich
+> als 1.2. Daher:
+> 1. **`tls_version` nie aus macOS-Python** übernehmen — die TLS-Version wird **ausschließlich auf der
+>    EC2** (echtes OpenSSL 3.x) erhoben. macOS-Python nur für Dev/Logik-Tests.
+> 2. Pro Messung **`ssl.OPENSSL_VERSION` mitloggen** → LibreSSL-Zeilen sind sofort verwerfbar.
+> 3. Nach dem Handshake `ssock.version()` als **harten Guard** prüfen (z. B. Assert „nicht < 1.2 wegen
+>    Lib-Cap").
+> 4. **Cross-Check mit echtem OpenSSL:** `openssl s_client -connect <host>:443 -servername <host> -tls1_3`
+>    (bzw. ohne `-tls1_3` → ausgehandelte Version aus „Protocol :"-Zeile lesen).
+> 5. **Interpreter pinnen** (s. Lockfile/Versions-Capture, A5) — die TLS-Quelle muss reproduzierbar OpenSSL sein.
 
 ### Route (Traceroute) + AS-Pfad
 ```bash
@@ -82,6 +98,44 @@ dig +short <reversed-ip>.origin.asn.cymru.com TXT +time=2 +tries=1
 
 ### DNSSEC-Status (optional)
 Per `dnspython`: AD-Flag, RRSIG im Answer, DS-Record beim Parent → ob die Zone signiert/validiert ist.
+
+---
+
+## Layer-1-Skripte — gebaut & reviewt (Stand 2026-06-15)
+
+Die obigen Befehle sind jetzt als kleine Python-Wrapper in **`measurements/layer1/`** umgesetzt. Jedes
+Skript läuft über alle 7 Hosts (zentral in `hosts.py`), druckt eine Tabelle und speichert die Rohdaten
+als JSONL in **`data/layer1/<skript>.jsonl`**. Gebaut „Methodik-first"; jedes Skript wurde **einzeln per
+ultracode-Review** geprüft (Finden → adversariale Gegenprüfung), die bestätigten Fixes sind eingearbeitet.
+
+| Messung | Skript | setzt Befehl um | wichtige Entscheidungen / Rohdaten |
+|---------|--------|------------------|------------------------------------|
+| TCP-RTT (**primär**) | `tcp_ping.py` | Python-`socket`-Handshake | N=20, **min + median**, **alle** Rohwerte (`rtts_ms`), `resolved_ip`; Uhr stoppt vor `close()` |
+| ICMP-RTT (Cross-Check) | `icmp_ping.py` | `ping -c` | N=10; pingt die **aufgelöste IP** (gleiche IP wie TCP → fairer Vergleich); „geblockt" vs. echter Fehler getrennt; volle `raw`-Ausgabe |
+| DNS Multi-Resolver | `dns_lookup.py` | `dig @8.8.8.8/1.1.1.1/9.9.9.9` | IPv4 je Resolver + TTL (über Google-Resolver; = **verbleibende Cache-TTL**) |
+| ASN/Netz je IP (**Bed. b**) | `asn_lookup.py` | `dig TXT …origin.asn.cymru.com` | **alle** IPv4s je Host, MOAS-sicheres Parsing, rohe Cymru-Zeile gespeichert |
+| TLS-Info + Timing | `tls_info.py` | Python-`ssl` | A1-Guard (Version **nur auf EC2** belastbar), TCP/TLS getrennt getimt, Cipher + Bits + Cert-CN/SAN |
+| Traceroute + AS-Pfad (**Bed. c**) | `traceroute_asn.py` | `traceroute -n` + Cymru | auf **aufgelöste IP**, 25 Hops, `-w 2`, `reached_dest`-Flag, ASN-Cache |
+
+**Gemeinsame Bau-Prinzipien (Lehre aus Review + altem Lauf):**
+- Jedes Skript gibt **IMMER einen Record pro Host** zurück — auch bei Fehler (DNS, fehlendes Tool, Timeout).
+  Kein einzelner Fehlschlag reißt den ganzen Lauf ab.
+- **Fehlendes CLI-Tool** (`dig`/`traceroute` sind auf frischem Ubuntu/EC2 **nicht** vorinstalliert!) wird
+  gefangen (`except OSError`), nicht als Crash.
+- **Rohdaten vollständig** speichern (alle Einzelwerte, rohe Tool-Ausgabe), nicht nur Aggregate.
+- Hosts **zentral** in `hosts.py` (eine Quelle der Wahrheit).
+
+**Ausführen** (vom Repo-Wurzelverzeichnis):
+```bash
+.venv/bin/python measurements/layer1/<skript>.py     # tcp_ping | icmp_ping | dns_lookup | asn_lookup | tls_info | traceroute_asn
+```
+
+**Dokumentierte Entscheidungen (2026-06-15):**
+- **TCP-SYN-Traceroute (Bedingung c):** Das Skript nutzt **UDP**-Traceroute (ohne sudo, Mac-tauglich).
+  Auf der **EC2 zusätzlich** (mit sudo), weil Cloudflare/Azure UDP stärker filtern:
+  `sudo traceroute -T -p 443 -n -w 2 -q 1 -m 25 <ip>` → belastbarer für (c); ggf. später als `--tcp`-Flag.
+- **Output-Pfad** ist `cwd`-relativ (bewusst simpel) → Skripte **vom Repo-Root** starten.
+- **DNSSEC** (oben als optional markiert) ist **noch nicht** gebaut → bei Bedarf nachrüsten.
 
 ---
 

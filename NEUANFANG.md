@@ -78,13 +78,13 @@ Setup besser können muss**. Die Punkte sind hier als Anforderungen umformuliert
 
 | Kategorie | Provider | Modell | Region | Protokoll |
 |-----------|----------|--------|--------|-----------|
-| STT | Deepgram | Nova-3 | USA (Anycast) | WebSocket |
+| STT | Deepgram | Nova-3 | USA (Multi-DC, DNS-Round-Robin) | WebSocket |
 | STT | Rev.ai | English | USA | WebSocket |
 | STT | Azure | Standard Neural | Italien (Italy North) | WebSocket |
 | LLM | OpenAI | gpt-4o-mini | USA (GPU) | HTTPS+SSE |
 | LLM | Groq | llama-3.1-8b-instant | USA (LPU) | HTTPS+SSE |
 | LLM | Mistral | mistral-small-2603 | EU/Frankreich | HTTPS+SSE |
-| TTS | Deepgram | Aura-2 | USA (Anycast) | HTTPS Streaming |
+| TTS | Deepgram | Aura-2 | USA (Multi-DC, DNS-Round-Robin) | HTTPS Streaming |
 | TTS | OpenAI | tts-1 | USA | HTTPS Streaming |
 | TTS | Azure | Standard Neural | Italien (Italy North) | HTTPS Streaming |
 
@@ -146,12 +146,37 @@ Setup besser können muss**. Die Punkte sind hier als Anforderungen umformuliert
   (TCP-Ping primär, connect-Submetriken, 7×8-UTC-Slots×n=100 **interleaved**, Layer-2 N≈30).
 - **ultracode-Audit gelaufen** → **`setup/AUDIT_ultracode_2026-06-14.md`** (59 Agenten, 41 bestätigte
   Findings). Urteil: **Go fürs Skript-Bauen, 0 kritische Defekte.**
-- **⭐ HIER WEITERMACHEN:** Punch-Liste aus dem Audit abarbeiten, Reihenfolge:
-  1. **Doku-Fixes (billig):** Deepgram = DNS-Round-Robin statt „Anycast"; rev.ai-IP-Fehlzuordnung
-     (`api_endpunkte.md`); `connect_ms`-Rest in `messprotokoll.md:47`; Mistral = Cloudflare-fronted.
-  2. **Doku-Ergänzungen:** Edge-Klassifikator (A3), Modell-Pinning (A2), Abschnitt „Aggregation &
-     Inferenz"/CI (A4), Erfolgs-/Timeout-Kriterien (A7), Instanz-/Per-Run-Capture (A5/A6, non-burstable!).
-  3. **Dann Skripte bauen** — Audit-Liste als Spezifikation; alte `archived/`-Skripte NICHT kopieren.
+- **2026-06-15:** ✅ **A9 (billige Doku-Fixes) erledigt** — Deepgram „Anycast" → „Multi-DC, DNS-Round-Robin"
+  (CLAUDE.md, NEUANFANG.md, anbieter_auswahl.md); rev.ai-/Deepgram-IP-Fehlzuordnung korrigiert
+  (`api_endpunkte.md`); `connect_ms` → `connect_total_ms` (`messprotokoll.md`); `-W`-Plattformnotiz
+  (`mess_kommandos.md`); rev.ai-TLS-1.2-Fußnote (`api_endpunkte.md`). Mistral=Cloudflare steht in der
+  Host-Tabelle.
+- **2026-06-15:** ✅ **A1 + A2 erledigt** — A1: TLS-Probe-Footgun (macOS/LibreSSL) abgesichert
+  (`tls_version` nur auf EC2/OpenSSL, `ssock.version()`-Guard, `OPENSSL_VERSION`-Logging,
+  `openssl s_client`-Cross-Check) in `mess_kommandos.md` + `messprotokoll.md`. A2: Modell-Pinning-Tabelle
+  in `api_endpunkte.md` (OpenAI→`gpt-4o-mini-2024-07-18`, Rest als Limitation) + `effective_model`-Logging
+  in `messprotokoll.md`.
+- **2026-06-15:** ✅ **A3–A8 erledigt → komplette Audit-Punch-Liste (A1–A9) abgearbeitet.**
+  - **A3** Edge/Host-Terminierungs-Klassifikator (Konjunktion a∧b∧c) in `messprotokoll.md` + feste
+    Terminierungs-Tabelle in `api_endpunkte.md` (vorläufig: 4× Host, 3× Edge, auf EC2 zu bestätigen).
+  - **A4** §Aggregation & Inferenz: Headline = **Median der Slot-Mediane** (gepoolt = Sensitivität),
+    Perzentil-Ehrlichkeit (p99 nur gepoolt/Limitation), Bootstrap-95%-CI, Differenz-Bootstrap/Mann-Whitney;
+    + E2E via Monte-Carlo-Faltung & Pareto-Front (Latenz↔Zuverlässigkeit).
+  - **A5** Per-Run: `resolved_ip`, `http_version`, `run_meta`-Record je Slot, Lockfile-Pflicht.
+  - **A6** Instanz `c6i.large` (non-burstable) + CPU-Steal-Logging.
+  - **A7** Erfolgs-/Timeout-Tabelle (Connect 10 s / Response einheitl. 30 s, Mindest-Output, Fehler-Enum).
+  - **A8** `ttft`/`ttfa` als Primärmetrik (mengen-robust), `total`/`ttl` sekundär; OpenAI-TTS auf mp3 gepinnt.
+- **2026-06-15:** ✅ **Layer-1-Skripte gebaut + ultracode-reviewt** (in `measurements/layer1/`):
+  `tcp_ping.py` (primäre RTT), `icmp_ping.py` (ICMP-Cross-Check), `dns_lookup.py` (Multi-Resolver+TTL),
+  `asn_lookup.py` (ASN/Netz je IP, Bedingung b), `tls_info.py` (TLS+Timing, A1-Guard),
+  `traceroute_asn.py` (AS-Pfad, Bedingung c) + zentrale `hosts.py`. Alle laufen auf dem Mac, Rohdaten →
+  `data/layer1/*.jsonl`. Einzelreviews (101 Agenten): bestätigte Fixes angewandt — v.a. `FileNotFoundError`
+  überall gefangen (dig/traceroute fehlen auf frischem Ubuntu!), ICMP/Traceroute auf aufgelöste IP
+  (Cross-Check-Konsistenz), stderr/returncode-Auswertung, ASN-MOAS-Robustheit. **Offen/zu besprechen:**
+  TCP-SYN-Traceroute `-T -p 443` (braucht sudo) und cwd-fester Output-Pfad.
+- **⭐ HIER WEITERMACHEN:** Mit Anton die Layer-1-Skripte durchgehen; dann Layer 2 (PCAP) + Layer 3
+  (Cold-Start-Runner) bauen. Danach: Pilot-Messung (1 Slot) gegen das Protokoll validieren → volle
+  Kampagne. (Block B/C/D des Audits beim Schreiben des Methodik-Kapitels einarbeiten.)
 
 ## 7. Externe Aufräum-Erinnerungen (aus altem HANDOFF, weiterhin offen)
 

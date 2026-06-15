@@ -11,6 +11,18 @@
 - **Ort:** AWS EC2, Region `eu-central-1` (Frankfurt) — feste Mess-Instanz, dokumentiert mit
   Account, Instanz-ID, Region und Zeitzone (UTC) zum Messzeitpunkt.
 - **Begründung:** EU-Perspektive ist die Forschungsfrage. Frankfurt ist ein zentraler EU-Internet-Knoten.
+- **Software-Voraussetzung (Reproduzierbarkeit, A1):** Alle Messungen laufen auf der EC2 (Ubuntu) mit
+  **echtem OpenSSL 3.x**. macOS-Python ist gegen **LibreSSL 2.8.3** gelinkt und meldet TLS-Versionen
+  systematisch falsch (alle Hosts als TLS 1.2 statt 1.3) → **`tls_version` wird ausschließlich auf der
+  EC2 erhoben**, der Mac dient nur der Skript-Entwicklung. Pro Messung wird `ssl.OPENSSL_VERSION`
+  mitgeloggt (LibreSSL-Zeilen sind verwerfbar); Details + Cross-Check in `mess_kommandos.md` (Layer-1-TLS).
+- **Instanz-Typ (A6): `c6i.large` — bewusst NICHT-burstable.** Begründung: Burstable-Typen (`t2`/`t3`,
+  wie die **alte** `t3.small`) laufen auf CPU-Credits; bei Credit-Erschöpfung drosselt AWS die CPU →
+  ms-Latenz-Timer springen **ohne Netz-Ursache** (= unerklärte Varianz, die der Prof bemängelt).
+  `c6i.large` (2 vCPU Intel Ice Lake, 4 GiB) hat garantierte CPU und reicht für die netzwerk-gebundene
+  Mess-Last (Alternative `m6i.large` = mehr RAM, hier unnötig). **AMI, Kernel, vCPU, EBS-Typ, AZ werden
+  fixiert** und im `run_meta` festgehalten (s. A5); **CPU-Steal-Time** pro Slot wird mitgeloggt → das
+  Fehlen von Throttling wird **empirisch belegt**, nicht nur behauptet.
 
 ## Drei-Schichten-Architektur
 
@@ -44,8 +56,8 @@
    echte API-Verbindung**, nicht einen ICMP-Nebenkanal, den manche Anbieter abweichend behandeln.
 
 3. **Konsistenz mit Layer 3:** TCP-Ping misst SYN→SYN-ACK = **1 RTT** — exakt die Größe, in die sich
-   `connect_ms` in Layer 3 zerlegt (`tcp_hs_ms`). Layer 1 und Layer 3 sprechen damit dieselbe Sprache;
-   die Cross-Layer-Argumentation (`connect_ms ≈ N_RTTs × ping`) wird konsistent.
+   `connect_total_ms` in Layer 3 zerlegt (`tcp_handshake_ms`). Layer 1 und Layer 3 sprechen damit
+   dieselbe Sprache; die Cross-Layer-Argumentation (`connect_total_ms ≈ N_RTTs × ping`) wird konsistent.
 
 ### Rolle von ICMP (warum nicht ganz weglassen)
 
@@ -68,6 +80,53 @@ Messfehler. Die genaue Edge-vs-Backend-Auflösung erfolgt im separaten Layer-1-E
 > wird von mehreren CDN-Endpunkten geblockt —, (b) denselben Port wie die echte API-Verbindung trifft
 > und (c) direkt der `tcp_hs`-Submetrik aus Layer 3 entspricht. ICMP messe ich zusätzlich, wo möglich,
 > um zu zeigen, dass beide RTTs übereinstimmen."
+
+---
+
+## Layer 1 — Endpunkt-Terminierung (Edge vs. Host) — der zentrale Erklärschritt (A3)
+
+### Warum dieser Schritt existiert (Prof-Einwand)
+
+Der schärfste offene Einwand war: **„Drei Anbieter mit sehr niedriger Layer-1-RTT aus Frankfurt — nicht
+erklärt."** Antwort: Bei einem Teil der Endpunkte (OpenAI, Groq, Mistral) terminiert die TCP-Verbindung
+an einem **CDN-Edge-Knoten (Cloudflare) in/nahe Frankfurt**, nicht am eigentlichen Backend. Die ~1-ms-RTT
+ist dann eine **reale Infrastruktur-Eigenschaft des Edge**, kein Messfehler — und sie sagt **nichts** über
+die Distanz zum echten Verarbeitungs-Backend. Dieser Schritt **belegt pro Endpunkt**, wo die Verbindung
+physisch terminiert, und macht damit aus einer unerklärten Zahl einen dokumentierten Befund (Contribution C2).
+
+### Klassifikator (Konjunktion — alle drei Bedingungen müssen erfüllt sein)
+
+Ein Endpunkt gilt als **Edge-terminiert** genau dann, wenn **(a) ∧ (b) ∧ (c)**:
+
+| Bedingung | Operationalisierung | Werkzeug |
+|-----------|---------------------|----------|
+| **(a)** TCP-RTT ≈ **1–2 ms** aus FRA | gemessener Minimal-TCP-Ping (Port 443) liegt im einstelligen ms-Bereich | Layer-1-TCP-Ping (rev.ai blockt ICMP → **TCP** ist der Beleg) |
+| **(b)** Ziel-IP in **CDN-ASN** | aufgelöste IP gehört zu Cloudflare **AS13335** (bzw. anderem CDN-AS) | ASN-/Whois-Lookup (Team-Cymru, s. `mess_kommandos.md`) |
+| **(c)** traceroute **bricht am CDN ab** | letzte sichtbaren Hops sind CDN-Infrastruktur, kein Durchstich zum Backend | `traceroute` (+ TCP-SYN-Variante `-T -p 443`) |
+
+Sonst gilt der Endpunkt als **Host-terminiert** (Verbindung endet am realen Backend des Providers).
+
+### Wichtige Präzisierungen (damit der Befund verteidigbar ist)
+
+- **Die ~1-ms-RTT ist der Terminierungs-Nachweis, nicht der IP-Besitz.** Argumentiert wird über die
+  *gemessene Latenz* + AS + Route, nicht darüber, „wem die IP gehört".
+- **Niedrige RTT ≠ automatisch Edge.** Azure Italy North hat eine **niedrige** RTT (~12 ms), ist aber
+  **Host** — weil es das echte EU-Rechenzentrum ist (AS8075 Microsoft, **kein** CDN-AS → Bedingung (b)
+  scheitert). Genau das macht die STT/TTS-Inversion glaubwürdig: Azures Vorsprung ist **realer**
+  Backend-Standort, kein Edge-Artefakt.
+- **Hohe RTT ≠ automatisch Host, aber hier eindeutig:** Deepgram trägt zwar historisch ein
+  „Anycast"-Label, misst aber **~102–148 ms** → Bedingung (a) scheitert → **Host** (Multi-DC-Round-Robin,
+  s. `anbieter_auswahl.md` / A9).
+- **Konsequenz für die Cross-Layer-Brücke:** Bei Edge-terminierten Anbietern ist `connect ≈ N×ping`
+  **tautologisch** (gleicher Knoten) und zählt **nicht** als Beleg → nur host-terminierte Anbieter
+  stützen die Brücke (s. Audit B). Bei Edge-Anbietern misst die RTT den FRA-Edge, **nicht** das Backend
+  → die Backend-Region ist via RTT **nicht** bestimmbar (Limitation, betrifft v.a. Mistral als EU-LLM).
+
+### Ergebnis-Artefakt
+
+Die Klassifikation jedes Endpunkts steht als **feste Spalte „Terminierung (Edge/Host)"** in
+`api_endpunkte.md` (§Terminierung) = **Single Source of Truth**. Die Werte dort sind aus den
+DNS-/ASN-Beobachtungen **vorläufig** gesetzt und werden auf der EC2 per TCP-Ping + traceroute **bestätigt**.
 
 ---
 
@@ -216,6 +275,20 @@ Token/Audio?** Das ist **nicht** über alle Kategorien gleich — und das wird h
 | `total_ms` | ✓ | ✓ | ✓ | Dauer bis Antwort vollständig |
 | `ttl_ms` (Time to Last Token) | — | ✓ | — | nur LLM |
 
+#### Primär- vs. Sekundärmetrik — Output-Mengen-Confound (A8)
+
+- **Primär (Engine-Metrik): `ttft`/`ttfa`.** Zeit bis zum **ersten** Token/Audio ist von der Output-**Menge**
+  **unabhängig** → fairer Engine-Vergleich. Feste Inputs standardisieren nur die **Eingabe**; die
+  Ausgabemenge ist es **nicht** (`max_tokens=50` ist Obergrenze, kein Fixwert).
+- **Sekundär: `total_ms`/`ttl_ms`.** Skalieren mit der Output-Menge — ein wortkarges Modell „gewinnt"
+  durch Knappheit, nicht durch Geschwindigkeit. Daher nur sekundär bzw. **pro Token normalisiert**
+  (`ttl_ms / output_tokens`) berichten; die rohe Output-Menge wird mitgespeichert (A10/A11).
+- **STT-`ttft` = Time-to-first-FINAL** und enthält damit das **Provider-Endpointing** (Stille-Erkennung)
+  → so etikettieren, nicht als reine „Rechenzeit" lesen.
+- **Wichtig fürs Framing:** Der Kern-Beleg (**STT/TTS-Inversion** bei Azure) ruht auf `ttft`/`ttfa` →
+  vom Output-Mengen-Confound **nicht** betroffen. Die TTS-Format-Achse ist über mp3-Pinning aller drei
+  TTS-Anbieter geschlossen (s. `api_endpunkte.md`, A8).
+
 ### Feste Inputs (für fairen Vergleich, identisch je Kategorie)
 
 - **STT:** `sample.wav` — „Good morning. I would like to know the current weather forecast for Frankfurt." (~5 s, PCM linear16, 16 kHz, mono)
@@ -232,10 +305,35 @@ Der alte Lauf hat Information weggeworfen und damit spätere Fragen unbeantwortb
 - **STT:** der **vollständige Transkript-String** (nicht nur die Länge) → ermöglicht WER gegen Referenz,
 - **LLM:** echte **Output-Token-/Chunk-Zahl** sowie der Text → Degeneration erkennbar (A10);
   klar benennen, ob gezählt wird = SSE-Chunks oder Tokens (A11),
+- **Modell-Version je Run (A2):** angefragte Modell-ID **und** die vom Server zurückgemeldete
+  `effective_model` (LLM: `chunk.model` aus dem SSE; STT/TTS: opportunistisch aus Response-Headern) →
+  stiller Backend-Drift wird sample-genau erkennbar statt unbemerkt. Pinning-Status je Endpunkt:
+  `api_endpunkte.md` (§Modell-Pinning).
 - **TTS:** Audio-Byte-Zahl / Dauer,
 - **Slot-`tag`** explizit mitschreiben → Gruppierung nach `tag`, nicht nach Timestamp-Stunde (verhindert
   den Phantom-Slot, A12),
 - **Fehler-/Fehlschlag-Marker** je Run → Grundlage für die Verfügbarkeits-Dimension (A8).
+- **Verbundene Ziel-IP je Run (A5):** direkt nach dem Connect `sock.getpeername()[0]` als `resolved_ip`
+  ins JSONL — **Kosten ~null, sample-genau**. Ohne sie ist über 56 Slots nicht belegbar, **welcher**
+  (Cloudflare-/Deepgram-)Edge bzw. DC ein Latenz-Sample bedient hat → blockiert sonst den
+  Edge-vs-Backend-Beleg (A3) und erklärt die Deepgram-RTT-Streuung (A9).
+- **HTTP-Version je Run (A5):** `response.http_version` roh mitschreiben (robuster als das Pinnen von
+  `httpx[http2]`).
+
+### Run-Metadaten je Slot (`run_meta`-Record, A5/A6)
+
+Pro Slot-Lauf **ein** zusätzlicher `run_meta`-Record (einmalig, nicht pro Messung) macht jeden Slot
+reproduzier- und zuordenbar:
+
+- `git_commit` (Skript-Stand), `python_version` + **Lockfile-Hash** (bzw. `pip freeze`),
+- `instance_id`, `instance_type`, `ami_id`, `kernel`, `iface`, `region`/`az`, `delay_s`,
+- **CPU-Steal-Time** (`/proc/stat`) zu Slot-Beginn/-Ende → belegt empirisch, dass kein burstable-Throttling
+  die ms-Timer verfälscht (s. A6),
+- `ssl.OPENSSL_VERSION` (LibreSSL-Slots sofort verwerfbar, s. A1), `chronyc tracking`-Schnappschuss
+  (Zeitbasis, s. Audit D).
+
+> **Lockfile-Pflicht:** `requirements.txt` (`>=`) reicht **nicht** für Reproduktion → ein Lockfile
+> (`uv.lock` bzw. eingefrorenes `pip freeze`) wird **committet**; sein Hash steht im `run_meta`.
 
 ### Fehlerbehandlung
 
@@ -245,6 +343,25 @@ Der alte Lauf hat Information weggeworfen und damit spätere Fragen unbeantwortb
 - Fehlschläge werden **gezählt und gespeichert**, nicht still verworfen → Verfügbarkeit ist eine eigene
   Auswertungsdimension, kein blinder Fleck.
 
+### Erfolgskriterien & Timeouts je Kategorie (A7)
+
+Ohne fixe Schwellen ist „Verfügbarkeit X %" nicht reproduzierbar/angreifbar → hier festgeschrieben:
+
+| Kategorie | Connect-Timeout | Response-Timeout | Mindest-Output für „Erfolg" |
+|-----------|-----------------|------------------|------------------------------|
+| **STT** | 10 s | **30 s** | nicht-leeres **Final**-Transkript (getrimmt ≥ 1 Wort) |
+| **LLM** | 10 s | **30 s** | getrimmter Text **≥ 1 Wort** **und** **≥ 3 SSE-Content-Chunks** (fängt Degeneration, A10) |
+| **TTS** | 10 s | **30 s** | Audio-Body **≥ 1.000 Bytes** (dekodierbar, nicht-leer) |
+
+- **Timeout-Asymmetrie vereinheitlicht (A7):** alter Lauf hatte STT 20 s vs LLM/TTS 30 s ohne Begründung
+  → **einheitlich 30 s** Response-Timeout (großzügiger Hang-Fang, **keine** Erwartungs-Latenz; echte ttft
+  liegt weit darunter). Connect-Timeout einheitlich 10 s.
+- **Schwellen sind nachträglich justierbar:** Da Roh-Text, Chunk-Zahl und Byte-Zahl **vollständig**
+  gespeichert werden (A5/A10), kann die Erfolgsdefinition in der Analyse verschärft/gelockert werden,
+  **ohne** neu zu messen. Die Tabelle ist der **Default**, nicht in Stein.
+- **Fehler-Enum (roh je Run gespeichert):** `timeout` · `connection_reset` · `http_4xx` · `http_5xx` ·
+  `empty_output` · `degenerate_output` (Output < Schwelle). → Grundlage der Verfügbarkeits-/Joint-Completion-Dimension (A8).
+
 ---
 
 ## Kampagnen-Design (Stand 2026-06-14, vorläufig)
@@ -253,7 +370,8 @@ Der alte Lauf hat Information weggeworfen und damit spätere Fragen unbeantwortb
 
 - **Dauer:** 7 Tage (volle Woche inkl. Wochenende — deckt Wochentag/Wochenende ab).
 - **Slots:** 8 pro Tag, alle 3 h.
-- **n pro Slot/Endpunkt:** 100 (komfortabel auch für Perzentile; 50 wäre Minimum für Mediane).
+- **n pro Slot/Endpunkt:** 100 (komfortabel für Median/p50/p90 je Slot; 50 wäre Minimum für Mediane).
+  Für **p95/p99 reicht n=100 je Slot nicht** → nur gepoolt über alle 56 Slots, s. §Aggregation & Inferenz (A4).
 - **Umfang:** 7 × 8 = **56 Slots**; 56 × 100 = **5.600 Messungen/Endpunkt**; × 9 = **50.400 gesamt**.
 
 ### Slot-Zeiten (UTC-verankert)
@@ -295,5 +413,64 @@ Aussagekraft hängt an der **Abdeckung der drei Varianzquellen** (Run-Jitter →
 Wochentag → 7 Tage), **nicht** an der Kalenderdauer. Eine BA ist keine Trend-/Langzeitstudie → mehr als
 ~7–14 Tage bringt kaum Mehrwert.
 
-> Offene Abschnitte (folgen): Hardware/Instanz-Doku des Vantage Points (Instanz-ID, Account, AMI,
-> Interface), Scheduler-Konkretisierung (cron/systemd-Unit), Validierungs-/Reproduktionsplan.
+---
+
+## Aggregation & Inferenz (A4)
+
+> Ohne festgeschriebene Regel ist die Headline („Deepgram < Azure") **nicht reproduzierbar definiert** —
+> verschiedene Aggregationen liefern verschiedene Zahlen. Dieser Abschnitt legt die **eine** Regel fest
+> und gibt jeder Zahl ein Konfidenzintervall (die Punktschätzer-Angriffsfläche des Prüfers).
+
+### (a) Aggregationsregel — wie aus 5.600 Zahlen EINE wird
+
+**Headline = Median der Slot-Mediane** (zweistufig): pro (Endpunkt × Slot-`tag`) den Median über die
+~700 Runs (7 Tage × 100) bilden → 8 Slot-Mediane; **Median dieser 8** = Headline-Zahl je Endpunkt.
+
+- **Warum nicht gepoolt:** Ein gepoolter Median über alle ~5.600 gewichtet Slots mit mehr **erfolgreichen**
+  Runs stärker — d.h. Tageszeiten mit besserer Verfügbarkeit ziehen die Zahl. Bei Anbietern mit
+  tageszeitabhängigem Ausfall (Groq ~33 % zu US-Stoßzeiten) verschönert das die Zahl. Der zweistufige
+  Median gibt **jeder Tageszeit gleiches Gewicht** → robust gegen das Verfügbarkeits-Confound (A8).
+- **Sensitivität:** Der **gepoolte Median** wird zusätzlich berichtet. Stimmen beide überein → Befund
+  robust; laufen sie auseinander → das ist selbst ein (diurnal-/ausfall-)Befund.
+- **Diurnal-Profil:** Die 8 Slot-Mediane (über 7 Tage) sind zugleich das **Tageszeit-Profil** je Endpunkt
+  (Auswerteachse für US-Backend-Last, s. Audit D).
+
+### (b) Perzentile — ehrlicher Anspruch
+
+- **p50/p90:** slot-aufgelöst belastbar (genug Runs je Slot).
+- **p95:** nur **gepoolt** (über alle 56 Slots) + Bootstrap-CI — nicht slot-weise (zu wenig Runs).
+- **p99:** **nicht** aus n=100 je Slot behaupten (p99 von 100 ≈ das Maximum) → nur über **alle 56 Slots**
+  gepoolt, oder explizit als **Limitation** benennen.
+- **Faustregel** (festgeschrieben): ein Perzentil q ist erst stabil, wenn `n·(1−q) ≥ 5–10`.
+- Verteilungen sind rechtsschief (CV ~87 % in der Vorkampagne) → **Bootstrap**-CI statt t-Intervall.
+
+### (c) Konfidenzintervalle & Vergleiche — gegen nackte Punktschätzer
+
+- **Jede** berichtete Median-/Perzentil-Zahl bekommt ein **Bootstrap-95%-CI**.
+- **Cross-Provider „X schneller als Y"** primär über **Differenz-Bootstrap** bzw. **Mann-Whitney-U** —
+  **nicht** über „die CIs überlappen sich nicht" (disjunkte CIs sind ein schwächerer Test).
+- Die Aussage **„X gewinnt in N/56 Slots"** wird als **Slot-Median-Vorzeichentest** gekennzeichnet
+  (auf Slot-Median-Ebene), nicht als Roh-Run-Vergleich — die rohen Tails überlappen.
+
+### Werkzeuge
+
+`numpy`/`scipy` für Mediane/Perzentile/Mann-Whitney; eigener Bootstrap (Resampling der Slot-Mediane bzw.
+gepoolten Runs, ≥10.000 Resamples). In `requirements.txt` sicherstellen.
+
+---
+
+## E2E-Auswertung (Pipeline-Gesamtlatenz, A6/A8-Bezug)
+
+> Nicht Median-Addition über die drei Phasen (alter Fehler), sondern echte Faltung + Verfügbarkeit.
+
+- **Monte-Carlo-Faltung** statt Median-Summe: pro Pipeline-Kandidat (STT×LLM×TTS) aus den empirischen
+  Verteilungen ziehen → E2E-Verteilung mit p50/p90/p95 **+ CI** (statt drei addierter Punktschätzer).
+- **Joint-Completion / Pareto-Front:** Latenz **gegen** Zuverlässigkeit (Ausfallrate) auftragen — ein
+  „Gewinner" wird erst **nach** der Front benannt (Groq ist schnell, aber ~33 % Ausfall → nicht pauschal
+  „beste Pipeline").
+
+---
+
+> Offene Abschnitte (folgen): konkrete Instanz-Werte beim Start eintragen (Instanz-ID, Account, AMI,
+> Interface — Typ `c6i.large` und die zu erfassenden Felder stehen bereits, s. Vantage Point + `run_meta`/A5),
+> Scheduler-Konkretisierung (cron/systemd-Unit), Validierungs-/Reproduktionsplan.
