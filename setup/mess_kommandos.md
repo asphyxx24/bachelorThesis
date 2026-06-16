@@ -139,30 +139,24 @@ ultracode-Review** geprüft (Finden → adversariale Gegenprüfung), die bestät
 
 ---
 
-## Layer 2 — Paketaufzeichnung (nur Dumping)
+## Layer 2 — Paketaufzeichnung + Handshake-Eichung
 
-### Capture (pro Anbieter, n=1, mit sudo)
-```bash
-sudo tcpdump -i <iface> -w data/layer2/capture_<provider>_<YYYYMMDD_HHMM>.pcap \
-     host <host> -s 0 -c 200000
-```
-Ablauf: tcpdump starten → **N≈30 Cold-Start-Calls** nacheinander ausführen → tcpdump (SIGTERM) stoppen.
-→ ein PCAP mit N Handshakes (in der Analyse am 4-Tupel getrennt). Interface vorher prüfen:
-```bash
-ip -br link        # Interface-Namen ermitteln (z.B. ens5 / eth0)
-```
+Skripte: `measurements/layer2/capture.py` (Cold-Start-Connects + Quell-Port-Log) + `analyze.py`
+(parst die PCAP via `tcpdump -r`, paart per Quell-Port, vergleicht Wire vs. App). **Keine Extra-Library.**
 
-### Analyse (nachgelagert, kein Live-Messen)
-Felder je Paket extrahieren:
+### Eichung (durchgeführt 2026-06-16, je host-terminierter Provider, feste Ziel-IP)
 ```bash
-tshark -r <pcap> -T fields -E separator='|' -E header=n \
-  -e frame.number -e frame.time_relative -e frame.len \
-  -e tcp.srcport -e tcp.dstport -e tcp.flags -e tcp.len \
-  -e ip.src -e ip.dst
+# iface prüfen: ip -o -4 route show to default
+sudo timeout 25 tcpdump -i ens5 -n -w data/layer2/cap_<prov>.pcap "tcp port 443 and host <IP>" &
+.venv/bin/python measurements/layer2/capture.py --host <host> --ip <IP> --n 30 --out data/layer2/applog_<prov>.jsonl
+.venv/bin/python measurements/layer2/analyze.py --pcap data/layer2/cap_<prov>.pcap --applog data/layer2/applog_<prov>.jsonl
 ```
-Daraus berechnet das Analyse-Skript: `tcp_handshake_ms` (SYN→SYN-ACK), Round-Trips bis erste
-App-Daten, **Inter-Arrival-Time** (Diff von `frame.time_relative`), Paketgrößen (`frame.len`/`tcp.len`),
-Retransmits. → s. PCAP-Größen-Tabelle im `messprotokoll.md`.
+**Ergebnis:** App-`tcp_handshake_ms` = Wire-SYN→SYN-ACK auf ~0,1 ms genau (Azure 11 ms: +0,11; Deepgram
+139 ms: +0,12) → Layer-3-Timer am Paket-Level validiert (C2). Feste `--ip` bei Round-Robin (Deepgram).
+
+### Richere PCAP-Analyse (Analyse-Phase, optional)
+Inter-Arrival-Times der Antwort-Pakete / Retransmits aus *während echter API-Calls* aufgezeichneten PCAPs —
+ebenfalls dependency-frei via `tcpdump -tt -n -r <pcap>` parsebar (Muster s. `analyze.py`). Noch ausstehend.
 
 ---
 

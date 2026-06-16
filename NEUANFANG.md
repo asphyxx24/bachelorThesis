@@ -34,8 +34,8 @@ Diese drei Dinge sind unabhängig davon, wie die Zahlen erhoben wurden — sie w
 
 - **Kernbefund (C1):** Aus EU-Sicht dominiert die **Backend-Engine** des Providers, **nicht** die
   Netzwerknähe. **Schärfster Beleg — LLM bei identischer Edge-RTT:** OpenAI/Groq/Mistral terminieren alle
-  bei Cloudflare Frankfurt (~1 ms RTT), aber LLM-`ttft` streut **60 → 263 → 436 ms (7×)** → gleiches Netz,
-  Differenz = Backend. Zweiter Beleg: Azure **schnellstes TTS** trotz US-Konkurrenz. STT ehrlich: auf der
+  bei Cloudflare Frankfurt (~1 ms RTT), aber LLM-`ttft` streut **75 → 268 → 476 ms (~6,4×; n=200, paced)** →
+  gleiches Netz, Differenz = Backend (per-IP invariant; EU-Mistral sogar langsamer als US-Groq). Zweiter Beleg: Azure **schnellstes TTS** trotz US-Konkurrenz. STT ehrlich: auf der
   fairen Metrik `ttfp` ist Azure **nicht** langsamster — die alte „Azure-STT-Endpointing-Inversion" war ein
   Dump-Artefakt (Bulk-Compute), kein Engine-Beleg. S. `setup/messprotokoll.md` → „STT-Primärmetrik".
 - **C2 — Drei-Schichten-Methodik + Cloudflare-/Edge-Grenze** (bei einem Teil der Provider terminiert

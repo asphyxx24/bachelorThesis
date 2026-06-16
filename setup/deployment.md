@@ -28,8 +28,11 @@
 - Jeder Slot: interleaved Round-Robin über alle 9 Endpunkte, 100 Runden, 1,5 s Delay → mit STT-Realtime-Pacing ~60–67 min/Slot (passt in den 3-h-Takt; Slot-Deadline 150 min als Sicherheitsnetz).
 - **flock** (`/tmp/layer3.lock`) verhindert überlappende Slots; **Per-Call-Timeout** (75 s) verhindert, dass ein hängender Call den Slot einfriert.
 - **Daten:** `~/thesis/data/layer3/campaign/<tag>_<ts>.jsonl` (1. Zeile `run_meta`, je Call ein Record, letzte Zeile `run_end`). **Log:** `~/thesis/data/layer3/cron.log`.
-- **Kampagnen-NEUSTART:** 2026-06-16, erster Slot 12:00 UTC, auf Commit **`bccceaf`** (STT `ttfp`+Pacing, F2/F3).
-  Ziel: 7 Tage × 8 Slots = 56 Slots (~2026-06-23). **`run_meta.git_dirty=False`** verifiziert (sauberer Tree).
+- **Kampagnen-NEUSTART:** 2026-06-16, erster Slot 12:00 UTC. **Slots 12h/15h liefen auf Commit `7f04770`**
+  (STT `ttfp`+Pacing, F2/F3 — code-identisch zu `bccceaf`, nur docs-only commit dazwischen; `run_meta` selbst
+  geprüft, `git_dirty=False`). Ab dem 18:00-Slot läuft **`f1f0d47`** (deepgram-`ttft`-Fix + IPv4-Pin + C1-Doku).
+  *Hinweis:* der deepgram-`ttft`-Fix (first→last is_final) ist für diesen festen Input ein **No-Op** (200/200
+  Calls = ein einziges Final-Segment), die 12h/15h-`ttft` sind also gültig. Ziel: 7 Tage × 8 Slots (~2026-06-23).
   Die 4 Slots + Pilot vom 15./16.6. (alter STT-Code, **ohne** `ttfp`) liegen in
   `data/layer3/campaign_old_predeploy_20260616/` → **verworfen**, nicht Teil der Wertungsdaten.
 
@@ -46,7 +49,7 @@ cron-Zeile (je Slot):
 | Azure STT/TTS | **~11–12 ms** | echtes EU-RZ (Italy North), **kein** CDN-AS |
 | Deepgram / Rev.ai | **~137–139 ms** | echtes US-Backend |
 
-- **STT/TTS-Inversion (C1):** Azure auf `ttft` **langsamster STT** (~1721 ms) aber `ttfa` **schnellster TTS** (~254 ms) — gleiche Region/RTT, gegensätzliches Ergebnis → „Region erklärt Latenz" falsifiziert. *(Diese STT-Zahl ist `ttft` = inkl. Endpointing-Stille-Warten; ab 2026-06-16 ist STT-Primärmetrik `ttfp` + Realtime-Pacing, das den Anteil zerlegt — s. `AUDIT_stt_methodik_2026-06-16.md`. Die 4 Pilot-/Kampagnen-Slots 15./16.6. nutzen noch den alten STT-Code → STT-seitig verworfen, Neumessung.)*
+- **RTT-Klassen (C2):** drei saubere Klassen (Edge ~1 ms / Azure-EU-RZ ~11 ms / US-Backend ~140 ms) live bestätigt. *(Die frühere „STT/TTS-Inversion (C1)"-Lesart mit ~1721 ms STT + ~254 ms TTS ist ÜBERHOLT: die n=3-Pilot-Zahlen sind durch die n=200-Kampagne ersetzt (Azure-`ttfa` ~94 ms; STT-`ttft`-Konstanz war Dump-Bulk-Compute, kein Endpointing-Timer). C1 ruht jetzt auf der LLM-Edge-Achse — s. `messprotokoll.md` → „Korrekte C1-Logik". Dieser Pilot zählt nur als RTT-/Edge-Beleg, nicht als C1-Latenzbeleg.)*
 - **A1:** auf EC2 echtes OpenSSL → **6× TLS 1.3**, rev.ai **TLS 1.2** (der eine echte 1.2-Host, kein LibreSSL-Artefakt).
 - **A6:** `cpu_steal 37→37` über den Slot → **kein** burstable-Throttling (c6i.large empirisch belegt).
 - **Rev.ai-Billing:** Wall-Clock ~2 s/Call → **15-s-Boden** greift → ~15 s/Call → **~1.400 min** für die volle Kampagne.

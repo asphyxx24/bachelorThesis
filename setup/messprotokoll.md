@@ -11,6 +11,10 @@
 - **Ort:** AWS EC2, Region `eu-central-1` (Frankfurt) — feste Mess-Instanz, dokumentiert mit
   Account, Instanz-ID, Region und Zeitzone (UTC) zum Messzeitpunkt.
 - **Begründung:** EU-Perspektive ist die Forschungsfrage. Frankfurt ist ein zentraler EU-Internet-Knoten.
+- **Limitation (Generalisierbarkeit, explizit):** EIN Vantage Point (nur Frankfurt). Die RTT-/Edge-Zahlen
+  sind FRA-spezifisch (ein anderer EU-Standort sähe andere Edge-Distanzen). Die **Engine-Unterschiede**
+  (Kernbefund C1) sind dagegen vantage-point-robust, weil sie bei *konstanter* Netz-Distanz auftreten
+  (gleiches Cloudflare-Edge ~1 ms für alle LLM). Single-VP daher als Limitation deklariert, C1 davon nicht betroffen.
 - **Software-Voraussetzung (Reproduzierbarkeit, A1):** Alle Messungen laufen auf der EC2 (Ubuntu) mit
   **echtem OpenSSL 3.x**. macOS-Python ist gegen **LibreSSL 2.8.3** gelinkt und meldet TLS-Versionen
   systematisch falsch (alle Hosts als TLS 1.2 statt 1.3) → **`tls_version` wird ausschließlich auf der
@@ -29,9 +33,11 @@
   Nur so messen alle Schichten dieselbe **Adressfamilie (IPv4)** — sonst verglichen die Cross-Layer-
   Brücke (`connect_total_ms ≈ N_RTTs × ping`) und die Edge-/Host-Klassifikation eine IP **anderer Familie**
   (IPv6) als der eigentliche Mess-Request. *(Präzisierung: Jedes L1-Skript löst zudem selbst auf — bei
-  DNS-Round-Robin-Hosts kann je Skript eine andere **Pool-IP** fallen; das ist unkritisch, da alle Pool-IPs
-  je Host in **derselben ASN + RTT-Klasse** liegen → Klassifikation/Brücke kippen nicht. Nicht „garantiert
-  dieselbe IP" behaupten.)* Im ersten Echtlauf wählte httpx unkontrolliert
+  DNS-Round-Robin-Hosts kann je Skript eine andere **Pool-IP** fallen, und der Pool kann **mehrere ASNs/
+  RTT-Klassen** umfassen: Deepgram = 6 IPs über Zayo AS6461 + Cogent AS174, zwei RTT-Klassen (~101 ms vs
+  ~139–146 ms). Die **Edge/Host-Klassifikation kippt trotzdem nicht** (alles US-Transit, kein CDN-AS,
+  RTT ≫ 2 ms → „Host"); aber `asn_lookup` prüft nur EINE IP je Host → NICHT behaupten „alle Pool-IPs gleiche
+  ASN, verifiziert". Die feine RTT-Streuung läuft entlang DC/IP, nicht ASN.)* Im ersten Echtlauf wählte httpx unkontrolliert
   **IPv6** (`2606:4700:…`), während Layer 1 die IPv4 (`104.18.…`) maß — genau diese Inkonsistenz schließt
   das Erzwingen. **Limitation (Diskussion):** Ein Dual-Stack-Client im Feld nähme evtl. IPv6 (Happy
   Eyeballs); wir messen bewusst den IPv4-Pfad. Zum **selben** CDN-Edge ist die Latenz über v4 vs. v6
@@ -148,6 +154,23 @@ DNS-/ASN-Beobachtungen **vorläufig** gesetzt und werden auf der EC2 per TCP-Pin
 
 ## Layer 2 — Paketaufzeichnung (PCAP)
 
+> **STATUS 2026-06-16 — IMPLEMENTIERT + GEEICHT.** Code: `measurements/layer2/capture.py` (Cold-Start-
+> Connects + Quell-Port-Log, während extern `tcpdump` mitschneidet) + `analyze.py` (parst die PCAP via
+> `tcpdump -r`, paart per Quell-Port, vergleicht Wire-SYN→SYN-ACK gegen den App-`tcp_handshake_ms`).
+> **Eichungs-Ergebnis (EC2, je N=30 Cold-Starts):**
+>
+> | Provider | RTT-Klasse | App-`tcp_handshake` (Median) | Wire-SYN→SYN-ACK (Median) | Differenz |
+> |----------|------------|------------------------------|---------------------------|-----------|
+> | Azure (Italy North) | ~11 ms | 11,29 ms | 11,18 ms | **+0,11 ms** |
+> | Deepgram (US) | ~139 ms | 139,01 ms | 138,87 ms | **+0,12 ms** |
+>
+> → Der Layer-3-App-Timer trifft die echte Wire-Latenz **an beiden Enden der RTT-Skala auf ~0,1 ms genau**
+> (der minimale Positiv-Offset ist die Kernel-Returnzeit nach dem SYN-ACK). Damit ist die Layer-3-
+> Zeitmessung **am Paket-Level validiert** — das beantwortet das „ich vertraue den Daten nicht" mit Daten.
+> Roh-Belege: `data/layer2/cap_{azure,deepgram}.pcap` + `applog_*.jsonl`.
+> **Noch offen (Analyse-Phase, kein Vertrauens-Blocker):** das *Mehr* aus Punkt 2 unten (Inter-Arrival-Times
+> der Antwort-Pakete, Retransmits) aus während-der-API-Calls aufgezeichneten PCAPs — die Eichung selbst steht.
+
 ### Zweck — und warum es NICHT redundant zu Layer 3 ist
 
 Layer 2 schneidet den **vollständigen Paketaustausch von N≈30 Cold-Start-Calls** pro Anbieter mit.
@@ -183,17 +206,20 @@ Source-Port → in der Analyse werden die N Handshakes am 4-Tupel (src-ip/src-po
 getrennt. So liefert ein PCAP eine **Verteilung** von N wire-level-Handshakes statt eines Einzelsamples.
 tcpdump läuft mit Host-Filter und **vollständigen** Paketen (kein Snap-Cut):
 
+**Tatsächlich gelaufen (Handshake-Eichung, 2026-06-16, je host-terminierter Provider, feste Ziel-IP):**
+
 ```bash
-sudo tcpdump -i <iface> -w data/layer2/capture_<provider>_<YYYYMMDD_HHMM>.pcap \
-     host <provider-host> -s 0 -c 200000
+# tcpdump im Hintergrund (iface ens5, Filter auf die eine Ziel-IP), dann 30 Cold-Starts, dann Analyse:
+sudo timeout 25 tcpdump -i ens5 -n -w data/layer2/cap_<provider>.pcap "tcp port 443 and host <IP>" &
+.venv/bin/python measurements/layer2/capture.py --host <host> --ip <IP> --n 30 --out data/layer2/applog_<provider>.jsonl
+.venv/bin/python measurements/layer2/analyze.py --pcap data/layer2/cap_<provider>.pcap --applog data/layer2/applog_<provider>.jsonl
 ```
 
-- `-i <iface>`: Netzwerk-Interface des Vantage Points (auf der alten EC2: `ens5` — **auf der neuen
-  Instanz vor dem Lauf verifizieren**, z. B. via `ip -br link`).
-- `host <provider-host>`: filtert exakt auf den jeweiligen API-Host (s. `api_endpunkte.md`).
-- `-s 0`: ganze Pakete (volle Header + Payload-Längen, nötig für Paketgrößen/IAT).
-- `-c 200000`: nur Sicherheits-Backstop — gestoppt wird per SIGTERM, sobald die N Calls durch sind.
-  (Höher als beim alten n=1-Lauf, weil N≈30 Calls inkl. STT-Audio deutlich mehr Pakete erzeugen.)
+- Feste `--ip`: bei Round-Robin-Hosts (Deepgram) nötig, damit Capture-Filter + alle N Connects denselben
+  Knoten treffen. tcpdump erzeugt **und** liest die PCAP → keine Extra-Library (scapy/tshark) nötig.
+- `-i ens5`: Interface des Vantage Points (vor dem Lauf via `ip -o -4 route show to default` verifizieren).
+- Für die spätere **richere** Analyse (IAT/Retransmits *während* echter API-Calls) wird breiter mitgeschnitten
+  (`host <host> -s 0`, gestoppt per SIGTERM/timeout); die Eichung oben braucht das nicht.
 
 ### TLS-1.3-Caveat → Analyse auf TCP-Ebene
 
@@ -376,9 +402,13 @@ Clips) — **kein** einheitlicher Stille-Timer. So beschriften, nicht als Engine
 > falsch).** Worauf „Engine/Backend schlägt Geografie" **wirklich** ruht (s. CLAUDE.md C1):
 > 1. **Kernbeleg — LLM @ identischer Edge-RTT:** OpenAI, Groq und Mistral terminieren **alle** bei Cloudflare
 >    in Frankfurt (~1 ms RTT, ASN 13335 — Layer 1). Bei **identischer Netz-Distanz** streut LLM-`ttft`
->    **60 ms (Groq) → 263 ms (Mistral) → 436 ms (OpenAI) = 7×** (n≈400). Gleiches Netz, 7× Unterschied → die
->    Differenz **muss** Backend/Engine sein, nicht Geografie. Sauberster, am wenigsten anfechtbarer Beleg.
-> 2. **Zweiter Beleg — TTS:** Azure ist **schnellstes TTS** (`ttfa` ~96 ms) trotz US-Konkurrenz (OpenAI ~917 ms);
+>    **75 ms (Groq) → 268 ms (Mistral) → 476 ms (OpenAI) ≈ 6,4×** (n=200, paced, connect-inkl.; selbst
+>    nachgerechnet). **Per-IP invariant** (Edge-Shuffle = 0 Effekt) und Geografie-Ordnung sogar **invertiert**
+>    (EU-Mistral 3,6× langsamer als US-Groq). Gleiches Netz, ~6,4× Unterschied → die Differenz **muss**
+>    Backend/Engine sein, nicht Geografie. Sauberster, am wenigsten anfechtbarer Beleg. *(„Engine" = Bündel
+>    aus Modellgröße/-Architektur + Inferenz-HW (Groq LPU) + Serving-Stack; die robuste Aussage ist die
+>    NEGATIVE „Netznähe erklärt es nicht".)*
+> 2. **Zweiter Beleg — TTS:** Azure ist **schnellstes TTS** (`ttfa` ~94 ms) trotz US-Konkurrenz (OpenAI ~940 ms);
 >    empirisch sehr robust (metrik-/aggregations-fest).
 > 3. **STT — ehrlich:** Auf der fairen Metrik `ttfp` ist Azure **nicht** der langsamste STT (gleichauf mit
 >    Deepgram). Die alte „Azure verliert STT"-Aussage galt nur auf der confounded Dump-`ttft` (Bulk-Compute) →
@@ -524,13 +554,13 @@ Wochentag → 7 Tage), **nicht** an der Kalenderdauer. Eine BA ist keine Trend-/
 
 - **Warum nicht gepoolt:** Ein gepoolter Median über alle ~5.600 gewichtet Slots mit mehr **erfolgreichen**
   Runs stärker — d.h. Tageszeiten mit besserer Verfügbarkeit ziehen die Zahl. Bei Anbietern mit
-  tageszeitabhängigem Ausfall (Groq ~33 % zu US-Stoßzeiten) verschönert das die Zahl. Der zweistufige
+  tageszeitabhängigem Ausfall (z.B. Free-Tier-Rate-Limits zu US-Stoßzeiten) verschönert das die Zahl. Der zweistufige
   Median gibt **jeder Tageszeit gleiches Gewicht** → robust gegen das Verfügbarkeits-Confound (A8).
 - **Sensitivität:** Der **gepoolte Median** wird zusätzlich berichtet. Stimmen beide überein → Befund
   robust; laufen sie auseinander → das ist selbst ein (diurnal-/ausfall-)Befund.
 - **Diurnal-Profil:** Die 8 Slot-Mediane (über 7 Tage) sind zugleich das **Tageszeit-Profil** je Endpunkt
   (Auswerteachse für US-Backend-Last, s. Audit D).
-- **Timeouts/Fehlschläge (z.B. OpenAI-TTS ~12 % ReadTimeouts, `ttfa=None`) fallen aus dem Latenz-Median heraus
+- **Timeouts/Fehlschläge (OpenAI-TTS ~8 % ReadTimeouts, 16/200 in der Kampagne — die ~12 % stammten aus alten Dump-Slots; `ttfa=None`) fallen aus dem Latenz-Median heraus
   — werden aber als eigene Verfügbarkeits-Achse (A8) IMMER neben jede Latenzzahl gestellt.** Sonst „gewinnt" ein
   Anbieter durch verschwundene Slow/Fail-Calls (Survivorship-Bias). „Schnellstes TTS" nur mit Ausfall-Asterisk.
   Für TTS zusätzlich **p95/p99/max gepoolt** berichten (Azure-`ttfa`-Tail bis ~9,7 s ist echtes Backend-Tail).
@@ -566,8 +596,8 @@ gepoolten Runs, ≥10.000 Resamples). In `requirements.txt` sicherstellen.
 - **Monte-Carlo-Faltung** statt Median-Summe: pro Pipeline-Kandidat (STT×LLM×TTS) aus den empirischen
   Verteilungen ziehen → E2E-Verteilung mit p50/p90/p95 **+ CI** (statt drei addierter Punktschätzer).
 - **Joint-Completion / Pareto-Front:** Latenz **gegen** Zuverlässigkeit (Ausfallrate) auftragen — ein
-  „Gewinner" wird erst **nach** der Front benannt (Groq ist schnell, aber ~33 % Ausfall → nicht pauschal
-  „beste Pipeline").
+  „Gewinner" wird erst **nach** der Front benannt (z.B. OpenAI-TTS ist nicht der langsamste, hat aber ~8 %
+  Ausfall → nicht pauschal „beste Pipeline"; Ausfallraten je Provider erst aus der vollen Kampagne festschreiben).
 
 ---
 

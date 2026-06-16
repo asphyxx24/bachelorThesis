@@ -8,9 +8,10 @@ Was es misst:
   letzte antwortende Hop liegt SELBST im CDN-AS (AS13335) bei ~1 ms — der Edge IST der Endpunkt.
 
 Zur IP-Auflösung (ehrlich): Jedes L1-Skript löst SELBST auf; bei Round-Robin-Hosts kann der Trace
-  eine andere Pool-IP treffen als tcp_ping/asn_lookup. Unkritisch (alle Pool-IPs je Host gleiche
-  ASN/RTT-Klasse). Die getracte IP steht je Record drin. `reached_dest` = ob der letzte
-  antwortende Hop die Ziel-IP war.
+  eine andere Pool-IP treffen als tcp_ping/asn_lookup. asn_lookup prüft EINE IP je Host — der Pool kann
+  mehrere ASNs umfassen (Deepgram: Zayo AS6461 + Cogent AS174, 2 RTT-Klassen). Host-Klassifikation bleibt
+  gültig (alles US-Transit, kein CDN-AS). Die getracte IP steht je Record drin. `reached_dest` = ob der
+  letzte antwortende Hop die Ziel-IP war.
 
 Werkzeug: `traceroute` (auf macOS vorhanden; auf frischem Ubuntu/EC2 nachinstallieren:
   sudo apt-get install traceroute). Fehlt es, crasht das Skript NICHT.

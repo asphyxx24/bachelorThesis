@@ -30,8 +30,9 @@ In beide Richtungen beantwortbar — „Netzwerk erklärt *weniger* als die Engi
 
 - **C1 (Kern) — „Engine schlägt Geografie":** Aus EU-Sicht dominiert die Backend-Engine, nicht die
   Netzwerknähe. **Schärfster Beleg — LLM bei identischer Edge-RTT:** OpenAI/Groq/Mistral terminieren *alle*
-  bei Cloudflare Frankfurt (~1 ms RTT, ASN 13335), doch LLM-`ttft` streut **60 → 263 → 436 ms (7×)** —
-  gleiches Netz, Differenz **muss** Backend sein. **Zweiter Beleg:** Azure **schnellstes TTS** (`ttfa` ~96 ms)
+  bei Cloudflare Frankfurt (~1 ms RTT, ASN 13335), doch LLM-`ttft` streut **75 → 268 → 476 ms (~6,4×;
+  n=200, paced, connect-inkl.)** — gleiches Netz, Differenz **muss** Backend sein (per-IP invariant; EU-Mistral
+  sogar langsamer als US-Groq → Geografie-Ordnung invertiert). **Zweiter Beleg:** Azure **schnellstes TTS** (`ttfa` ~96 ms)
   trotz US-Konkurrenz. **STT (ehrlich):** auf der fairen Metrik `ttfp` ist Azure **nicht** langsamster — die
   früher behauptete „Azure-STT-Endpointing-Inversion" war ein **Dump-Artefakt (Bulk-Compute)** und wird
   **nicht** als Engine-Beleg geführt. S. `setup/messprotokoll.md` → „STT-Primärmetrik".
@@ -42,9 +43,9 @@ In beide Richtungen beantwortbar — „Netzwerk erklärt *weniger* als die Engi
 
 - **Layer 1 (Infrastruktur):** DNS, RTT/Ping (**TCP primär**, ICMP zur Validierung), TLS, Traceroute
   → misst Netzwerk-Nähe zum **Host**.
-- **Layer 2 (Paketaufzeichnung):** tcpdump/PCAP, **N≈30 Cold-Starts/Anbieter** → **Eichung** der
-  App-Timer (Handshake-Überlappung) + **Zusatzinfo** (Inter-Arrival-Time, Retransmits, Round-Trips),
-  die Layer 3 nicht sehen kann.
+- **Layer 2 (Paketaufzeichnung):** tcpdump/PCAP (`measurements/layer2/`). **Eichung durchgeführt
+  (2026-06-16):** App-`tcp_handshake_ms` = Wire-SYN→SYN-ACK auf **~0,1 ms** genau (Azure 11 ms & Deepgram
+  139 ms, je N=30) → Layer-3-Timer am Paket-Level validiert. Richere Zusatzinfo (IAT/Retransmits) = Analyse-Phase.
 - **Layer 3 (API-Latenz):** Cold-Start — atomare connect-Submetriken + `ttft`/`ttfa`/`total`
   → misst Engine-Verarbeitung über die volle **URL**.
 

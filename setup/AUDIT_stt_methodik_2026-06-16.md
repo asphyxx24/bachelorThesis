@@ -138,7 +138,7 @@ ultracode-Durchläufe (23- + 62-Befund-Audit) → maßgeblich ist diese Fassung.
   Azure ~98 ms nach Audioende). `ttft − ttfp` ist **kein** Stille-Maß.
 - **C1 ruht NICHT auf STT.** Auf `ttfp` ist Azure nicht langsamster (gleichauf mit Deepgram, ~1045 ms; RTT
   überdeckt vom Pacing-Floor). Kernbeleg für „Engine schlägt Geografie" ist die **LLM-Edge-Achse** (OpenAI/
-  Groq/Mistral alle ~1 ms Cloudflare-RTT, aber `ttft` 60→263→436 ms = 7×), zweiter Beleg Azure-schnellstes-TTS.
+  Groq/Mistral alle ~1 ms Cloudflare-RTT, aber `ttft` 75→268→476 ms ≈ 6,4× (n=200, paced)), zweiter Beleg Azure-schnellstes-TTS.
 - `ttfp` selbst ist ein **„Engine reagiert zügig"-Indikator**, kein feines Engine-Ranking (Pacing-Floor
   dominiert den Absolutwert; nur große Differenzen wie Rev.ai +450 ms sind Signal = Emissions-Kadenz).
 

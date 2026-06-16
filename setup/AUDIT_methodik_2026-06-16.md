@@ -11,7 +11,7 @@
 > Exec-Summary stehende These „Azure-`ttft`-Konstanz 1722 ms = fester Stille-Timer/Endpointing" ist
 > **falsifiziert** — das war Dump-Bulk-Compute; paced finalisiert Azure ~98 ms nach Audioende. **Der STT-Weg
 > trägt C1 NICHT** (auf `ttfp` ist Azure nicht langsamster). Kernbeleg „Engine schlägt Geografie" ist die
-> **LLM-Edge-Achse** (OpenAI/Groq/Mistral alle ~1 ms Cloudflare-RTT, aber `ttft` 60→263→436 ms = 7×), zweiter
+> **LLM-Edge-Achse** (OpenAI/Groq/Mistral alle ~1 ms Cloudflare-RTT, aber `ttft` 75→268→476 ms ≈ 6,4× (n=200, paced)), zweiter
 > Beleg Azure-schnellstes-TTS. Maßgeblich: `messprotokoll.md` → „Korrekte C1-Logik" + `AUDIT_stt_methodik` (Banner oben).
 > Die untenstehenden Befund-Texte sind der **Original-Snapshot** des 1. Audits (Endpointing-Lesart dort überholt).
 

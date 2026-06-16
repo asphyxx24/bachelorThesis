@@ -10,10 +10,11 @@ Was es misst:
 
 Zur IP-Auflösung (ehrlich):
   Jedes L1-Skript löst den Host SELBST auf (eigenes gethostbyname). Bei DNS-Round-Robin-Hosts
-  (deepgram, rev.ai, openai, groq) kann ICMP damit eine ANDERE Pool-IP treffen als tcp_ping.
-  Unkritisch, weil alle Pool-IPs je Host in derselben ASN + RTT-Klasse liegen (per asn_lookup
-  verifiziert) → Cross-Check und Edge/Host-Klassifikation kippen dadurch NICHT. Die tatsächlich
-  gepingte IP wird je Record als `resolved_ip` mitgeloggt.
+  (deepgram, rev.ai, openai, groq) kann ICMP damit eine ANDERE Pool-IP treffen als tcp_ping. Die
+  tatsächlich gepingte IP steht je Record als `resolved_ip`. WICHTIG (nicht beschönigen): Deepgram
+  löst auf 6 IPs in ZWEI ASNs (Zayo AS6461 + Cogent AS174) und ZWEI RTT-Klassen (~101 ms: 38.68.64.131/.132
+  vs ~139–146 ms: Rest) auf. Die Edge/Host-Klassifikation kippt trotzdem NICHT (alle US-Transit, kein
+  CDN-AS, RTT ≫ 2 ms → durchweg „Host"); aber die feine RTT-Streuung läuft entlang DC/IP, nicht entlang ASN.
 
 Warum subprocess-Timeout statt `-W`:
   `-W` bedeutet unter Linux Sekunden, unter macOS Millisekunden (A9). Statt uns

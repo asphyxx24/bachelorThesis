@@ -54,14 +54,15 @@ Pro Kategorie **3 Anbieter** → **9 Mess-Endpunkte** insgesamt.
 
 ### LLM — OpenAI, Groq, Mistral
 - **OpenAI (gpt-4o-mini):** US-GPU-Referenz, der De-facto-Standard.
-- **Groq (llama-3.1-8b-instant):** US, aber spezielle LPU-Hardware → testet, ob Backend-Architektur
-  (nicht Geografie) die Latenz dominiert.
+- **Groq (llama-3.1-8b-instant):** US, aber spezielle LPU-Hardware → testet, ob das **Backend insgesamt
+  (Inferenz-HW + Modellgröße/-Architektur), nicht Geografie** die Latenz dominiert. *(Caveat: Groq variiert
+  HW UND Modellgröße (8B) gemeinsam → „Engine" als Bündel verstehen; robust ist die negative Aussage „nicht Geografie".)*
 - **Mistral (mistral-small):** Der **EU-Anbieter** (Frankreich). Wichtig als geografisch naher
   Vergleichspunkt — und für die Verfügbarkeits-/Output-Dimension relevant.
 
 ### TTS — Deepgram, OpenAI, Azure
 - **Deepgram (Aura-2)** & **OpenAI (tts-1):** US-Streaming-TTS.
-- **Azure (Standard Neural):** **Schnellstes TTS** (`ttfa` ~96 ms) trotz US-Konkurrenz (OpenAI ~917 ms) —
+- **Azure (Standard Neural):** **Schnellstes TTS** (`ttfa` ~94 ms, n=200) trotz US-Konkurrenz (OpenAI ~940 ms) —
   empirisch sehr robust. Das ist der **zweite** C1-Beleg (Kernbeleg ist die LLM-Edge-Achse, s. `messprotokoll.md`).
   Die within-Azure-Gegenüberstellung STT (~1 s bis erstes Wort) vs. TTS (~96 ms) bleibt höchstens eine
   **Workload-Beobachtung** (5-s-Audio rein vs. Kurzsatz raus), **nicht** „reine Engine-Geschwindigkeit".
