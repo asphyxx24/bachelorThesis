@@ -25,10 +25,13 @@
 ## Wie die Kampagne läuft
 
 - **cron** (aktiv + enabled) feuert die **8 UTC-Slots** `00/03/06/09/12/15/18/21h`, je `run.py --n 100 --tag HHh`.
-- Jeder Slot: interleaved Round-Robin über alle 9 Endpunkte, 100 Runden, 1,5 s Delay → ~52 min/Slot (passt in den 3-h-Takt; Slot-Deadline 150 min als Sicherheitsnetz).
+- Jeder Slot: interleaved Round-Robin über alle 9 Endpunkte, 100 Runden, 1,5 s Delay → mit STT-Realtime-Pacing ~60–67 min/Slot (passt in den 3-h-Takt; Slot-Deadline 150 min als Sicherheitsnetz).
 - **flock** (`/tmp/layer3.lock`) verhindert überlappende Slots; **Per-Call-Timeout** (75 s) verhindert, dass ein hängender Call den Slot einfriert.
 - **Daten:** `~/thesis/data/layer3/campaign/<tag>_<ts>.jsonl` (1. Zeile `run_meta`, je Call ein Record, letzte Zeile `run_end`). **Log:** `~/thesis/data/layer3/cron.log`.
-- **Kampagnen-Start:** 2026-06-15, erster Slot 21:00 UTC. Ziel: 7 Tage × 8 Slots = 56 Slots.
+- **Kampagnen-NEUSTART:** 2026-06-16, erster Slot 12:00 UTC, auf Commit **`bccceaf`** (STT `ttfp`+Pacing, F2/F3).
+  Ziel: 7 Tage × 8 Slots = 56 Slots (~2026-06-23). **`run_meta.git_dirty=False`** verifiziert (sauberer Tree).
+  Die 4 Slots + Pilot vom 15./16.6. (alter STT-Code, **ohne** `ttfp`) liegen in
+  `data/layer3/campaign_old_predeploy_20260616/` → **verworfen**, nicht Teil der Wertungsdaten.
 
 cron-Zeile (je Slot):
 ```bash
