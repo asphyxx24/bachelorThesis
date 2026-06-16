@@ -46,10 +46,11 @@ Pro Kategorie **3 Anbieter** → **9 Mess-Endpunkte** insgesamt.
   2026-06-16 pacen wir ohnehin alle drei STT einheitlich** (1×-Realtime, für `ttfp`-Fairness —
   s. `messprotokoll.md`); das Pacing-Argument gegen AssemblyAI ist damit obsolet, Rev.ai bleibt wegen
   reifem Modell, rohem WS-Zugang und bereits geladenem Guthaben.)*
-- **Azure (Standard Neural):** Der EU-nahe Gegenpol (Italy North). Liefert den schärfsten Beleg für
-  „Engine schlägt Geografie": EU-gehostet, aber bei STT auf `ttft` **langsamer** als das US-Deepgram —
-  was sich als **Endpointing-Stille-Warten** entpuppt (`ttft − ttfp`), nicht als Engine-/Geo-Nachteil
-  (s. `messprotokoll.md` → „STT-Primärmetrik").
+- **Azure (Standard Neural):** Der EU-nahe Gegenpol (Italy North), echtes EU-RZ (~11 ms RTT, kein CDN).
+  Wichtig als geografisch naher STT-Vergleichspunkt. *(Hinweis: Auf der fairen Metrik `ttfp` ist Azure
+  **nicht** langsamer als das US-Deepgram — gleichauf. Die im Dump beobachtete „STT-Langsamkeit" war
+  Bulk-Verarbeitung, kein Engine-/Geo-Nachteil; der C1-Kernbeleg ruht auf der LLM-Edge-Achse, nicht auf STT —
+  s. `messprotokoll.md` → „STT-Primärmetrik" + „Korrekte C1-Logik".)*
 
 ### LLM — OpenAI, Groq, Mistral
 - **OpenAI (gpt-4o-mini):** US-GPU-Referenz, der De-facto-Standard.
@@ -60,9 +61,10 @@ Pro Kategorie **3 Anbieter** → **9 Mess-Endpunkte** insgesamt.
 
 ### TTS — Deepgram, OpenAI, Azure
 - **Deepgram (Aura-2)** & **OpenAI (tts-1):** US-Streaming-TTS.
-- **Azure (Standard Neural):** Liefert die **Inversion** zur STT-Beobachtung — derselbe Azure (gleiche
-  ~11 ms RTT), der bei STT auf `ttft` verliert, **gewinnt** bei TTS (`ttfa`). Da die Geografie konstant
-  ist, kann die Differenz nicht Geografie sein → **Backend**. Das ist der Kern-Beleg der These.
+- **Azure (Standard Neural):** **Schnellstes TTS** (`ttfa` ~96 ms) trotz US-Konkurrenz (OpenAI ~917 ms) —
+  empirisch sehr robust. Das ist der **zweite** C1-Beleg (Kernbeleg ist die LLM-Edge-Achse, s. `messprotokoll.md`).
+  Die within-Azure-Gegenüberstellung STT (~1 s bis erstes Wort) vs. TTS (~96 ms) bleibt höchstens eine
+  **Workload-Beobachtung** (5-s-Audio rein vs. Kurzsatz raus), **nicht** „reine Engine-Geschwindigkeit".
 
 ## Warum überwiegend US-Anbieter? (Das ist Teil des Befundes, kein Mangel)
 

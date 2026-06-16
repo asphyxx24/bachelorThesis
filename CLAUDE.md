@@ -29,11 +29,12 @@ In beide Richtungen beantwortbar — „Netzwerk erklärt *weniger* als die Engi
 ## Contribution
 
 - **C1 (Kern) — „Engine schlägt Geografie":** Aus EU-Sicht dominiert die Backend-Engine, nicht die
-  Netzwerknähe. Schärfster Beleg: **STT/TTS-Inversion** desselben Providers auf `ttft`/`ttfa` (Azure mit
-  **gleicher** ~11 ms RTT verliert bei STT, gewinnt bei TTS → Geografie konstant gehalten, Differenz =
-  Backend). **`ttfp` ist das Diagnose-Werkzeug**, das Azures STT-Nachteil als Endpointing-Stille-Warten
-  zerlegt (`ttft − ttfp`) — es **erklärt** die Inversion, ist **kein** cross-provider Tempo-Ranking
-  (das enthielte RTT/Geografie). S. `setup/messprotokoll.md` → „STT-Primärmetrik".
+  Netzwerknähe. **Schärfster Beleg — LLM bei identischer Edge-RTT:** OpenAI/Groq/Mistral terminieren *alle*
+  bei Cloudflare Frankfurt (~1 ms RTT, ASN 13335), doch LLM-`ttft` streut **60 → 263 → 436 ms (7×)** —
+  gleiches Netz, Differenz **muss** Backend sein. **Zweiter Beleg:** Azure **schnellstes TTS** (`ttfa` ~96 ms)
+  trotz US-Konkurrenz. **STT (ehrlich):** auf der fairen Metrik `ttfp` ist Azure **nicht** langsamster — die
+  früher behauptete „Azure-STT-Endpointing-Inversion" war ein **Dump-Artefakt (Bulk-Compute)** und wird
+  **nicht** als Engine-Beleg geführt. S. `setup/messprotokoll.md` → „STT-Primärmetrik".
 - **C2 — Drei-Schichten-Methodik + Cloudflare-/Edge-Grenze.**
 - **C3 (Methoden-Baustein) — Ping-basierte connect-Klassen-Heuristik** (`r` bewusst **nicht** als Gütemaß).
 
@@ -74,7 +75,7 @@ In beide Richtungen beantwortbar — „Netzwerk erklärt *weniger* als die Engi
 
 - **STT-Primärmetrik: `ttfp`** (Time-to-first-**Partial**, erstes Live-Wort) ab **erstem Audio-Chunk**
   (nach Connect) → **connect-EXKLUSIV**, endpointing-frei. Audio wird **1×-realtime** gestreamt (Pacing),
-  sonst liefert Deepgram kein Interim. `ttft` (erstes Final) bleibt **sekundär** (enthält Endpointing).
+  sonst liefert Deepgram kein Interim. `ttft` (Stream-Ende-Final, deepgram=letztes Segment) bleibt **sekundär**.
   User-perceived STT-Cold-Start = `connect_total + stt_ttfp`. Details: `setup/messprotokoll.md`.
 - **LLM/TTS:** `ttft`/`ttfa` ab **Request-Absenden** über frische Verbindung → **connect-INKLUSIV**.
 - **E2E** zählt connect **nicht doppelt**: STT trägt connect + ttfp, LLM/TTS tragen nur ttft/ttfa.

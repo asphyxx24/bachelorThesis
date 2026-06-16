@@ -11,16 +11,18 @@ STT-Metrik-Asymmetrie (s. messprotokoll.md). PRIMÄRMETRIK ist ttfp (First-Parti
   -> Zeit bis zum ERSTEN Live-Wort (Interim/Partial/Hypothese). Endpointing-frei (das erste Live-Wort
   kommt VOR der Stille-Wartezeit). Enthält bauartbedingt ~1 In-Band-RTT (Audio hin + Partial zurück) ->
   "Netz-Roundtrip + Engine-Reaktion", NICHT reine Rechenzeit; Netz-Anteil via connect/RTT abschätzbar.
-  ttft (final) bleibt SEKUNDÄR (ehrlich beschriftet): enthält bei manchen Providern (v.a. Azure) eine
-  feste Stille-Wartezeit (Endpointing), die wir über die rohe WS NICHT abschalten können
-  (s. AUDIT_stt_methodik_2026-06-16.md). Beide connect-EXKLUSIV (Uhr ab erstem Audio-Chunk).
+  ttft (Stream-Ende-Final) bleibt SEKUNDÄR: Zeit bis zum letzten finalisierten Segment (deepgram: letztes
+  is_final, damit cross-provider vergleichbar mit Azure/Rev.ai). Das kleine Post-Audio-Warten (ttft −
+  audio_upload, paced ~98 ms bei Azure) ist KEIN großer fester Stille-Timer — die im Dump beobachteten
+  ~1722 ms waren Bulk-Verarbeitung, kein Endpointing-Fenster (s. AUDIT_stt_methodik_2026-06-16.md).
+  Beide connect-EXKLUSIV (Uhr ab erstem Audio-Chunk).
 
   Zeitachse je Call (alles als ms, ein Nullpunkt t0 = vor dem Connect):
     ws_connect_ms   = TCP+TLS+WS-Upgrade
     session_init_ms = ws_done -> erster Audio-Chunk (Rev.ai wartet hier auf "connected"-Msg!)
     audio_upload_ms = erster -> letzter Chunk gesendet (~Audiodauer, da 1x-realtime getaktet)
-    ttfp_ms         = erster Chunk -> erstes LIVE-Wort        (PRIMÄR, endpointing-frei)
-    ttft_ms         = erster Chunk -> erstes finales Transkript (SEKUNDÄR, enthält Endpointing)
+    ttfp_ms         = erster Chunk -> erstes LIVE-Wort         (PRIMÄR, endpointing-frei)
+    ttft_ms         = erster Chunk -> Stream-Ende-Final        (SEKUNDÄR; deepgram=letztes Segment-Final)
     total_ms        = t0 -> Final empfangen (connect-INKLUSIV, OHNE WS-Close)
 
 Drei Protokolle (rohe WS, kein SDK), je getaktetes Senden + paralleler Empfang:
@@ -30,7 +32,8 @@ Drei Protokolle (rohe WS, kein SDK), je getaktetes Senden + paralleler Empfang:
 
 Gespeichert (Lehren A5/A14): voller Transkript-STRING (für WER), resolved_ip, model_requested, Fehler.
 Erfolg = nicht-leeres Final-Transkript (A7).
-Hinweis: Die STT-Hosts sind IPv4-only (keine AAAA) -> kein IPv6-Drift, kein Forcing nötig.
+Hinweis: Die STT-Hosts liefern aktuell nur IPv4 — zur Konsistenz mit LLM/TTS (die IPv4 erzwingen)
+wird IPv4 hier dennoch hart gepinnt (family=AF_INET), falls sich die DNS-Antwort mal ändert.
 
 Ausführen (vom Repo-Wurzelverzeichnis, braucht Keys in .env + data/inputs/sample.wav):
   .venv/bin/python measurements/layer3/stt.py
@@ -39,6 +42,7 @@ Ausführen (vom Repo-Wurzelverzeichnis, braucht Keys in .env + data/inputs/sampl
 import asyncio
 import json
 import os
+import socket
 import ssl
 import struct
 import time
@@ -124,7 +128,8 @@ def _azure_text(raw):
 # Rückgabe je Funktion: dict mit
 #   t_first   = erster Audio-Chunk gesendet        t_upload = letzter Chunk + End-Signal gesendet (~Audiodauer)
 #   t_partial = erstes LIVE-Wort (Interim) -> ttfp (endpointing-frei, s. messprotokoll.md)
-#   t_final   = erstes finales Transkript  -> ttft (enthält Provider-Stille-Warten, sekundär)
+#   t_final   = STREAM-ENDE-Final -> ttft (sekundär; deepgram: letztes Segment-Final, damit cross-provider
+#               vergleichbar mit Azure/Rev.ai. Unter Pacing ~am Audioende; KEIN Stille-Timer, s. messprotokoll.md)
 #   transcript, ttfp_is_final/ttfp_text = Audit: WAS hat ttfp ausgelöst (Interim=False erwartet)
 def _io_result(t_first, t_partial, t_upload, t_final, transcript, ttfp_is_final, ttfp_text):
     return {"t_first": t_first, "t_partial": t_partial, "t_upload": t_upload, "t_final": t_final,
@@ -157,9 +162,8 @@ async def _io_deepgram(ws, pcm):
                 if text and t_partial is None:                 # erstes Live-Wort (Interim ODER Final)
                     t_partial, p_final, p_text = time.perf_counter(), bool(msg.get("is_final")), text
                 if msg.get("is_final") and text:
-                    if t_final is None:
-                        t_final = time.perf_counter()
-                    segs.append(text)
+                    t_final = time.perf_counter()   # bei JEDEM Segment-Final neu -> letzter = Stream-Ende-Final
+                    segs.append(text)               # (cross-provider vergleichbar mit Azure/Rev.ai-Final)
             elif mtype == "Metadata":          # nach allen Finals -> sauberer Abbruch (kein Hänger)
                 break
         return t_partial, t_final, " ".join(segs), p_final, p_text
@@ -240,7 +244,8 @@ async def _run(name, ep, key, pcm):
     try:
         async with ws_connect(url, additional_headers=headers, ssl=_SSL,
                               open_timeout=CONNECT_TIMEOUT_S, close_timeout=2,
-                              ping_interval=None) as ws:    # kein Keepalive-Ping auf der Mess-Verbindung
+                              ping_interval=None,           # kein Keepalive-Ping auf der Mess-Verbindung
+                              family=socket.AF_INET) as ws:  # IPv4 hart pinnen (Konsistenz mit LLM/TTS)
             t_ws_done = time.perf_counter()
             out["ws_connect_ms"] = round((t_ws_done - t0) * 1000, 2)
             out["resolved_ip"] = _peer_ip(ws)

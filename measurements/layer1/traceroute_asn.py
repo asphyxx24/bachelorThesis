@@ -3,13 +3,14 @@ Layer 1 — Traceroute + AS-Pfad (Edge-Klassifikator, Bedingung c).
 
 Was es misst:
   Den Netzwerk-Pfad (Hop für Hop) zu jedem Host und das Netz/AS je Hop. Zweck:
-  zeigt, über welche Provider die Route läuft und ob sie an einem CDN-Edge
-  "abbricht" (Bedingung c des Edge-/Host-Klassifikators, s. messprotokoll.md, A3).
+  Bedingung (c) des Edge-/Host-Klassifikators (s. messprotokoll.md, A3). Edge-Indiz ist
+  NICHT "Route bricht ab", sondern: die Ziel-IP wird erreicht (`reached_dest=True`) und der
+  letzte antwortende Hop liegt SELBST im CDN-AS (AS13335) bei ~1 ms — der Edge IST der Endpunkt.
 
-Konsistenz: Wir lösen den Host einmal zur IPv4 auf (wie tcp_ping.py) und tracen
-  GENAU diese IP -> selbe IP wie tcp_ping/asn_lookup, reproduzierbar. `reached_dest`
-  sagt, ob der letzte antwortende Hop die Ziel-IP war (Route bis zum Backend) oder
-  vorher abbrach (Edge-Indiz).
+Zur IP-Auflösung (ehrlich): Jedes L1-Skript löst SELBST auf; bei Round-Robin-Hosts kann der Trace
+  eine andere Pool-IP treffen als tcp_ping/asn_lookup. Unkritisch (alle Pool-IPs je Host gleiche
+  ASN/RTT-Klasse). Die getracte IP steht je Record drin. `reached_dest` = ob der letzte
+  antwortende Hop die Ziel-IP war.
 
 Werkzeug: `traceroute` (auf macOS vorhanden; auf frischem Ubuntu/EC2 nachinstallieren:
   sudo apt-get install traceroute). Fehlt es, crasht das Skript NICHT.

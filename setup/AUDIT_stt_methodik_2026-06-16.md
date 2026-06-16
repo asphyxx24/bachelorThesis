@@ -2,7 +2,19 @@
 
 # Entscheidungs-Bericht: Faire STT-Latenzmessung (Deepgram Nova-3 / Rev.ai / Azure Speech)
 
-**Kernproblem in einem Satz:** Die aktuelle STT-Metrik `ttft = t_first_final − t_first_chunk` misst nicht die Engine-Geschwindigkeit, sondern *Engine + die anbieterspezifische Stille-/Endpointing-Politik* — und der Code löst die Finalisierung bei den drei Anbietern *ungleich* aus. Beides zusammen untergräbt genau die Hälfte des Kernbefunds C1 (STT/TTS-Inversion bei Azure).
+> ⚠️ **KORREKTUR 2026-06-16 (gegen paced-Echtdaten — gilt vor dem ganzen Bericht unten):**
+> Die unten getroffene Lesart „Azure-`ttft`-Konstanz (1722 ms) = fester Stille-Timer/Endpointing-Fenster"
+> ist durch die spätere **paced-Stichprobe FALSIFIZIERT.** Unter 1×-Realtime-Pacing finalisiert Azure nur
+> **~98 ms nach dem letzten Audiobyte** (nicht 1722 ms). Die 1722 ms im *Dump* waren **Bulk-Verarbeitung**
+> der auf einmal reingeworfenen 4,84-s-Äußerung (`audio_upload`≈0,8 ms im Dump); die Konstanz (CV 0,9 %)
+> belegt nur deterministisches Verarbeitungsverhalten bei identischem Input, **keinen** großen Stille-Timer.
+> **Folgen:** (a) `ttft − ttfp` ist KEIN „Stille-Warten"-Maß; (b) auf der fairen Metrik `ttfp` ist Azure
+> **nicht** langsamster STT (gleichauf mit Deepgram); (c) der **STT-Weg trägt C1 nicht** — der Kernbeleg für
+> „Engine schlägt Geografie" ist die **LLM-Edge-Achse** (s. `messprotokoll.md` → „Korrekte C1-Logik" +
+> Status-Block am Ende dieses Dokuments). Die Recherche unten (welche Metrik fair ist → `ttfp`+Pacing) bleibt
+> gültig; nur die kausale Endpointing-These ist überholt.
+
+**Kernproblem in einem Satz (Stand der Recherche, s. Korrektur oben):** Die STT-Metrik `ttft = t_first_final − t_first_chunk` misst nicht reine Engine-Geschwindigkeit, sondern *Engine + anbieterspezifische Finalisierungs-Politik* — und der Code löste die Finalisierung bei den drei Anbietern *ungleich* aus. Deshalb Wechsel auf `ttfp`.
 
 **Was die echten Daten zeigen (aus `/tmp/campaign_summary.txt`):**
 - Azure STT: `ttft` p50 = 1722 ms, p90 = 1731, p99 = 1741 → praktisch konstant (Spannweite < 30 ms über 400 Calls). Das ist das Signaturmuster eines **festen serverseitigen Stille-Timeouts**, nicht variabler Rechenzeit.
@@ -110,37 +122,32 @@ Warum das trägt:
 
 ---
 
-## Status 2026-06-16 — implementiert, adversarisch geprüft, korrigiert
+## Status 2026-06-16 — implementiert, ZWEIMAL geprüft, gegen Echtdaten korrigiert
 
-Schritte 1–3 erledigt; danach **ultracode-Gegenprüfung** (23 Befunde, alle bestätigt) → zwei kritische
-Korrekturen eingearbeitet. Maßgeblich ist die **korrigierte** Fassung unten (sie ersetzt die erste
-„Azure ist der schnellste STT"-Lesart, die **falsch** war).
+`ttfp` + Realtime-Pacing implementiert (Code: `stt.py` `_paced_send` + `asyncio.gather`). Danach **zwei**
+ultracode-Durchläufe (23- + 62-Befund-Audit) → maßgeblich ist diese Fassung. Was gilt:
 
-**Korrektur 1 — Realtime-Pacing statt Dump.** Beim Audio-Dump sendet Deepgram vor dem Final **kein** Interim
-→ Deepgrams `ttfp` wäre sein **Final** (anderer Meilenstein als Azures/Rev.ais Teilwort) → der Cross-Provider-
-Vergleich wäre apples-to-oranges und **gegen Deepgram** verzerrt. **Fix:** Audio bei allen drei im
-**1×-Realtime-Takt** senden, Senden/Empfangen parallel (`asyncio.gather`). Dann liefern **alle** ein echtes
-erstes Interim (verifiziert: `ttfp_is_final=False` bei allen). Code: `stt.py` `_paced_send` + `CHUNK_SECONDS`.
+**Solide & verifiziert:**
+- **Realtime-Pacing** ist nötig (sonst sendet Deepgram beim Dump kein Interim) und korrekt: paralleler Empfang
+  stempelt `ttfp` mitten im Stream (ttfp~1045 ms ≪ audio_upload~4880 ms), `ttfp_is_final=False` bei 25/25 aller
+  drei → erstes Wort ist überall ein echtes Interim.
+- `ttft` jetzt = **Stream-Ende-Final** (Deepgram: *letztes* `is_final`-Segment) → cross-provider vergleichbar.
 
-**Korrektur 2 — C1 NICHT über ein Cross-Provider-`ttfp`-Ranking.** `ttfp` enthält ~1 RTT; auf der STT-Achse
-sitzt Azure in-Region (~11 ms) vs. US (~138 ms) → ein nackter `ttfp`-Rang bevorzugt **Geografie**, nicht Engine.
-„Azure ist der schnellste STT" als Engine-Aussage ist daher **unzulässig** (Eigentor: stützt eher „Geografie
-schlägt Engine"). **Korrekte C1-Logik:** Die **Inversion *innerhalb* von Azure** (gleiche RTT: STT-`ttft`
-langsam, TTS-`ttfa` schnell → Differenz **muss** Backend sein) bleibt der Kern-Beleg; `ttfp` ist das
-**Diagnose-Werkzeug**, das Azures STT-Langsamkeit als Endpointing **zerlegt** (`ttft − ttfp`), **nicht** ein
-Tempo-Ranking. → konsistent mit `CLAUDE.md` C1; Inversion bleibt, wird durch `ttfp` sauberer erklärt.
+**Korrigiert (2. Audit, gegen paced-Echtdaten — s. Banner ganz oben):**
+- Die „1722 ms = fester Stille-Timer/Endpointing"-These ist **falsch** (Dump-Bulk-Compute; paced finalisiert
+  Azure ~98 ms nach Audioende). `ttft − ttfp` ist **kein** Stille-Maß.
+- **C1 ruht NICHT auf STT.** Auf `ttfp` ist Azure nicht langsamster (gleichauf mit Deepgram, ~1045 ms; RTT
+  überdeckt vom Pacing-Floor). Kernbeleg für „Engine schlägt Geografie" ist die **LLM-Edge-Achse** (OpenAI/
+  Groq/Mistral alle ~1 ms Cloudflare-RTT, aber `ttft` 60→263→436 ms = 7×), zweiter Beleg Azure-schnellstes-TTS.
+- `ttfp` selbst ist ein **„Engine reagiert zügig"-Indikator**, kein feines Engine-Ranking (Pacing-Floor
+  dominiert den Absolutwert; nur große Differenzen wie Rev.ai +450 ms sind Signal = Emissions-Kadenz).
 
-**Smoke-Test (paced, n=1/Provider, Mac — nur Illustration, nicht Vantage-Point):**
+**Belegmessung (paced, EC2-Vantage-Point, n=25/Provider, 2026-06-16):**
 
-| Provider | RTT (FRA) | `ttfp` (erstes Interim) | `ttft` (final, paced) | erstes Wort (`ttfp_is_final`) |
-|----------|-----------|-------------------------|-----------------------|-------------------------------|
-| Azure (EU) | ~11 ms | ~1093 ms | ~5074 ms | „good" (False) |
-| Deepgram (US) | ~138 ms | ~1045 ms | ~4812 ms | „Good" (False) |
-| Rev.ai (US) | ~138 ms | ~1563 ms | ~5264 ms | „good" (False) |
+| Provider | RTT (FRA) | `ttfp` (primär) | `ttft` (Stream-Ende) | `ttft − audio_upload` | `ttfp_is_final` |
+|----------|-----------|-----------------|----------------------|-----------------------|-----------------|
+| Azure (EU) | ~11 ms | ~1045 ms (CV 0,2 %) | ~4979 ms | ~98 ms | 0/25 |
+| Deepgram (US) | ~142 ms | ~1046 ms (CV 1,9 %) | ~4783 ms | ~−112 ms | 0/25 |
+| Rev.ai (US) | ~140 ms | ~1494 ms (CV 0,3 %) | ~5180 ms | ~302 ms | 0/25 |
 
-> Endpointing-Wartezeit wird in der Auswertung als `ttft − audio_upload_ms` isoliert (alle Rohzeiten je Call
-> gespeichert: `ttfp_ms`, `ttft_ms`, `audio_upload_ms`, `ttfp_is_final`, `ttfp_text`). Der `ttft`-Konstanz-
-> Beleg (Pilot: CV 0,9 %) wird als „**stark konsistent mit festem Timer**" formuliert (nicht „Fingerabdruck"),
-> verstärkt durch Deepgrams CV ~104 % bei identischem Input → Konstanz ist provider-spezifisch.
-
-**Offen:** Schritt 4 (STT-Kampagne neu fahren, n=100, paced), Schritt 5 (optional Azure-Timeout-Variationsserie C).
+**Offen:** Schritt 4 (volle STT-Kampagne läuft seit 16.6., paced), Schritt 5 (optional Azure-Timeout-Variationsserie C — nur falls man die Finalisierungs-Politik separat belegen will; für C1 nicht mehr nötig).

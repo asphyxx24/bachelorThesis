@@ -8,9 +8,12 @@ Was es misst:
   Manche Hosts (z.B. rev.ai) blocken ICMP — die werden sauber als "geblockt"
   markiert, nicht als Crash.
 
-Damit der Cross-Check fair ist:
-  Wir lösen den Host EINMAL selbst zur IPv4 auf (wie tcp_ping.py) und pingen
-  diese IP — so messen beide Layer garantiert dieselbe IP (wichtig bei Round-Robin).
+Zur IP-Auflösung (ehrlich):
+  Jedes L1-Skript löst den Host SELBST auf (eigenes gethostbyname). Bei DNS-Round-Robin-Hosts
+  (deepgram, rev.ai, openai, groq) kann ICMP damit eine ANDERE Pool-IP treffen als tcp_ping.
+  Unkritisch, weil alle Pool-IPs je Host in derselben ASN + RTT-Klasse liegen (per asn_lookup
+  verifiziert) → Cross-Check und Edge/Host-Klassifikation kippen dadurch NICHT. Die tatsächlich
+  gepingte IP wird je Record als `resolved_ip` mitgeloggt.
 
 Warum subprocess-Timeout statt `-W`:
   `-W` bedeutet unter Linux Sekunden, unter macOS Millisekunden (A9). Statt uns

@@ -71,8 +71,10 @@ Alle drei sprechen das **OpenAI-kompatible** `/chat/completions`-Schema, `stream
 ### OpenAI (tts-1)
 - **URL:** `https://api.openai.com/v1/audio/speech`
 - **Body (gepinnt, A8):** `{"model":"tts-1","input":"<fester Text>","voice":"alloy","response_format":"mp3"}`
-  — `response_format` **explizit `mp3`** (= gleiches Format wie Deepgram/Azure → fairer Byte-/Latenz-Vergleich;
-  Default wäre sonst implizit und format-abhängig).
+  — `response_format` **explizit `mp3`** (gleicher **Container** wie Deepgram/Azure). **ABER nur der Container
+  ist gepinnt, nicht die Bitrate** (Azure 48 kbit/s, Deepgram/OpenAI Provider-Default → `audio_bytes` ~3,6×
+  verschieden). Daher: **`ttfa` ist fair** (erstes Audio-Byte, mengen-unabhängig), `total_ms`/`audio_bytes`
+  cross-provider **nicht**; `audio_bytes` nur Erfolgs-Gate. Bitrate ist nicht bei allen Anbietern angleichbar.
 - **Auth:** Header `Authorization: Bearer <API_KEY>`
 - **Host:** `api.openai.com`
 

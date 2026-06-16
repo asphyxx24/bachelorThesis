@@ -3,14 +3,17 @@
 
 # Methodik-Bericht — Bachelorarbeit (Layer-3-Messkampagne, Stand 4 Slots)
 
-> **Bearbeitungsstatus (2026-06-16, nach diesem Bericht):** Befunde umgesetzt —
-> **STT-Endpointing/Flush-Asymmetrie + „Dump"** (das Kernrisiko, L3 + C1-STT): gelöst durch **`ttfp`
-> (Time-to-first-Partial) als Primärmetrik + 1×-Realtime-Pacing aller drei STT** (statt nur „etikettieren");
-> separat dokumentiert in **`AUDIT_stt_methodik_2026-06-16.md`** + `messprotokoll.md` → „STT-Primärmetrik".
-> **F2** `output_tokens` (OpenAI `stream_options`) ✓ · **F3** Erfolgs-Gate inhaltlich statt `LLM_MIN_CHUNKS` ✓ ·
-> **F5** Commit (git_dirty) erfolgt mit dieser Änderung. C1 entsprechend justiert (Inversion bleibt Kern,
-> auf `ttft`/`ttfa`; `ttfp` zerlegt den STT-Anteil als Backend-Politik — **kein** cross-provider Tempo-Rang).
-> Die untenstehenden Befund-Texte sind der **Original-Snapshot** des Audits (nicht nachträglich umgeschrieben).
+> **Bearbeitungsstatus (2026-06-16, nach ZWEI Audit-Runden):** Umgesetzt — STT-`ttft`-Confound: `ttfp`
+> (Time-to-first-Partial) + 1×-Realtime-Pacing aller drei STT; `ttft` jetzt = Stream-Ende-Final. **F2**
+> `output_tokens` (OpenAI `stream_options`) ✓ live verifiziert · **F3** Erfolg inhaltlich statt `LLM_MIN_CHUNKS` ✓ ·
+> **F5** sauberer Tree (git_dirty=False auf Wertungsdaten).
+> ⚠️ **WICHTIGE KORREKTUR durch den 2. Audit (datengestützt, gegen paced-Echtdaten):** Die unten in der
+> Exec-Summary stehende These „Azure-`ttft`-Konstanz 1722 ms = fester Stille-Timer/Endpointing" ist
+> **falsifiziert** — das war Dump-Bulk-Compute; paced finalisiert Azure ~98 ms nach Audioende. **Der STT-Weg
+> trägt C1 NICHT** (auf `ttfp` ist Azure nicht langsamster). Kernbeleg „Engine schlägt Geografie" ist die
+> **LLM-Edge-Achse** (OpenAI/Groq/Mistral alle ~1 ms Cloudflare-RTT, aber `ttft` 60→263→436 ms = 7×), zweiter
+> Beleg Azure-schnellstes-TTS. Maßgeblich: `messprotokoll.md` → „Korrekte C1-Logik" + `AUDIT_stt_methodik` (Banner oben).
+> Die untenstehenden Befund-Texte sind der **Original-Snapshot** des 1. Audits (Endpointing-Lesart dort überholt).
 
 ## 1) Executive Summary
 

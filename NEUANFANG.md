@@ -33,10 +33,11 @@ Diese drei Dinge sind unabhängig davon, wie die Zahlen erhoben wurden — sie w
 ### 2.1 Der Reframe — „Engine schlägt Geografie" (die Contribution)
 
 - **Kernbefund (C1):** Aus EU-Sicht dominiert die **Backend-Engine** des Providers, **nicht** die
-  Netzwerknähe. Schärfster Beleg: **STT/TTS-Inversion desselben Providers** auf `ttft`/`ttfa` (Azure mit
-  gleicher ~11 ms RTT verliert bei STT, gewinnt bei TTS → Geografie konstant → Differenz = Backend).
-  `ttfp` zerlegt Azures STT-Nachteil als Endpointing-Warten (`ttft − ttfp`) — Diagnose, kein cross-provider
-  Tempo-Ranking (das enthielte RTT). S. `setup/messprotokoll.md` → „STT-Primärmetrik".
+  Netzwerknähe. **Schärfster Beleg — LLM bei identischer Edge-RTT:** OpenAI/Groq/Mistral terminieren alle
+  bei Cloudflare Frankfurt (~1 ms RTT), aber LLM-`ttft` streut **60 → 263 → 436 ms (7×)** → gleiches Netz,
+  Differenz = Backend. Zweiter Beleg: Azure **schnellstes TTS** trotz US-Konkurrenz. STT ehrlich: auf der
+  fairen Metrik `ttfp` ist Azure **nicht** langsamster — die alte „Azure-STT-Endpointing-Inversion" war ein
+  Dump-Artefakt (Bulk-Compute), kein Engine-Beleg. S. `setup/messprotokoll.md` → „STT-Primärmetrik".
 - **C2 — Drei-Schichten-Methodik + Cloudflare-/Edge-Grenze** (bei einem Teil der Provider terminiert
   die Verbindung an einem Edge-Knoten, nicht am US-Server).
 - **C3 (Methoden-Baustein, NICHT Headline):** Ping-basierte connect-Klassen-Heuristik. `r` bewusst
