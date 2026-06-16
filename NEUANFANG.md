@@ -187,9 +187,14 @@ Setup besser können muss**. Die Punkte sind hier als Anforderungen umformuliert
   deployed, **cron** 8 UTC-Slots × n=100, erster Slot **2026-06-15 21:00 UTC**. Pilot bestätigt die These
   live (FRA-RTTs ~1 ms Cloudflare / ~11 ms Azure / ~138 ms US, STT/TTS-Inversion, A1/A6). Doku:
   **`setup/deployment.md`** + Layer-3-Tabelle in `mess_kommandos.md`. Erinnerung: [[l3-campaign-deployed]].
-- **⭐ HIER WEITERMACHEN (morgen):** **Daten-Validierung per ultracode** gegen echte Slot-Daten
-  (Messfehler/Methodik prüfen, Diurnal). Offene Aktionen: nach ~7 Tagen Instanz stoppen; **Layer 2 (PCAP)**
-  nachholen; WER/sample.wav-Provenienz (A14). (Audit-Block B/C/D beim Methodik-Kapitel einarbeiten.)
+- **2026-06-16:** ✅ **Methodik 3× ultracode-auditiert (23 → 62 → 85 Befunde) + alle Fixes umgesetzt; Code `f9e6dc8`.**
+  - **STT auf `ttfp` + 1×-Realtime-Pacing** (paralleler Empfang via `asyncio.gather`); `ttft`=Stream-Ende-Final sekundär. **LLM F2** (`output_tokens`) **+ F3** (Erfolg inhaltlich). IPv4 bei STT gepinnt.
+  - **C1 datengestützt neu verankert:** Kernbeleg = **LLM @ identischer Edge-RTT** (75/268/476 ms ≈ 6,4× bei ~1 ms Cloudflare, per-IP invariant, Geografie invertiert); 2. Beleg Azure-schnellstes-TTS; STT ehrlich (kein Engine-Beleg). Die alte „Azure-STT-Endpointing/1722 ms"-These war Dump-Bulk-Compute → **falsch, gestrichen**.
+  - **LAYER 2 ECHT gebaut + geeicht** (`measurements/layer2/`): App-`tcp_handshake` = Wire-SYN→SYN-ACK auf **±0,1 ms** (Azure 11 ms / Deepgram 139 ms, je N=30) → Layer-3 paket-validiert (C2). Beantwortet Wählischs Datenvertrauen mit Daten.
+  - **Deepgram-ASN korrigiert** (6 IPs/2 ASNs/2 RTT-Klassen). Voll-Urteil: `data/audit_20260616/VERDICT.md`.
+- **⭐ HIER WEITERMACHEN (morgen): siehe `HANDOFF.md`** — Campaign-Check, **mehrere Arbeitstitel ausarbeiten**,
+  Datenaufbereitung, **Statistik gemeinsam gegenprüfen** (nächste ungeprüfte Fehlerfläche), erste Interpretation,
+  LaTeX-Prof-Folien. Kampagne läuft bis ~23.6. (dann Instanz stoppen).
 
 ## 7. Externe Aufräum-Erinnerungen (aus altem HANDOFF, weiterhin offen)
 

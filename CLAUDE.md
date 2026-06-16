@@ -85,7 +85,9 @@ In beide Richtungen beantwortbar — „Netzwerk erklärt *weniger* als die Engi
 
 | Datei | Inhalt |
 |-------|--------|
+| `HANDOFF.md` | **⭐ Hier einsteigen** — aktueller Stand + To-dos (Campaign-Check, Arbeitstitel, Statistik, Folien) |
 | `NEUANFANG.md` | **Lebende Referenz** — Warum/Was/Reihenfolge + aktueller Status |
+| `data/audit_20260616/VERDICT.md` | Voll-Audit-Urteil (3 Runden) + Echtdaten-Belege |
 | `setup/anbieter_auswahl.md` | Welche Anbieter je Dienst, mit Begründung |
 | `setup/api_endpunkte.md` | Verifizierte Hosts, URLs, Pfade, Auth-Methoden |
 | `setup/messprotokoll.md` | **Methodik** — alle 3 Layer, Metriken, Kampagne, Fehlerbehandlung |
