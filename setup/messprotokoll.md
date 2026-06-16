@@ -42,8 +42,9 @@
   zum **Host**.
 - **Layer 2 (Paketaufzeichnung):** tcpdump/PCAP → belegt die Protokoll-Struktur (Handshake-Abfolge).
 - **Layer 3 (API-Latenz):** Cold-Start — Verbindungsaufbau in **atomaren Submetriken**
-  (`tcp_handshake_ms`, `tls_handshake_ms`, `ws_upgrade_ms`) + `ttft_ms`/`ttfa_ms` + `total_ms` → misst
-  die **Engine-Verarbeitung** über die volle **URL**. *(Sammel-`connect_ms` abgeschafft — s. Layer-3-Abschnitt.)*
+  (`tcp_handshake_ms`, `tls_handshake_ms`, `ws_upgrade_ms`) + Erste-Ausgabe-Metrik + `total_ms` → misst
+  die **Engine-Verarbeitung** über die volle **URL**. Erste-Ausgabe-Metrik: STT **`ttfp`** (Time-to-first-
+  Partial, primär) bzw. `ttft`/`ttfa` (LLM/TTS). *(Sammel-`connect_ms` abgeschafft — s. Layer-3-Abschnitt.)*
 
 ---
 
@@ -263,27 +264,30 @@ Token/Audio?** Das ist **nicht** über alle Kategorien gleich — und das wird h
 
 | Kategorie | Uhr startet bei | → connect | Erste-Token-Metrik |
 |-----------|-----------------|-----------|--------------------|
-| **STT** | **erstem Audio-Chunk** (nach dem Connect) | **exklusiv** | `stt_ttft_ms` = `t_first_final − t_first_chunk` |
+| **STT** | **erstem Audio-Chunk** (nach dem Connect) | **exklusiv** | **`stt_ttfp_ms` = `t_first_partial − t_first_chunk` (PRIMÄR)** · `stt_ttft_ms` = `t_first_final − t_first_chunk` (sekundär) |
 | **LLM** | **Absenden des Requests** (frische Verbindung) | **inklusiv** | `llm_ttft_ms` = `t_first_token − t_request` |
 | **TTS** | **Absenden des Requests** (frische Verbindung) | **inklusiv** | `tts_ttfa_ms` = `t_first_audio − t_request` |
 
-- **STT misst die reine Engine-Verarbeitung** (Connect ist abgezogen, separat in den Submetriken).
-  → User-perceived STT-Cold-Start = `connect_total_ms + stt_ttft_ms` (erst in der Auswertung addiert).
+- **STT misst Netz-Roundtrip + Engine-Reaktion** (Connect ist abgezogen, separat in den Submetriken; der
+  in `ttfp` verbleibende ~1-RTT-Netzanteil ist via Layer-1-RTT herausrechenbar — keine *reine* Rechenzeit).
+  → User-perceived STT-Cold-Start bis erstes Wort = `connect_total_ms + stt_ttfp_ms` (Primär; in der
+  Auswertung addiert). Variante „bis Final" = `connect_total_ms + stt_ttft_ms` (enthält Endpointing).
 - **LLM/TTS messen connect-inklusiv** — das `ttft`/`ttfa` enthält den Verbindungsaufbau bereits.
   Die Submetriken oben werden hier als **separate Referenzmessung** (Wegwerf-Socket) zusätzlich erhoben,
   damit man den connect-Anteil bei Bedarf herausrechnen kann.
 
-> **Konsequenz für die E2E-Pipeline:** `stt_connect + stt_ttft + llm_ttft + tts_ttfa` zählt connect
-> **nicht doppelt** — STT trägt connect + ttft (ttft ist post-connect), LLM/TTS tragen nur ttft/ttfa
-> (connect bereits enthalten). Cross-Provider wird **nie** rohes connect verglichen, sondern nur der
-> user-perceived Cold-Start je Phase.
+> **Konsequenz für die E2E-Pipeline:** `stt_connect + stt_ttfp + llm_ttft + tts_ttfa` zählt connect
+> **nicht doppelt** — STT trägt connect + ttfp (post-connect, endpointing-frei), LLM/TTS tragen nur
+> ttft/ttfa (connect bereits enthalten). Cross-Provider wird **nie** rohes connect verglichen, sondern
+> nur der user-perceived Cold-Start je Phase.
 
 ### Metriken je Kategorie (vollständig)
 
 | Metrik | STT | LLM | TTS | Bedeutung |
 |--------|:---:|:---:|:---:|-----------|
 | Submetriken (s. o.) | ✓ | ✓ (Referenz) | ✓ (Referenz) | Verbindungsaufbau, atomar |
-| `*_ttft_ms` / `ttfa_ms` | ✓ | ✓ | ✓ | Zeit bis erstes Token/Audio |
+| `ttfp_ms` (Time-to-first-Partial) | ✓ (**primär**) | — | — | STT: Zeit bis erstes Live-Wort (endpointing-frei) |
+| `*_ttft_ms` / `ttfa_ms` | ✓ (sekundär) | ✓ | ✓ | Zeit bis erstes Token/Audio (STT-ttft enthält Endpointing) |
 | `total_ms` | ✓ | ✓ | ✓ | Dauer bis Antwort vollständig |
 | `ttl_ms` (Time to Last Token) | — | ✓ | — | nur LLM |
 
@@ -295,11 +299,83 @@ Token/Audio?** Das ist **nicht** über alle Kategorien gleich — und das wird h
 - **Sekundär: `total_ms`/`ttl_ms`.** Skalieren mit der Output-Menge — ein wortkarges Modell „gewinnt"
   durch Knappheit, nicht durch Geschwindigkeit. Daher nur sekundär bzw. **pro Token normalisiert**
   (`ttl_ms / output_tokens`) berichten; die rohe Output-Menge wird mitgespeichert (A10/A11).
-- **STT-`ttft` = Time-to-first-FINAL** und enthält damit das **Provider-Endpointing** (Stille-Erkennung)
-  → so etikettieren, nicht als reine „Rechenzeit" lesen.
-- **Wichtig fürs Framing:** Der Kern-Beleg (**STT/TTS-Inversion** bei Azure) ruht auf `ttft`/`ttfa` →
-  vom Output-Mengen-Confound **nicht** betroffen. Die TTS-Format-Achse ist über mp3-Pinning aller drei
-  TTS-Anbieter geschlossen (s. `api_endpunkte.md`, A8).
+- **TTS-Inversion vom Output-Mengen-Confound nicht betroffen** (`ttfa` = erstes Audio, mengen-unabhängig);
+  die TTS-Format-Achse ist über mp3-Pinning aller drei TTS-Anbieter geschlossen (s. `api_endpunkte.md`, A8).
+
+#### STT-Primärmetrik: `ttfp` (Time-to-first-PARTIAL) + Realtime-Pacing — und warum
+
+> Vollständige Anbieter-Recherche + Belege: **`AUDIT_stt_methodik_2026-06-16.md`**.
+> Diese Entscheidung wurde adversarisch gegengeprüft (ultracode, 2026-06-16, 23 Befunde) und danach
+> korrigiert — die hier stehende Fassung ist die geprüfte. Kurzfassung:
+
+**Das Problem (Endpointing-Confound).** STT-`ttft` ist *Time-to-first-FINAL* — die Zeit bis das erste
+**finalisierte** Transkript kommt. Ein Provider erklärt einen Satz aber erst dann für „final", wenn er
+**eine feste Stille-Spanne abgewartet** hat (Endpointing / Voice-Activity-Detection). Diese Wartezeit ist
+**Provider-Politik, keine Rechenzeit.** Empirisch im Pilot: Azure-`ttft` war **rock-konstant ~1722 ms**
+(CV 0,9 % über 400 Calls) — eine solche Konstanz ist **stark konsistent mit einem festen Timer** (Stille-
+Countdown), nicht mit Engine-Last. Stärkster Beleg: bei **identischem Input** schwankt Deepgram um
+**CV ~104 %** (0,4–3,7 s) — die Konstanz ist also **provider-spezifisch**, kein Input-Artefakt. `ttft`
+vergleicht damit Engine **+** unterschiedliche Stille-Politik in einer Zahl → als Engine-Maß **unfair**.
+
+**Warum wir das Endpointing NICHT angleichen können** (das wäre der naheliegende Fix gewesen):
+
+| Provider | Endpointing einstellbar? | Befund |
+|----------|--------------------------|--------|
+| Deepgram | (kein fester Timer) | finalisiert auf `CloseStream`/Stream-Ende; bei Realtime-Audio emittiert es vorher Interims |
+| Rev.ai | **nein** | kein dokumentierter Parameter auf dem Streaming-Endpunkt |
+| Azure | **nur über das SDK** | `Speech_SegmentationSilenceTimeoutMs` ist **ausschließlich** im Azure-**SDK** dokumentiert, **nicht** im rohen WebSocket-Protokoll, das diese Arbeit (bewusst, Cold-Start ohne SDK) nutzt → über unsere Verbindung **nicht erreichbar**; Azure läuft auf server-seitigen Defaults |
+
+Ein faires „alle warten gleich lang" ist damit **technisch unmöglich**, ohne das Cold-Start-/Kein-SDK-Design
+zu brechen (das wäre ein größerer Methodik-Bruch als der Confound selbst).
+
+**Die Lösung: `ttfp` (erstes Live-Wort), gemessen unter Realtime-Pacing.** Statt das Warten anzugleichen,
+**messen wir davor**: die Zeit bis zum **ersten Interim-/Partial-Transkript** (Deepgram: erstes `Results`;
+Rev.ai: erstes `partial`; Azure: erstes `speech.hypothesis`). Das erste Live-Wort kommt **vor** der Stille-
+Wartezeit → es enthält das Endpointing **per Konstruktion nicht**.
+- **Realtime-Pacing (zwingend):** Das Audio wird im **1×-Echtzeit-Takt** gestreamt (~128 ms je 4096-B-Chunk),
+  Senden und Empfangen laufen **parallel**. Grund: nur bei echtzeit-eintreffendem Audio liefern **alle drei**
+  Provider echte Interims — beim Audio-**Dump** sendet Deepgram vor dem Final keins, dann wäre Deepgrams `ttfp`
+  sein **Final** (anderer Meilenstein als Azures/Rev.ais Teilwort → unfairer Cross-Provider-Vergleich). Pacing
+  macht den Meilenstein bei allen gleich (echtes erstes Interim) **und** entspricht dem Echtzeit-Voice-Thema.
+  *(Belegt im Smoke-Test: Audit-Feld `ttfp_is_final=False` bei allen dreien — das erste Wort ist überall ein
+  echtes Interim, nicht das Final.)*
+- **Symmetrisch zu TTS-`ttfa`** (erstes Audio) und LLM-`ttft` (erstes Token): „Zeit bis erstes Ausgabe-Element".
+
+**Zwei ehrliche Grenzen von `ttfp` (explizit deklariert, nicht weggeredet):**
+1. **Endpointing-frei, aber nicht *politik*-frei.** Wann ein Provider sein erstes Interim sendet (Puffer-Tiefe,
+   Konfidenzschwelle, Batch-Granularität) ist selbst Provider-Politik. `ttfp` entfernt den *Stille-Timer*-
+   Confound, nicht jeden Politik-Anteil → **kleine** `ttfp`-Unterschiede nicht als Engine-Tempo überinterpretieren.
+2. **`ttfp` enthält ~1 In-Band-RTT** (Audio hin + Partial zurück). Es ist „**Netz-Roundtrip + Engine-Reaktion**",
+   **nicht** reine Rechenzeit. Für *Engine*-Aussagen im Cross-Provider-Vergleich ist der RTT-Anteil
+   (via Layer-1-RTT / `tcp_handshake_ms`) **herauszurechnen** — auf der STT-Achse sitzt Azure in der EU (~11 ms),
+   die US-Anbieter bei ~138 ms; ein nackter `ttfp`-Rang würde **Geografie** mit Engine verwechseln.
+
+**`ttft` (final) bleibt Sekundärmetrik — ehrlich beschriftet** („Time-to-first-final, **enthält Endpointing**").
+Die Differenz **`ttft − ttfp`** macht die Stille-Wartezeit **sichtbar/quantifizierbar** (eigenes Teilergebnis
+statt Störgröße) — das ist der eigentliche diagnostische Wert von `ttfp`.
+
+**Belegmessung (Entwicklungs-Smoke 2026-06-16, n=1/Provider — auf dem *Mac*, NICHT dem Vantage-Point EC2,
+nur zur Methoden-Illustration; verbindliche Zahlen liefert die EC2-Kampagne):**
+
+| Provider | RTT (FRA) | `ttfp` (erstes Interim) | `ttft` (final, paced) | erstes Wort |
+|----------|-----------|-------------------------|-----------------------|-------------|
+| Azure (EU, Italy North) | ~11 ms | ~1093 ms | ~5074 ms | „good" (Interim) |
+| Deepgram (US) | ~138 ms | ~1045 ms | ~4812 ms | „Good" (Interim) |
+| Rev.ai (US) | ~138 ms | ~1563 ms | ~5264 ms | „good" (Interim) |
+
+> *(Unter Pacing liegt `ttft` ~5 s, weil das Final erst nach dem ~4,84-s-Audiostrom + Stille-Warten kommt;
+> die Endpointing-Wartezeit wird in der Auswertung als `ttft − audio_upload_ms` isoliert, alle Rohzeiten je
+> Call gespeichert.)*
+
+> **Korrekte C1-Logik (geprüft — frühere „Azure ist der schnellste STT"-Formulierung war falsch):**
+> Ein Cross-Provider-`ttfp`-Rang taugt **nicht** als Engine-Beleg, weil er den RTT-/Geografie-Anteil enthält
+> (Azure ist in-Region begünstigt). Der wasserdichte Beleg für **„Engine/Backend schlägt Geografie"** ist die
+> **Inversion *innerhalb* von Azure** auf `ttft`/`ttfa`: **gleicher** Anbieter, **gleiches** RZ, **gleiche**
+> ~11 ms RTT — STT langsam (`ttft`), TTS schnell (`ttfa`). Da Geografie hier **konstant gehalten** ist, *kann*
+> die Differenz nicht Geografie sein → sie **muss** Backend sein. `ttfp` ist dabei das **Diagnose-Werkzeug**,
+> das Azures STT-Langsamkeit **zerlegt** (`ttft − ttfp` = Stille-Warten = Backend-Politik) — es **erklärt** die
+> Inversion, es **ersetzt** sie nicht durch ein cross-provider Tempo-Ranking. So bleibt C1 intakt und ist
+> sauberer belegt. (Konsistent mit `CLAUDE.md` C1; Details `AUDIT_stt_methodik_2026-06-16.md`.)
 
 ### Feste Inputs (für fairen Vergleich, identisch je Kategorie)
 

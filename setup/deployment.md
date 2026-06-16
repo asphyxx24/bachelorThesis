@@ -43,7 +43,7 @@ cron-Zeile (je Slot):
 | Azure STT/TTS | **~11–12 ms** | echtes EU-RZ (Italy North), **kein** CDN-AS |
 | Deepgram / Rev.ai | **~137–139 ms** | echtes US-Backend |
 
-- **STT/TTS-Inversion (C1):** Azure **langsamster STT** (~1721 ms) aber **schnellster TTS** (~254 ms) — gleiche Region/RTT, gegensätzliches Ergebnis → „Region erklärt Latenz" falsifiziert.
+- **STT/TTS-Inversion (C1):** Azure auf `ttft` **langsamster STT** (~1721 ms) aber `ttfa` **schnellster TTS** (~254 ms) — gleiche Region/RTT, gegensätzliches Ergebnis → „Region erklärt Latenz" falsifiziert. *(Diese STT-Zahl ist `ttft` = inkl. Endpointing-Stille-Warten; ab 2026-06-16 ist STT-Primärmetrik `ttfp` + Realtime-Pacing, das den Anteil zerlegt — s. `AUDIT_stt_methodik_2026-06-16.md`. Die 4 Pilot-/Kampagnen-Slots 15./16.6. nutzen noch den alten STT-Code → STT-seitig verworfen, Neumessung.)*
 - **A1:** auf EC2 echtes OpenSSL → **6× TLS 1.3**, rev.ai **TLS 1.2** (der eine echte 1.2-Host, kein LibreSSL-Artefakt).
 - **A6:** `cpu_steal 37→37` über den Slot → **kein** burstable-Throttling (c6i.large empirisch belegt).
 - **Rev.ai-Billing:** Wall-Clock ~2 s/Call → **15-s-Boden** greift → ~15 s/Call → **~1.400 min** für die volle Kampagne.

@@ -40,11 +40,16 @@ Pro Kategorie **3 Anbieter** → **9 Mess-Endpunkte** insgesamt.
   mit kurz-TTL-DNS-Round-Robin (rotiert `md1`/`sac1`/`sv1`, **kein** Anycast/GeoDNS) → guter
   Kontrast „weit weg, aber schnell". Die RTT-Streuung (~102–148 ms) erklärt sich aus dem je Messung
   verbundenen DC; deshalb wird die verbundene Ziel-IP pro Run mitgeloggt (s. `messprotokoll.md`, A5).
-- **Rev.ai (English):** Zweiter US-Anbieter, akzeptiert Audio-Dump (kein Echtzeit-Pacing nötig) →
-  methodisch konsistent zu Deepgram/Azure. *(Ersetzt AssemblyAI, dessen Streaming-API Echtzeit-Pacing
-  erzwang und die Methodik inkonsistent machte.)*
+- **Rev.ai (English):** Zweiter US-Anbieter, reifes English-Streaming-Modell, **roher WebSocket-Zugang
+  ohne SDK** → methodisch konsistent zu Deepgram/Azure. *(Ersetzte ursprünglich AssemblyAI, dessen API
+  Echtzeit-Pacing erzwang — damals, als alle STT gedumpt wurden, ein Inkonsistenz-Argument. **Seit
+  2026-06-16 pacen wir ohnehin alle drei STT einheitlich** (1×-Realtime, für `ttfp`-Fairness —
+  s. `messprotokoll.md`); das Pacing-Argument gegen AssemblyAI ist damit obsolet, Rev.ai bleibt wegen
+  reifem Modell, rohem WS-Zugang und bereits geladenem Guthaben.)*
 - **Azure (Standard Neural):** Der EU-nahe Gegenpol (Italy North). Liefert den schärfsten Beleg für
-  „Engine schlägt Geografie": EU-gehostet, aber bei STT **langsamer** als das US-Deepgram.
+  „Engine schlägt Geografie": EU-gehostet, aber bei STT auf `ttft` **langsamer** als das US-Deepgram —
+  was sich als **Endpointing-Stille-Warten** entpuppt (`ttft − ttfp`), nicht als Engine-/Geo-Nachteil
+  (s. `messprotokoll.md` → „STT-Primärmetrik").
 
 ### LLM — OpenAI, Groq, Mistral
 - **OpenAI (gpt-4o-mini):** US-GPU-Referenz, der De-facto-Standard.
@@ -55,8 +60,9 @@ Pro Kategorie **3 Anbieter** → **9 Mess-Endpunkte** insgesamt.
 
 ### TTS — Deepgram, OpenAI, Azure
 - **Deepgram (Aura-2)** & **OpenAI (tts-1):** US-Streaming-TTS.
-- **Azure (Standard Neural):** Liefert die **Inversion** zur STT-Beobachtung — derselbe Azure, der bei
-  STT verliert, **gewinnt** bei TTS (EU-Nähe schlägt hier durch). Das ist der Kern-Beleg der These.
+- **Azure (Standard Neural):** Liefert die **Inversion** zur STT-Beobachtung — derselbe Azure (gleiche
+  ~11 ms RTT), der bei STT auf `ttft` verliert, **gewinnt** bei TTS (`ttfa`). Da die Geografie konstant
+  ist, kann die Differenz nicht Geografie sein → **Backend**. Das ist der Kern-Beleg der These.
 
 ## Warum überwiegend US-Anbieter? (Das ist Teil des Befundes, kein Mangel)
 

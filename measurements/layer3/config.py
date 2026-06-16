@@ -33,7 +33,8 @@ MAX_TOKENS = 50
 # --- Timeouts & Erfolgskriterien (A7) ---
 CONNECT_TIMEOUT_S = 10
 RESPONSE_TIMEOUT_S = 30
-LLM_MIN_CHUNKS = 3          # >= 3 SSE-Content-Chunks (fängt Degeneration, A10)
+LLM_MIN_CHARS = 3           # F3: Erfolg inhaltlich (>=3 Zeichen Antwort), NICHT über Chunk-Zahl —
+                            # providerspez. SSE-Batching (Mistral: ganze Antwort in 1 Chunk) ist kein Fehler
 TTS_MIN_BYTES = 1000        # >= 1000 Bytes Audio
 
 # --- LLM-Endpunkte (OpenAI-kompatibles /chat/completions, SSE) ---
@@ -64,8 +65,9 @@ TTS = {
 
 # --- STT-Endpunkte (WebSocket) — für den späteren STT-Caller ---
 STT = {
+    # interim_results=true: liefert Live-Wörter (Interims) für ttfp (Primärmetrik, endpointing-frei)
     "deepgram": {"url": ("wss://api.deepgram.com/v1/listen?model=nova-3&language=en"
-                         "&encoding=linear16&sample_rate=16000&punctuate=true&interim_results=false"),
+                         "&encoding=linear16&sample_rate=16000&punctuate=true&interim_results=true"),
                  "host": "api.deepgram.com", "model": "nova-3", "key_env": "DEEPGRAM_API_KEY"},
     "revai":    {"url": ("wss://api.rev.ai/speechtotext/v1/stream"
                          "?content_type=audio/x-raw;layout=interleaved;rate=16000;format=S16LE;channels=1"),

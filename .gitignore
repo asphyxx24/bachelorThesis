@@ -23,5 +23,12 @@ venv/
 # Lokales Backup der Rohdaten (laut HANDOFF.md nicht in Git)
 data/raw_backup/
 
+# Generierte Messdaten (EC2 erzeugt die maßgeblichen Daten, separat gesichert) + Laufzeit-Artefakte.
+# Wichtig fürs run_meta: sonst hält untracked Mess-Output git_dirty dauerhaft True (A5/F5).
+# data/inputs/ (sample.wav) bleibt getrackt — das ist der Eingabe-, kein Ausgabe-Datensatz.
+data/layer1/
+data/layer2/
+data/layer3/
+
 # Archivierte Mai-Kampagne (2026-06-08): bereits in git-Historie, nicht doppelt tracken
 data_archive_2026-05/

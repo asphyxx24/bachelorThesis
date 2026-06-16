@@ -33,8 +33,10 @@ Diese drei Dinge sind unabhängig davon, wie die Zahlen erhoben wurden — sie w
 ### 2.1 Der Reframe — „Engine schlägt Geografie" (die Contribution)
 
 - **Kernbefund (C1):** Aus EU-Sicht dominiert die **Backend-Engine** des Providers, **nicht** die
-  Netzwerknähe. Schärfster Beleg: **STT/TTS-Inversion desselben Providers** (Azure verliert bei STT,
-  gewinnt bei TTS).
+  Netzwerknähe. Schärfster Beleg: **STT/TTS-Inversion desselben Providers** auf `ttft`/`ttfa` (Azure mit
+  gleicher ~11 ms RTT verliert bei STT, gewinnt bei TTS → Geografie konstant → Differenz = Backend).
+  `ttfp` zerlegt Azures STT-Nachteil als Endpointing-Warten (`ttft − ttfp`) — Diagnose, kein cross-provider
+  Tempo-Ranking (das enthielte RTT). S. `setup/messprotokoll.md` → „STT-Primärmetrik".
 - **C2 — Drei-Schichten-Methodik + Cloudflare-/Edge-Grenze** (bei einem Teil der Provider terminiert
   die Verbindung an einem Edge-Knoten, nicht am US-Server).
 - **C3 (Methoden-Baustein, NICHT Headline):** Ping-basierte connect-Klassen-Heuristik. `r` bewusst
@@ -112,7 +114,8 @@ Setup besser können muss**. Die Punkte sind hier als Anforderungen umformuliert
 
 - **Layer 1 (Infrastruktur):** DNS, Ping, TLS, Traceroute — **plus** Endpunkt-Auflösung (s. §3).
 - **Layer 2 (Paketaufzeichnung):** tcpdump/PCAP, je Provider.
-- **Layer 3 (API-Latenz):** Cold-Start `connect_ms` / `ttft_ms` / `total_ms`.
+- **Layer 3 (API-Latenz):** Cold-Start — atomare connect-Submetriken / Erste-Ausgabe-Metrik / `total_ms`.
+  Erste-Ausgabe: STT **`ttfp`** (primär, paced) bzw. `ttft`/`ttfa` (LLM/TTS). S. `setup/messprotokoll.md`.
 
 **Messdesign-Grundsätze (überdenkbar, aber Ausgangspunkt):**
 - **Cold-Start:** jede Messung neue TCP+TLS-Verbindung (kein Connection Pooling).
@@ -165,7 +168,9 @@ Setup besser können muss**. Die Punkte sind hier als Anforderungen umformuliert
   - **A5** Per-Run: `resolved_ip`, `http_version`, `run_meta`-Record je Slot, Lockfile-Pflicht.
   - **A6** Instanz `c6i.large` (non-burstable) + CPU-Steal-Logging.
   - **A7** Erfolgs-/Timeout-Tabelle (Connect 10 s / Response einheitl. 30 s, Mindest-Output, Fehler-Enum).
-  - **A8** `ttft`/`ttfa` als Primärmetrik (mengen-robust), `total`/`ttl` sekundär; OpenAI-TTS auf mp3 gepinnt.
+  - **A8** Erste-Ausgabe als Primärmetrik (mengen-robust): STT **`ttfp`** (paced, endpointing-frei),
+    LLM/TTS `ttft`/`ttfa`; `total`/`ttl` sekundär; OpenAI-TTS auf mp3 gepinnt. (STT-`ttfp`-Verfeinerung
+    2026-06-16, s. `setup/AUDIT_stt_methodik_2026-06-16.md`.)
 - **2026-06-15:** ✅ **Layer-1-Skripte gebaut + ultracode-reviewt** (in `measurements/layer1/`):
   `tcp_ping.py` (primäre RTT), `icmp_ping.py` (ICMP-Cross-Check), `dns_lookup.py` (Multi-Resolver+TTL),
   `asn_lookup.py` (ASN/Netz je IP, Bedingung b), `tls_info.py` (TLS+Timing, A1-Guard),

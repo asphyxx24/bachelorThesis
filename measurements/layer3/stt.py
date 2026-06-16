@@ -1,21 +1,31 @@
 """
 Layer 3 — STT-Caller (Deepgram / Rev.ai / Azure), rohe WebSockets.
 
-STT-Metrik-Asymmetrie (s. messprotokoll.md): ttft_ms = t_first_final - t_first_chunk
-  -> connect-EXKLUSIV (Uhr startet beim ERSTEN Audio-Chunk, NACH dem Connect).
-  Da Audio als Dump (nicht echtzeit-getaktet) gesendet wird, enthält ttft die Upload-Zeit
-  + Provider-Endpointing + Engine. Diese Anteile sind über die Roh-Submetriken trennbar:
+Audio wird im 1x-REALTIME-TAKT gestreamt (nicht als Dump), gesendet UND empfangen LAUFEN PARALLEL
+(asyncio.gather). Grund: nur bei echtzeit-eintreffendem Audio liefern ALLE Provider echte Interim-Wörter
+(Deepgram sendet beim Dump keins), erst dadurch ist ttfp cross-provider fair UND pipeline-realistisch.
+Parallel-Empfang ist nötig, damit ttfp gestempelt wird, wenn das Wort ankommt — nicht erst nach Upload.
+
+STT-Metrik-Asymmetrie (s. messprotokoll.md). PRIMÄRMETRIK ist ttfp (First-Partial):
+  ttfp_ms = t_first_partial - t_first_chunk
+  -> Zeit bis zum ERSTEN Live-Wort (Interim/Partial/Hypothese). Endpointing-frei (das erste Live-Wort
+  kommt VOR der Stille-Wartezeit). Enthält bauartbedingt ~1 In-Band-RTT (Audio hin + Partial zurück) ->
+  "Netz-Roundtrip + Engine-Reaktion", NICHT reine Rechenzeit; Netz-Anteil via connect/RTT abschätzbar.
+  ttft (final) bleibt SEKUNDÄR (ehrlich beschriftet): enthält bei manchen Providern (v.a. Azure) eine
+  feste Stille-Wartezeit (Endpointing), die wir über die rohe WS NICHT abschalten können
+  (s. AUDIT_stt_methodik_2026-06-16.md). Beide connect-EXKLUSIV (Uhr ab erstem Audio-Chunk).
 
   Zeitachse je Call (alles als ms, ein Nullpunkt t0 = vor dem Connect):
     ws_connect_ms   = TCP+TLS+WS-Upgrade
     session_init_ms = ws_done -> erster Audio-Chunk (Rev.ai wartet hier auf "connected"-Msg!)
-    audio_upload_ms = erster Chunk -> letzter Chunk gesendet
-    ttft_ms         = erster Chunk -> erstes finales Transkript   (connect-EXKLUSIV)
+    audio_upload_ms = erster -> letzter Chunk gesendet (~Audiodauer, da 1x-realtime getaktet)
+    ttfp_ms         = erster Chunk -> erstes LIVE-Wort        (PRIMÄR, endpointing-frei)
+    ttft_ms         = erster Chunk -> erstes finales Transkript (SEKUNDÄR, enthält Endpointing)
     total_ms        = t0 -> Final empfangen (connect-INKLUSIV, OHNE WS-Close)
 
-Drei Protokolle (rohe WS, kein SDK):
-  - Deepgram: rohe PCM-Frames; CloseStream beendet; Finals sammeln, Abbruch bei "Metadata"
-  - Rev.ai:   erst "connected"-Msg; rohe PCM-Frames; "EOS" beendet; Final in elements
+Drei Protokolle (rohe WS, kein SDK), je getaktetes Senden + paralleler Empfang:
+  - Deepgram: rohe PCM-Frames; Finalize+CloseStream beenden; Finals sammeln, Abbruch bei "Metadata"
+  - Rev.ai:   erst "connected"-Msg; rohe PCM-Frames; "EOS" beendet; Partial/Final in elements
   - Azure:    Microsoft-Framing (speech.config + Audio-Messages mit 2-Byte-Header); Final = speech.phrase
 
 Gespeichert (Lehren A5/A14): voller Transkript-STRING (für WER), resolved_ip, model_requested, Fehler.
@@ -44,7 +54,13 @@ from config import (STT, STT_WAV, CONNECT_TIMEOUT_S, RESPONSE_TIMEOUT_S,
 from connect import connect_submetrics
 
 _SSL = ssl.create_default_context(cafile=certifi.where())
-CHUNK_SIZE = 4096   # PCM-Chunk-Größe in Bytes
+CHUNK_SIZE = 4096       # PCM-Chunk-Größe in Bytes
+SAMPLE_RATE = 16000     # Hz (sample.wav)
+BYTES_PER_SAMPLE = 2    # linear16 = 16 bit mono
+# 1x-Realtime-Takt: ein 4096-B-Chunk = 4096/(16000*2) = 0,128 s Audio -> so schnell darf gesendet werden.
+# Echtzeit-Pacing ist nötig, damit alle Provider echte Interim-Wörter liefern und ttfp cross-provider
+# fair + pipeline-realistisch ist (sonst sendet Deepgram beim Dump kein Interim). S. messprotokoll.md.
+CHUNK_SECONDS = CHUNK_SIZE / (SAMPLE_RATE * BYTES_PER_SAMPLE)
 
 
 def load_pcm(path):
@@ -85,72 +101,120 @@ def _azure_audio_msg(rid, data):
     return struct.pack(">H", len(h)) + h + data
 
 
-# ---- Protokoll-I/O: gibt jeweils (t_first_chunk, t_upload_done, t_first_final, transcript) ----
-async def _io_deepgram(ws, pcm):
+def _azure_body(raw):
+    """Parst den JSON-Body einer Azure-Textmessage (nach dem \\r\\n\\r\\n). None bei Fehler."""
+    i = raw.find("\r\n\r\n")
+    if i == -1:
+        return None
+    try:
+        return json.loads(raw[i + 4:])
+    except Exception:
+        return None
+
+
+def _azure_text(raw):
+    body = _azure_body(raw)
+    return body.get("Text", "") if body else ""
+
+
+# ---- Protokoll-I/O ----
+# Jede Funktion sendet das Audio im 1x-Realtime-Takt (Sende-Coroutine) UND empfängt PARALLEL
+# (Empfangs-Coroutine) via asyncio.gather. Parallel ist nötig, weil Interims WÄHREND des Sendens
+# ankommen -> nur so wird ttfp dann gestempelt, wenn das Wort kommt (nicht erst nach dem Upload).
+# Rückgabe je Funktion: dict mit
+#   t_first   = erster Audio-Chunk gesendet        t_upload = letzter Chunk + End-Signal gesendet (~Audiodauer)
+#   t_partial = erstes LIVE-Wort (Interim) -> ttfp (endpointing-frei, s. messprotokoll.md)
+#   t_final   = erstes finales Transkript  -> ttft (enthält Provider-Stille-Warten, sekundär)
+#   transcript, ttfp_is_final/ttfp_text = Audit: WAS hat ttfp ausgelöst (Interim=False erwartet)
+def _io_result(t_first, t_partial, t_upload, t_final, transcript, ttfp_is_final, ttfp_text):
+    return {"t_first": t_first, "t_partial": t_partial, "t_upload": t_upload, "t_final": t_final,
+            "transcript": transcript, "ttfp_is_final": ttfp_is_final, "ttfp_text": ttfp_text}
+
+
+async def _paced_send(ws, pcm, wrap, end_msgs):
+    """Sendet PCM im 1x-Realtime-Takt (Chunk -> sleep), dann die End-Signale.
+    Gibt (t_first_chunk, t_upload_done) zurück. wrap() verpackt einen Chunk (z.B. Azure-Framing)."""
     t_first = None
     for i in range(0, len(pcm), CHUNK_SIZE):
         if t_first is None:
             t_first = time.perf_counter()
-        await ws.send(pcm[i:i + CHUNK_SIZE])
-    await ws.send(json.dumps({"type": "Finalize"}))
-    await ws.send(json.dumps({"type": "CloseStream"}))
-    t_upload = time.perf_counter()
-    t_final, segs = None, []
-    async for raw in ws:
-        msg = json.loads(raw)
-        mtype = msg.get("type")
-        if mtype == "Results" and msg.get("is_final"):
-            alts = msg.get("channel", {}).get("alternatives", [{}])
-            text = alts[0].get("transcript", "") if alts else ""
-            if text:
-                if t_final is None:
-                    t_final = time.perf_counter()
-                segs.append(text)
-        elif mtype == "Metadata":          # kommt nach allen Finals -> sauberer Abbruch (kein Hänger)
-            break
-    return t_first, t_upload, t_final, " ".join(segs)
+        await ws.send(wrap(pcm[i:i + CHUNK_SIZE]))
+        await asyncio.sleep(CHUNK_SECONDS)
+    for m in end_msgs:
+        await ws.send(m)
+    return t_first, time.perf_counter()
+
+
+async def _io_deepgram(ws, pcm):
+    async def recv():
+        t_partial, t_final, p_final, p_text, segs = None, None, None, "", []
+        async for raw in ws:
+            msg = json.loads(raw)
+            mtype = msg.get("type")
+            if mtype == "Results":
+                alts = msg.get("channel", {}).get("alternatives", [{}])
+                text = alts[0].get("transcript", "") if alts else ""
+                if text and t_partial is None:                 # erstes Live-Wort (Interim ODER Final)
+                    t_partial, p_final, p_text = time.perf_counter(), bool(msg.get("is_final")), text
+                if msg.get("is_final") and text:
+                    if t_final is None:
+                        t_final = time.perf_counter()
+                    segs.append(text)
+            elif mtype == "Metadata":          # nach allen Finals -> sauberer Abbruch (kein Hänger)
+                break
+        return t_partial, t_final, " ".join(segs), p_final, p_text
+
+    send = _paced_send(ws, pcm, lambda c: c,
+                       [json.dumps({"type": "Finalize"}), json.dumps({"type": "CloseStream"})])
+    (t_first, t_upload), (t_partial, t_final, transcript, p_final, p_text) = await asyncio.gather(send, recv())
+    return _io_result(t_first, t_partial, t_upload, t_final, transcript, p_final, p_text)
 
 
 async def _io_revai(ws, pcm):
     connected = json.loads(await ws.recv())          # erst die "connected"-Message (Session-Init, ~1 RTT)
     if connected.get("type") != "connected":
         raise RuntimeError(f"rev.ai unerwartete erste Message: {connected.get('type')}")
-    t_first = None
-    for i in range(0, len(pcm), CHUNK_SIZE):
-        if t_first is None:
-            t_first = time.perf_counter()
-        await ws.send(pcm[i:i + CHUNK_SIZE])
-    await ws.send("EOS")
-    t_upload = time.perf_counter()
-    async for raw in ws:
-        msg = json.loads(raw)
-        if msg.get("type") == "final":
-            text = "".join(e.get("value", "") for e in msg.get("elements", []))
-            return t_first, t_upload, time.perf_counter(), text
-    return t_first, t_upload, None, ""
+
+    async def recv():
+        t_partial, p_text = None, ""
+        async for raw in ws:
+            msg = json.loads(raw)
+            mtype = msg.get("type")
+            if mtype == "partial" and t_partial is None:
+                ptext = "".join(e.get("value", "") for e in msg.get("elements", []))
+                if ptext.strip():
+                    t_partial, p_text = time.perf_counter(), ptext
+            elif mtype == "final":
+                text = "".join(e.get("value", "") for e in msg.get("elements", []))
+                return t_partial, time.perf_counter(), text, False, p_text
+        return t_partial, None, "", False, p_text
+
+    send = _paced_send(ws, pcm, lambda c: c, ["EOS"])
+    (t_first, t_upload), (t_partial, t_final, transcript, p_final, p_text) = await asyncio.gather(send, recv())
+    return _io_result(t_first, t_partial, t_upload, t_final, transcript, p_final, p_text)
 
 
 async def _io_azure(ws, pcm):
     rid = uuid.uuid4().hex
-    await ws.send(_azure_config_msg(rid))
-    t_first = None
-    for i in range(0, len(pcm), CHUNK_SIZE):
-        if t_first is None:
-            t_first = time.perf_counter()
-        await ws.send(_azure_audio_msg(rid, pcm[i:i + CHUNK_SIZE]))
-    await ws.send(_azure_audio_msg(rid, b""))         # leere Audio-Message = Ende
-    t_upload = time.perf_counter()
-    async for raw in ws:
-        if isinstance(raw, bytes):
-            continue
-        if "speech.phrase" in raw:
-            body_start = raw.find("\r\n\r\n")
-            if body_start == -1:
+    await ws.send(_azure_config_msg(rid))            # speech.config zuerst
+
+    async def recv():
+        t_partial, p_text = None, ""
+        async for raw in ws:
+            if isinstance(raw, bytes):
                 continue
-            body = json.loads(raw[body_start + 4:])
-            if body.get("RecognitionStatus") == "Success":
-                return t_first, t_upload, time.perf_counter(), body.get("DisplayText", "")
-    return t_first, t_upload, None, ""
+            if "speech.hypothesis" in raw and t_partial is None:   # Recognizing = erstes Live-Wort
+                t_partial, p_text = time.perf_counter(), _azure_text(raw)
+                continue
+            if "speech.phrase" in raw:
+                body = _azure_body(raw)
+                if body and body.get("RecognitionStatus") == "Success":
+                    return t_partial, time.perf_counter(), body.get("DisplayText", ""), False, p_text
+        return t_partial, None, "", False, p_text
+
+    send = _paced_send(ws, pcm, lambda c: _azure_audio_msg(rid, c), [_azure_audio_msg(rid, b"")])
+    (t_first, t_upload), (t_partial, t_final, transcript, p_final, p_text) = await asyncio.gather(send, recv())
+    return _io_result(t_first, t_partial, t_upload, t_final, transcript, p_final, p_text)
 
 
 _IO = {"deepgram": _io_deepgram, "revai": _io_revai, "azure": _io_azure}
@@ -159,7 +223,8 @@ _IO = {"deepgram": _io_deepgram, "revai": _io_revai, "azure": _io_azure}
 async def _run(name, ep, key, pcm):
     """Öffnet die WS, misst die Submetriken, dispatcht ans Protokoll. Gibt dict zurück."""
     out = {"ws_connect_ms": None, "session_init_ms": None, "audio_upload_ms": None,
-           "ttft_ms": None, "total_ms": None, "transcript": "", "resolved_ip": None, "error": None}
+           "ttfp_ms": None, "ttft_ms": None, "total_ms": None, "transcript": "",
+           "ttfp_is_final": None, "ttfp_text": "", "resolved_ip": None, "error": None}
 
     if name == "deepgram":
         url, headers = ep["url"], {"Authorization": f"Token {key}"}
@@ -179,17 +244,20 @@ async def _run(name, ep, key, pcm):
             t_ws_done = time.perf_counter()
             out["ws_connect_ms"] = round((t_ws_done - t0) * 1000, 2)
             out["resolved_ip"] = _peer_ip(ws)
-            t_first, t_upload, t_final, transcript = await asyncio.wait_for(
-                _IO[name](ws, pcm), timeout=RESPONSE_TIMEOUT_S)
+            r = await asyncio.wait_for(_IO[name](ws, pcm), timeout=RESPONSE_TIMEOUT_S)
             t_done = time.perf_counter()                    # vor dem WS-Close gemessen
         out["total_ms"] = round((t_done - t0) * 1000, 2)
-        if t_first is None or t_final is None:
+        if r["t_first"] is None or r["t_final"] is None:
             out["error"] = "kein finales Transkript"
             return out
-        out["session_init_ms"] = round((t_first - t_ws_done) * 1000, 2)
-        out["audio_upload_ms"] = round((t_upload - t_first) * 1000, 2)
-        out["ttft_ms"] = round((t_final - t_first) * 1000, 2)
-        out["transcript"] = transcript
+        out["session_init_ms"] = round((r["t_first"] - t_ws_done) * 1000, 2)
+        out["audio_upload_ms"] = round((r["t_upload"] - r["t_first"]) * 1000, 2)
+        if r["t_partial"] is not None:                       # primär; None falls kein Interim kam
+            out["ttfp_ms"] = round((r["t_partial"] - r["t_first"]) * 1000, 2)
+            out["ttfp_is_final"] = r["ttfp_is_final"]        # Audit: war das erste Wort schon Final?
+            out["ttfp_text"] = r["ttfp_text"]
+        out["ttft_ms"] = round((r["t_final"] - r["t_first"]) * 1000, 2)
+        out["transcript"] = r["transcript"]
     except asyncio.TimeoutError:
         out["error"] = "timeout"
         out["total_ms"] = round((time.perf_counter() - t0) * 1000, 2)
@@ -210,9 +278,12 @@ def call_stt(name, ep, pcm):
         "ws_connect_ms": None,      # echter WS-Connect (TCP+TLS+WS-Upgrade)
         "session_init_ms": None,    # ws_done -> erster Audio-Chunk (Rev.ai: "connected"-Wartezeit)
         "audio_upload_ms": None,    # erster -> letzter Audio-Chunk gesendet
-        "ttft_ms": None,            # connect-EXKLUSIV: t_first_final - t_first_chunk
+        "ttfp_ms": None,            # PRIMÄR, endpointing-frei: t_first_partial - t_first_chunk
+        "ttft_ms": None,            # SEKUNDÄR (enthält Endpointing): t_first_final - t_first_chunk
         "total_ms": None,           # connect-INKLUSIV (ohne WS-Close)
         "transcript": "",
+        "ttfp_is_final": None,      # Audit: war das ttfp-auslösende Wort schon Final? (erwartet: False)
+        "ttfp_text": "",            # Audit: Text des ttfp-auslösenden Live-Worts
         "n_chars": 0,
         "success": False,
         "error": None,
@@ -225,8 +296,8 @@ def call_stt(name, ep, pcm):
 
     rec["connect"] = connect_submetrics(ep["host"], timeout=CONNECT_TIMEOUT_S)
     res = asyncio.run(_run(name, ep, key, pcm))
-    for k in ("ws_connect_ms", "session_init_ms", "audio_upload_ms", "ttft_ms",
-              "total_ms", "transcript", "resolved_ip", "error"):
+    for k in ("ws_connect_ms", "session_init_ms", "audio_upload_ms", "ttfp_ms", "ttft_ms",
+              "total_ms", "transcript", "ttfp_is_final", "ttfp_text", "resolved_ip", "error"):
         rec[k] = res[k]
     rec["n_chars"] = len(rec["transcript"])
     rec["success"] = bool(rec["transcript"].strip())
@@ -241,14 +312,14 @@ def main():
     pcm = load_pcm(wav)
     results = [call_stt(name, ep, pcm) for name, ep in STT.items()]
 
-    print(f"{'Provider':<10} {'ws_conn':>8} {'sess_in':>8} {'ttft':>9} {'total':>9} {'ok':>4}  Transkript / Fehler")
+    print(f"{'Provider':<10} {'ws_conn':>8} {'sess_in':>8} {'ttfp':>9} {'ttft':>9} {'total':>9} {'ok':>4}  Transkript / Fehler")
     for r in results:
         def f(x):
             return f"{x:.1f}" if x is not None else "-"
         ok = "ja" if r["success"] else "—"
         note = r["transcript"][:42] if r["success"] else (r["error"] or "")
         print(f"{r['provider']:<10} {f(r['ws_connect_ms']):>8} {f(r['session_init_ms']):>8} "
-              f"{f(r['ttft_ms']):>9} {f(r['total_ms']):>9} {ok:>4}  {note}")
+              f"{f(r['ttfp_ms']):>9} {f(r['ttft_ms']):>9} {f(r['total_ms']):>9} {ok:>4}  {note}")
 
     os.makedirs(DATA_DIR, exist_ok=True)
     out = DATA_DIR / "stt.jsonl"

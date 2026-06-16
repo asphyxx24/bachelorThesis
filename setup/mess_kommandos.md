@@ -197,7 +197,7 @@ Skript wurde **einzeln per ultracode-Review** geprüft (Finden → adversariale 
 | `connect.py` | atomare dns/tcp/tls-Submetriken | Wegwerf-Socket = **Referenz** (TCP+TLS, kein h2); echte Peer-IP kommt aus dem Mess-Request |
 | `llm.py` | OpenAI/Groq/Mistral (HTTPS+SSE) | `ttft`/`total` **connect-INKLUSIV**; `effective_model` aus `chunk.model` (A2); IPv4 erzwungen (`local_address`) |
 | `tts.py` | Deepgram/OpenAI/Azure (HTTPS-Stream) | `ttfa`/`total`/`audio_bytes`/`n_chunks`; mp3 gepinnt (A8); `audio_bytes` nur Erfolgs-Gate, **kein** Cross-Provider-Maß (Bitrate ≠) |
-| `stt.py` | Deepgram/Rev.ai/Azure (rohe WebSockets) | `ttft` **connect-EXKLUSIV** (`t_first_final − t_first_chunk`); Submetriken `ws_connect`/`session_init`/`audio_upload`; **voller Transkript-String** (A14) |
+| `stt.py` | Deepgram/Rev.ai/Azure (rohe WebSockets) | **`ttfp`** (Time-to-first-Partial) **primär**, `ttft` (Final) sekundär, beide **connect-EXKLUSIV**; **Audio 1×-realtime gepaced** + paralleler Empfang (`asyncio.gather`); Submetriken `ws_connect`/`session_init`/`audio_upload`; Audit `ttfp_is_final`/`ttfp_text`; **voller Transkript-String** (A14) |
 | `run.py` | Slot-Runner | interleaved Round-Robin + Rotation, 1,5 s Delay; **flock** (kein Parallel-Slot), **Slot-Deadline**, **Per-Call-Timeout**, `run_meta`+`run_end` (A5/A6/A8) |
 
 **Ausführen:** `.venv/bin/python measurements/layer3/<skript>.py` (einzeln) bzw.
@@ -206,5 +206,5 @@ Skript wurde **einzeln per ultracode-Review** geprüft (Finden → adversariale 
 **Wichtige Mess-Entscheidungen (Pilot-bestätigt, s. deployment.md):**
 - **Rev.ai-Session-Init:** der „connected"-Recv (~1 RTT) liegt zwischen WS-Connect und erstem Chunk →
   als eigene Submetrik `session_init_ms` erfasst, damit `ws_connect`/user-perceived Cold-Start cross-provider fair bleiben.
-- **STT-Audio als Dump** (kein Echtzeit-Pacing) → `ttft` enthält Upload+Endpointing+Engine; über `audio_upload_ms` trennbar.
+- **STT-Audio 1×-realtime gepaced** (nicht Dump) + paralleler Empfang → nur so liefern alle drei echte Interims für `ttfp` (endpointing-frei, cross-provider fair); `ttft` (Final) enthält zusätzlich Endpointing, über `ttft − audio_upload_ms` isolierbar. S. `messprotokoll.md` → „STT-Primärmetrik".
 - **Rev.ai-Billing:** ~15 s/Call (15-s-Boden, Wall-Clock ~2 s) → ~1.400 min für die volle Kampagne.

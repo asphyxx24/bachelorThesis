@@ -16,7 +16,9 @@
 
 ### Deepgram (Nova-3)
 - **WS-URL:** `wss://api.deepgram.com/v1/listen`
-- **Query:** `?model=nova-3&language=en&encoding=linear16&sample_rate=16000&punctuate=true&interim_results=false`
+- **Query:** `?model=nova-3&language=en&encoding=linear16&sample_rate=16000&punctuate=true&interim_results=true`
+- **`interim_results=true`** liefert Live-Wörter (Interim-`Results`) für die STT-Primärmetrik **`ttfp`**
+  (Time-to-first-Partial, endpointing-frei — s. `messprotokoll.md` → „STT-Primärmetrik: ttfp").
 - **Auth:** Header `Authorization: Token <API_KEY>`
 - **Audio:** rohe PCM-Frames (linear16, 16 kHz), Chunk-Größe 4096 B
 - **Host:** `api.deepgram.com`

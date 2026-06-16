@@ -7,7 +7,8 @@ Misst je Provider über eine FRISCHE Verbindung (Cold-Start, kein Pooling):
   - n_chunks, output_text, output_tokens, effective_model (Backend-Drift, A2)
   - resolved_ip: echte Peer-IP des Mess-Requests (A5; Edge-vs-Backend-Beleg A3)
   - connect   : atomare dns/tcp/tls-Submetriken (Referenz, Wegwerf-Socket, TCP+TLS-only)
-Erfolg = >= LLM_MIN_CHUNKS Chunks UND nicht-leerer Text (A7).
+Erfolg = inhaltlich (>= LLM_MIN_CHARS Zeichen Antwort), A7/F3 — NICHT über Chunk-Zahl
+  (providerspez. SSE-Batching, z.B. Mistral 1 Chunk, ist kein Fehler).
 
 Ausführen (vom Repo-Wurzelverzeichnis, braucht Keys in .env):
   .venv/bin/python measurements/layer3/llm.py
@@ -20,7 +21,7 @@ import httpx
 from datetime import datetime, timezone
 
 from config import (LLM, LLM_PROMPT, MAX_TOKENS, CONNECT_TIMEOUT_S,
-                    RESPONSE_TIMEOUT_S, LLM_MIN_CHUNKS, DATA_DIR, get_key)
+                    RESPONSE_TIMEOUT_S, LLM_MIN_CHARS, DATA_DIR, get_key)
 from connect import connect_submetrics
 
 
@@ -67,7 +68,8 @@ def call_llm(name, ep):
     body = {"model": ep["model"],
             "messages": [{"role": "user", "content": LLM_PROMPT}],
             "stream": True,
-            "max_tokens": MAX_TOKENS}
+            "max_tokens": MAX_TOKENS,
+            "stream_options": {"include_usage": True}}   # F2: sonst liefert OpenAI keine usage/output_tokens
     headers = {"Authorization": f"Bearer {key}"}
     timeout = httpx.Timeout(connect=CONNECT_TIMEOUT_S, read=RESPONSE_TIMEOUT_S, write=10.0, pool=10.0)
     # IPv4 erzwingen (local_address=0.0.0.0): konsistent mit Layer 1 (gethostbyname/IPv4) und der
@@ -110,7 +112,7 @@ def call_llm(name, ep):
                         rec["n_chunks"] += 1
                         rec["output_text"] += delta
         rec["total_ms"] = round((time.perf_counter() - t_req) * 1000, 2)
-        rec["success"] = rec["n_chunks"] >= LLM_MIN_CHUNKS and len(rec["output_text"].strip()) > 0
+        rec["success"] = len(rec["output_text"].strip()) >= LLM_MIN_CHARS   # F3: inhaltlich, nicht Chunk-Zahl
     except Exception as e:
         rec["error"] = f"{type(e).__name__}: {e}"
         if t_req is not None and rec["total_ms"] is None:
