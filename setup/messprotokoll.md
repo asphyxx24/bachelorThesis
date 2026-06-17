@@ -443,6 +443,10 @@ Der alte Lauf hat Information weggeworfen und damit spätere Fragen unbeantwortb
   ins JSONL — **Kosten ~null, sample-genau**. Ohne sie ist über 56 Slots nicht belegbar, **welcher**
   (Cloudflare-/Deepgram-)Edge bzw. DC ein Latenz-Sample bedient hat → blockiert sonst den
   Edge-vs-Backend-Beleg (A3) und erklärt die Deepgram-RTT-Streuung (A9).
+  > **Auswertungs-Hinweis (Daten-Audit 17.6.):** Es gibt ZWEI IP-Felder — `connect.resolved_ip` (die IP des
+  > eigentlichen Mess-Requests) und das top-level `resolved_ip` (separater Vorab-Resolve). Bei Round-Robin-Hosts
+  > weichen sie in ~29 % ab, und top-level ist bei Connect-/Read-Fails `null`. → Für IP-/Region-/connect-Analysen
+  > **ausschließlich `connect.resolved_ip`** verwenden; Fehlschläge NIE über top-level==null filtern.
 - **HTTP-Version je Run (A5):** `response.http_version` roh mitschreiben (robuster als das Pinnen von
   `httpx[http2]`).
 
@@ -482,6 +486,11 @@ Ohne fixe Schwellen ist „Verfügbarkeit X %" nicht reproduzierbar/angreifbar �
 - **Timeout-Asymmetrie vereinheitlicht (A7):** alter Lauf hatte STT 20 s vs LLM/TTS 30 s ohne Begründung
   → **einheitlich 30 s** Response-Timeout (großzügiger Hang-Fang, **keine** Erwartungs-Latenz; echte ttft
   liegt weit darunter). Connect-Timeout einheitlich 10 s.
+  > **Zwei Timeouts (Daten-Audit 17.6. — explizit, damit Verfügbarkeit reproduzierbar ist):** (1) der
+  > **bindende** Hang-Timeout ist der **Read-Timeout 30 s** (`config.RESPONSE_TIMEOUT_S`, httpx/WS) — daran
+  > brechen z.B. die OpenAI-TTS-Fails ab (`total_ms` ~30 s, `ttfa=null`). (2) Zusätzlich ein **Per-Call-Hard-
+  > Timeout 75 s** (run.py-Thread, `run_meta.call_timeout_s`) als reiner Backstop gegen Total-Hänger — der
+  > wird im Normalbetrieb NIE erreicht. „Timeout" in den Verfügbarkeitszahlen = der 30-s-Read-Timeout.
 - **Schwellen sind nachträglich justierbar:** Da Roh-Text, Chunk-Zahl und Byte-Zahl **vollständig**
   gespeichert werden (A5/A10), kann die Erfolgsdefinition in der Analyse verschärft/gelockert werden,
   **ohne** neu zu messen. Die Tabelle ist der **Default**, nicht in Stein.

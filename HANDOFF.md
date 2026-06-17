@@ -59,7 +59,17 @@ Selbst gegen Rohdaten (n=200) nachgerechnet + paket-geeicht:
 
 ---
 
-## 4. MORGEN — konkrete To-dos (in dieser Reihenfolge)
+## 4. To-dos (in dieser Reihenfolge)
+
+> **Daten-Audit Tag 1 (17.6.) erledigt → Datensatz VERTRAUENSWÜRDIG** (6 Slots, 5.400 Calls, 0 Wertfehler;
+> C1 hält diurnal; Anomalien providerseitig erklärt). Voll-Urteil: `data/audit_20260617/VERDICT.md`.
+> **Auswertungs-Disziplin (sonst kippt's beim Schreiben — unbedingt beachten):**
+> - **IP immer aus `connect.resolved_ip`** (nicht top-level `resolved_ip` — weicht 29 % ab, bei Fails null).
+> - **Verfügbarkeit getrennt von Latenz** (Latenz nur success-only; OpenAI-TTS ~88 % + Mistral-03h-n=78 als eigene Achse).
+> - **C1:** groq sauber disjunkt; **mistral<openai nur Median-Ordnung** (Tails überlappen) → Mann-Whitney/Bootstrap, nicht „getrennte Verteilungen". Spread 6,2–7,8× = diurnal variierend, keine Konstante.
+> - **Diurnal = Snapshot (6/56 Slots)** — noch keine Tageszeit-Inferenz; volle Kampagne abwarten.
+> - **`total_ms` längenabhängig** → `ttft`/`ttfa` primär.
+> - **Code für Rest der Kampagne einfrieren (f9e6dc8)**; 30-s-Read-Timeout (`config.RESPONSE_TIMEOUT_S`) ≠ 75-s-Hard-Timeout.
 
 1. **Campaign-Check** (s. §1) — Slots gewachsen? Rev.ai-Guthaben ok? Fehler in cron.log?
 2. **Mehrere Arbeitstitel ausarbeiten** (ausdrücklich gewünscht). Aktueller Platzhalter:
