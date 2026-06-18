@@ -5,8 +5,9 @@
 > (nur Nachschlagewerk, nicht mehr Grundlage). Leitprinzip: **erst Methodik schriftlich, dann Code,
 > dann messen.**
 
-**Arbeitstitel (nicht angemeldet, frei änderbar):** Engine schlägt Geografie: Netzwerk-, Protokoll-
-und Latenzanalyse kommerzieller Cloud-AI-APIs einer Echtzeit-Voice-Pipeline aus EU-Perspektive
+**Arbeitstitel (nicht angemeldet, frei änderbar — IN ÜBERARBEITUNG):** Kandidaten in **`arbeitstitel.md`**
+(neutral-deskriptiv, Rigor-Signal; „Engine"/„Backend" bewusst NICHT im Titel wegen Modellgrößen-Confound —
+die verteidigbare Aussage ist die *negative*: „Netznähe erklärt die Latenzspreizung nicht"). Auswahl steht noch aus.
 **Autor:** Anton Rusik · **Betreuer:** Prof. Dr. Matthias Wählisch, TU Dresden
 **Vantage Point:** AWS EC2 `eu-central-1` (Frankfurt)
 
@@ -86,6 +87,7 @@ In beide Richtungen beantwortbar — „Netzwerk erklärt *weniger* als die Engi
 | Datei | Inhalt |
 |-------|--------|
 | `HANDOFF.md` | **⭐ Hier einsteigen** — aktueller Stand + To-dos (Campaign-Check, Arbeitstitel, Statistik, Folien) |
+| `arbeitstitel.md` | Titel-Kandidaten (Favorit + Alternativen) — Auswahl steht noch aus |
 | `NEUANFANG.md` | **Lebende Referenz** — Warum/Was/Reihenfolge + aktueller Status |
 | `data/audit_20260616/VERDICT.md` | Voll-Audit-Urteil (3 Runden) + Echtdaten-Belege |
 | `setup/anbieter_auswahl.md` | Welche Anbieter je Dienst, mit Begründung |

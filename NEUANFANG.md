@@ -192,9 +192,13 @@ Setup besser können muss**. Die Punkte sind hier als Anforderungen umformuliert
   - **C1 datengestützt neu verankert:** Kernbeleg = **LLM @ identischer Edge-RTT** (75/268/476 ms ≈ 6,4× bei ~1 ms Cloudflare, per-IP invariant, Geografie invertiert); 2. Beleg Azure-schnellstes-TTS; STT ehrlich (kein Engine-Beleg). Die alte „Azure-STT-Endpointing/1722 ms"-These war Dump-Bulk-Compute → **falsch, gestrichen**.
   - **LAYER 2 ECHT gebaut + geeicht** (`measurements/layer2/`): App-`tcp_handshake` = Wire-SYN→SYN-ACK auf **±0,1 ms** (Azure 11 ms / Deepgram 139 ms, je N=30) → Layer-3 paket-validiert (C2). Beantwortet Wählischs Datenvertrauen mit Daten.
   - **Deepgram-ASN korrigiert** (6 IPs/2 ASNs/2 RTT-Klassen). Voll-Urteil: `data/audit_20260616/VERDICT.md`.
-- **⭐ HIER WEITERMACHEN (morgen): siehe `HANDOFF.md`** — Campaign-Check, **mehrere Arbeitstitel ausarbeiten**,
-  Datenaufbereitung, **Statistik gemeinsam gegenprüfen** (nächste ungeprüfte Fehlerfläche), erste Interpretation,
-  LaTeX-Prof-Folien. Kampagne läuft bis ~23.6. (dann Instanz stoppen).
+- **⭐ HIER WEITERMACHEN: siehe `HANDOFF.md`** — Campaign-Check, **Arbeitstitel wählen** (Kandidaten fertig in
+  `arbeitstitel.md`), Datenaufbereitung, **Statistik gemeinsam gegenprüfen** (nächste ungeprüfte Fehlerfläche),
+  erste Interpretation, LaTeX-Prof-Folien. Kampagne läuft bis ~23.6. (dann Instanz stoppen).
+- **2026-06-17:** ✅ **Daten-Audit Tag 1** (50 Agenten, 6 Slots/5.400 Calls, Zahlen aus Rohdaten nachgerechnet):
+  Datensatz **vertrauenswürdig**, 0 Wertfehler, C1 diurnal stabil, Anomalien providerseitig (Mistral-503 @03h,
+  OpenAI-TTS ~30s-Hang). Nichts neu zu messen — nur Auswertungs-Disziplin (s. `data/audit_20260617/VERDICT.md`
+  + Disziplin-Block in `HANDOFF.md` §4).
 
 ## 7. Externe Aufräum-Erinnerungen (aus altem HANDOFF, weiterhin offen)
 

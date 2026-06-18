@@ -72,12 +72,11 @@ Selbst gegen Rohdaten (n=200) nachgerechnet + paket-geeicht:
 > - **Code für Rest der Kampagne einfrieren (f9e6dc8)**; 30-s-Read-Timeout (`config.RESPONSE_TIMEOUT_S`) ≠ 75-s-Hard-Timeout.
 
 1. **Campaign-Check** (s. §1) — Slots gewachsen? Rev.ai-Guthaben ok? Fehler in cron.log?
-2. **Mehrere Arbeitstitel ausarbeiten** (ausdrücklich gewünscht). Aktueller Platzhalter:
-   *„Engine schlägt Geografie: Netzwerk-, Protokoll- und Latenzanalyse kommerzieller Cloud-AI-APIs einer
-   Echtzeit-Voice-Pipeline aus EU-Perspektive."* Morgen 3–5 Varianten entwickeln, die den geschärften
-   C1-Kern (LLM-Edge / „Backend statt Geografie") + die 3-Schichten-Methodik + Eichung tragen.
-   Mögliche Achsen: (a) Befund-betont („Backend schlägt Geografie…"), (b) methodik-betont
-   („Drei-Schichten-Messmethodik für…"), (c) nüchtern-deskriptiv. → mit Anton entscheiden.
+2. **Arbeitstitel auswählen/verfeinern** — Kandidaten **ausgearbeitet in `arbeitstitel.md`** (Favorit:
+   „Kommerzielle Cloud-AI-APIs unter der Lupe: Eine paket-validierte Drei-Schichten-Latenzanalyse einer
+   Echtzeit-Voice-Pipeline aus EU-Sicht" + 2 Alternativen). Linie: neutral-deskriptiv, Rigor-Signal,
+   „Engine/Backend" NICHT im Titel (negative Aussage ist die verteidigbare). → Anton wählt/verfeinert,
+   dann dem Betreuer vorlegen.
 3. **Datenaufbereitung starten:** Slots von EC2 ziehen; Auswerte-Notebook/Skript bauen.
 4. **Statistik sauber ausführen + GEMEINSAM gegenprüfen** (= die nächste ungeprüfte Fehlerfläche):
    Aggregation **A4** (Median der Slot-Mediane, nicht gepoolt) + **Bootstrap-95%-CI**; Perzentile (p50/p90

@@ -29,6 +29,8 @@ data/raw_backup/
 data/layer1/
 data/layer2/
 data/layer3/
+# Lokale Audit-Arbeitsstände (gezogene Slot-Rohdaten + VERDICT/SUMMARY) — Schlüsse stehen in setup/*.md
+data/audit_*/
 
 # Archivierte Mai-Kampagne (2026-06-08): bereits in git-Historie, nicht doppelt tracken
 data_archive_2026-05/
