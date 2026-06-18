@@ -286,6 +286,27 @@ der aus EU-Sicht (Distanz zum US-Backend) gerade der interessante Teil ist.
 aller Anbieter). `tcp_handshake_ms` ist zudem **identisch** mit dem Layer-1-TCP-Ping → die Cross-Layer-
 Brücke (`connect ≈ N_RTTs × ping`) wird transparent statt behauptet.
 
+### Welches IP-Feld wofür — `resolved_ip` vs. `connect.resolved_ip` (reconciled)
+
+Jeder Record trägt **zwei** IP-Felder unterschiedlicher Herkunft; bei Anycast/Round-Robin weichen sie in
+**~29 %** der Calls ab. Verwechslung verfälscht IP-/Region-/Brücken-Analysen — daher die feste Regel:
+
+| Feld | Herkunft (Code) | Eigenschaft | Verwenden für |
+|------|-----------------|-------------|---------------|
+| top-level `resolved_ip` | `getpeername` am **realen Mess-Socket** (`llm.py:87` / `stt.py:251` / `tts.py:108`) | **echter Peer** des Mess-Requests; **`null` bei Fails** (z.B. 74 TTS-Timeouts) | **L3↔L1/L2-RTT-Brücke** (welcher reale Server lieferte die Latenz) — dort **nur** Samples mit `connect.resolved_ip == resolved_ip` |
+| `connect.resolved_ip` | separater `gethostbyname` auf dem **Wegwerf-Socket** (`connect.py:29`) | **immer befüllt**, auch bei Fails; eigene Round-Robin-Ziehung | **Region/ASN-Klassifikation, Verfügbarkeit, connect-Submetriken** |
+
+- **Region/ASN/Verfügbarkeit → `connect.resolved_ip`** (nie `null`). **Fails NIEMALS über
+  `resolved_ip == null` filtern** — sonst verschwinden gerade die Timeouts aus der Verfügbarkeits-Achse.
+- **connect-Submetriken** (`tcp/tls_handshake_ms`) gehören zu `connect.resolved_ip` (auf diesem Socket gemessen).
+- **Cross-Layer-RTT-Brücke** → top-level `resolved_ip`, beschränkt auf Feld-Gleichheit; Abweichungsquote
+  als Limitation berichten.
+
+> **Reconciliation:** Der 16.6-Audit (`AUDIT_methodik_2026-06-16.md`: top-level = echter Peer, Brücke nur
+> bei Match) und der 17.6-Audit (`data/audit_20260617/VERDICT.md`: „IP für Region/connect aus
+> `connect.resolved_ip`") sind **kein Widerspruch, sondern zweckabhängig** — diese Tabelle ist die Single
+> Source of Truth.
+
 ### Zeitmess-Semantik je Kategorie (die Asymmetrie — wichtig!)
 
 Der entscheidende Punkt, der bisher verwirrt hat: **Ab welchem Zeitpunkt läuft die Uhr für das erste

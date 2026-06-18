@@ -30,9 +30,9 @@ reproduzierbare Prozedur zurückführbar ist.
 
 Diese drei Dinge sind unabhängig davon, wie die Zahlen erhoben wurden — sie werden mitgenommen:
 
-### 2.1 Der Reframe — „Engine schlägt Geografie" (die Contribution)
+### 2.1 Der Reframe — „Backend statt Geografie" (die Contribution)
 
-- **Kernbefund (C1):** Aus EU-Sicht dominiert die **Backend-Engine** des Providers, **nicht** die
+- **Kernbefund (C1):** Aus EU-Sicht dominiert die **Backend-Verarbeitung (HW+Modell)** des Providers, **nicht** die
   Netzwerknähe. **Schärfster Beleg — LLM bei identischer Edge-RTT:** OpenAI/Groq/Mistral terminieren alle
   bei Cloudflare Frankfurt (~1 ms RTT), aber LLM-`ttft` streut **75 → 268 → 476 ms (~6,4×; n=200, paced)** →
   gleiches Netz, Differenz = Backend (per-IP invariant; EU-Mistral sogar langsamer als US-Groq). Zweiter Beleg: Azure **schnellstes TTS** trotz US-Konkurrenz. STT ehrlich: auf der
@@ -139,7 +139,7 @@ Setup besser können muss**. Die Punkte sind hier als Anforderungen umformuliert
    **alle** Rohdaten (Transkript-Texte, token_count, Timestamps).
 4. **Pilot-Messung** (1 Slot, alle Provider) → gegen das Protokoll validieren.
 5. **Volle Kampagne.**
-6. **Analyse** auf den neuen Daten — Framing („Engine schlägt Geografie") steht bereits.
+6. **Analyse** auf den neuen Daten — Framing („Backend statt Geografie") steht bereits.
 
 ---
 

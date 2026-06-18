@@ -29,11 +29,11 @@ In beide Richtungen beantwortbar — „Netzwerk erklärt *weniger* als die Engi
 
 ## Contribution
 
-- **C1 (Kern) — „Engine schlägt Geografie":** Aus EU-Sicht dominiert die Backend-Engine, nicht die
+- **C1 (Kern) — „Backend statt Geografie":** Aus EU-Sicht dominiert die Backend-Verarbeitung (HW+Modell), nicht die
   Netzwerknähe. **Schärfster Beleg — LLM bei identischer Edge-RTT:** OpenAI/Groq/Mistral terminieren *alle*
   bei Cloudflare Frankfurt (~1 ms RTT, ASN 13335), doch LLM-`ttft` streut **75 → 268 → 476 ms (~6,4×;
   n=200, paced, connect-inkl.)** — gleiches Netz, Differenz **muss** Backend sein (per-IP invariant; EU-Mistral
-  sogar langsamer als US-Groq → Geografie-Ordnung invertiert). **Zweiter Beleg:** Azure **schnellstes TTS** (`ttfa` ~96 ms)
+  sogar langsamer als US-Groq → Geografie-Ordnung invertiert). **Zweiter Beleg:** Azure **schnellstes TTS** (`ttfa` ~94 ms)
   trotz US-Konkurrenz. **STT (ehrlich):** auf der fairen Metrik `ttfp` ist Azure **nicht** langsamster — die
   früher behauptete „Azure-STT-Endpointing-Inversion" war ein **Dump-Artefakt (Bulk-Compute)** und wird
   **nicht** als Engine-Beleg geführt. S. `setup/messprotokoll.md` → „STT-Primärmetrik".
