@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<title>Exposé zur Bachelorarbeit</title>
+<style>
+  @page {
+    size: A4;
+    margin: 18mm 20mm;
+  }
+  html { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  body {
+    font-family: Georgia, "Times New Roman", Times, serif;
+    font-size: 10.5pt;
+    line-height: 1.36;
+    color: #1a1a1a;
+    margin: 0;
+    hyphens: auto;
+    -webkit-hyphens: auto;
+    text-align: justify;
+  }
+  h1 {
+    font-size: 17pt;
+    line-height: 1.25;
+    margin: 0 0 6pt 0;
+    text-align: left;
+  }
+  h2 {
+    font-size: 12pt;
+    margin: 10pt 0 4pt 0;
+    padding-bottom: 2pt;
+    border-bottom: 0.6pt solid #bbb;
+    text-align: left;
+    break-after: avoid;
+    page-break-after: avoid;
+  }
+  h2 + p, h2 + ul, h2 + blockquote {
+    break-before: avoid;
+    page-break-before: avoid;
+  }
+  h2.result {
+    break-before: page;
+    page-break-before: always;
+    margin-top: 0;
+  }
+  p { margin: 0 0 5pt 0; }
+  .meta {
+    margin: 0 0 4pt 0;
+    line-height: 1.4;
+    text-align: left;
+  }
+  .meta-block { margin-bottom: 9pt; }
+  blockquote {
+    margin: 7pt 0 7pt 0;
+    padding: 6pt 11pt;
+    border-left: 2.5pt solid #555;
+    background: #f4f4f4;
+    font-style: italic;
+    text-align: left;
+    break-inside: avoid;
+    page-break-inside: avoid;
+  }
+  blockquote p { margin: 0; }
+  .leitfrage-label {
+    text-align: center;
+    font-weight: bold;
+    margin: 8pt 0 4pt 0;
+  }
+  ul {
+    margin: 0 0 6pt 0;
+    padding-left: 18pt;
+  }
+  li {
+    margin-bottom: 4pt;
+    break-inside: avoid;
+    page-break-inside: avoid;
+  }
+  code {
+    font-family: "SF Mono", "Menlo", "Consolas", monospace;
+    font-size: 9.2pt;
+    background: #eee;
+    padding: 0 2px;
+    border-radius: 2px;
+  }
+  strong { font-weight: bold; }
+  em { font-style: italic; }
+</style>
+</head>
+<body>
+
+<h1>Exposé zur Bachelorarbeit</h1>
+
+<div class="meta-block">
+  <p class="meta"><strong>Bachelorarbeit (B.Sc. Informatik, TU Dresden)</strong></p>
+  <p class="meta"><strong>Autor:</strong> Anton Rusik · Matrikelnummer 4847595</p>
+  <p class="meta"><strong>Erstprüfer:</strong> Prof. Dr. Matthias Wählisch</p>
+  <p class="meta"><strong>Arbeitstitel (Arbeitsstand, noch nicht final entschieden):</strong><br>Erklärt Netznähe die Latenzunterschiede? Eine drei-schichtige Messstudie zu Cloud-AI-Sprachdiensten (STT, LLM, TTS) aus EU-Sicht</p>
+</div>
+
+<h2>Motivation &amp; Forschungsfrage</h2>
+<p>Echtzeit-Sprachassistenten verketten kommerzielle Cloud-Dienste für Spracherkennung (STT), Sprachmodelle (LLM) und Sprachsynthese (TTS) sequenziell. Die Antwortlatenz entscheidet über die Nutzbarkeit, doch ihre Ursachen, also Netzweg gegenüber Backend-Verarbeitung, werden kaum getrennt gemessen. Öffentliche Latenz-Benchmarks solcher Dienste vermischen beide Anteile typischerweise, während die hier verwendete paket-validierte Schichtentrennung sie überhaupt erst getrennt messbar macht. Die Arbeit liefert eine empirische Latenz- und Verfügbarkeits-Charakterisierung dieses kommerziellen LLM-/AI-Servings, deren schärfsten Befund die LLM-Stufe liefert.</p>
+
+<p class="leitfrage-label">Leitfrage</p>
+
+<blockquote>
+  <p>In welchem Maße erklären <strong>Netzwerk- und Infrastruktureigenschaften</strong> (RTT, Protokoll, Hosting-Region), verglichen mit der <strong>Backend-Verarbeitung</strong> der Anbieter, die Latenzunterschiede zwischen kommerziellen Cloud-AI-APIs aus EU-Perspektive, und wie sich daraus die sequenzielle Cold-Start-Gesamtlatenz der Voice-Pipeline ergibt?</p>
+</blockquote>
+
+<p>Die Frage ist bewusst offen, denn auch der Befund, dass das Netzwerk <em>weniger</em> erklärt als das Backend, wäre ein ebenso tragfähiges Ergebnis. Neben der Latenz wird die Verfügbarkeit (Fehlerrate) je Endpunkt als eigene Achse erhoben.</p>
+
+<h2>Methodik</h2>
+<p>Gemessen wird von einem festen Vantage Point (AWS EC2, Frankfurt) gegen neun Endpunkte, also je drei Anbieter pro Stufe: STT (Deepgram, Rev.ai, Azure), LLM (OpenAI, Groq, Mistral) und TTS (Deepgram, OpenAI, Azure). Drei sauber getrennte Messschichten:</p>
+<ul>
+  <li><strong>Layer 1 (Infrastruktur):</strong> DNS, RTT (TCP/ICMP), TLS, Traceroute, ASN → Netznähe zum Host.</li>
+  <li><strong>Layer 2 (Paketebene):</strong> Verkehrsaufzeichnung (tcpdump/PCAP) zur <strong>paketbasierten Validierung des Connect-Timers</strong>. Der in der Anwendung gemessene Wert stimmt mit dem aus den Paketen abgeleiteten auf ~0,1 ms überein. (Die Antwortlatenzen <code>ttft</code>/<code>ttfa</code> nutzen denselben Messmechanismus, sind aber nicht direkt paket-geeicht.)</li>
+  <li><strong>Layer 3 (API-Latenz):</strong> Cold-Start-Messung, also jede Anfrage über eine frische Verbindung ohne Connection-Pooling, da aus EU-Sicht gerade der Verbindungsaufbau zum Backend der interessante Anteil ist. Erfasst werden atomare Submetriken (TCP-/TLS-/WebSocket-Handshake) sowie Time-to-first-Token/-Audio.</li>
+</ul>
+<p>Zielumfang: 7-Tage-Kampagne, 8 Zeitslots pro Tag, n=100 je Endpunkt und Slot, interleaved, insgesamt rund 50.000 Einzelmessungen. Vorläufig ausgewertet werden die bislang erhobenen Slots robust mit Bootstrap-Konfidenzintervallen, wobei die Aggregation (Median der Slot-Mediane gegenüber gepoolt) noch gegengeprüft wird. Die Latenz wird nur auf erfolgreichen Calls betrachtet, die Verfügbarkeit getrennt als eigene Achse ausgewiesen.</p>
+
+<h2 class="result">Zentrales Ergebnis (Zwischenstand)</h2>
+<p>Die drei LLM-Anbieter terminieren <strong>alle am selben Cloudflare-Edge in Frankfurt</strong>: je Anbieter beide DNS-rotierten Edge-IPs als AS13335 bei ~1 ms TCP-RTT gemessen und per ASN-Lookup bestätigt (100 % des LLM-Traffics). Trotz nahezu identischer Netzanbindung streut die Antwortlatenz um <strong>rund das Sechseinhalbfache (~6,5×)</strong>, wobei die geografische Ordnung sogar invertiert ist: Ein EU-gehosteter Dienst ist langsamer als ein US-Dienst.</p>
+<p>Die belastbare Aussage ist daher negativ: <strong>Die Netznähe erklärt die Spreizung nicht.</strong> Die Differenz liegt also nicht in der EU-Edge-Nähe, sondern im Backend und Serving, etwa in der Inferenz-Hardware (zum Beispiel Groqs LPU gegenüber GPU-Serving), der Modellgröße und dem Serving-Stack. Diese positive Lesart trägt einen unvermeidbaren Modellgrößen-Confound, denn das schnellste Modell ist zugleich das kleinste auf Spezialhardware, und wird transparent diskutiert. Die negative Kernaussage bleibt davon unberührt, da bereits die invertierte Geografie-Ordnung Netznähe als Erklärung ausschließt. Der Befund ist zudem vom einzelnen Vantage Point unabhängig, weil er bei <em>konstanter</em> Netzdistanz (gleicher Edge, ~1 ms für alle drei LLM) auftritt.</p>
+
+<h2>Beitrag, Abgrenzung, Stand</h2>
+<ul>
+  <li><strong>Kernbefund:</strong> empirischer Nachweis, dass Netznähe die Latenzspreizung nicht erklärt, am stärksten an LLMs mit identischem Edge. STT trägt zur Engine-These bewusst nicht bei, da es auf der fairen Metrik Engine und Geografie nicht scharf trennt, und dient als methodischer Kontrast- und Verfügbarkeitsfall.</li>
+  <li><strong>Methodischer Beitrag:</strong> eine reproduzierbare, mehrfach auditierte Drei-Schichten-Methodik samt paket-validierter Edge-Grenze für Performance-Aussagen über kommerzielle Blackbox-AI-Dienste.</li>
+  <li><strong>Methoden-Baustein:</strong> eine ping-basierte Heuristik zur Klassifikation der Connect-Zusammensetzung. Aus den Phasen wird die sequenzielle Cold-Start-Gesamtlatenz der Pipeline zusammengesetzt.</li>
+  <li><strong>Out of Scope:</strong> Transkriptions- und Ausgabequalität (gemessen werden nur Latenz und Verfügbarkeit) sowie der einzelne Vantage Point (Frankfurt). Die RTT- und Edge-Zahlen sind FRA-spezifisch, der Backend-Kernbefund ist davon unberührt.</li>
+  <li><strong>Stand:</strong> Die Messinfrastruktur steht und ist mehrfach auditiert. Die Kampagne läuft noch, danach folgen Auswertung, Statistik und schriftliche Ausarbeitung (geplante Fertigstellung voraussichtlich im August 2026).</li>
+</ul>
+
+</body>
+</html>

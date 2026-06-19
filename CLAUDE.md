@@ -7,7 +7,7 @@
 > Statistik, Folien. Lebende Referenz + Status: **`NEUANFANG.md`**, Einstieg **`HANDOFF.md`**. Alles Frühere
 > liegt in **`archived/`** (nur Nachschlagewerk). Leitprinzip: **erst Methodik schriftlich, dann Code, dann messen.**
 
-**Arbeitstitel (nicht angemeldet, frei änderbar — IN ÜBERARBEITUNG):** Kandidaten in **`arbeitstitel.md`**
+**Arbeitstitel (nicht angemeldet, frei änderbar — IN ÜBERARBEITUNG):** Kandidaten in **`notes/arbeitstitel.md`**
 (neutral-deskriptiv, Rigor-Signal; „Engine"/„Backend" bewusst NICHT im Titel wegen Modellgrößen-Confound —
 die verteidigbare Aussage ist die *negative*: „Netznähe erklärt die Latenzspreizung nicht"). Auswahl steht noch aus.
 **Autor:** Anton Rusik · **Betreuer:** Prof. Dr. Matthias Wählisch, TU Dresden
@@ -101,7 +101,7 @@ In beide Richtungen beantwortbar — „Netzwerk erklärt *weniger* als die Engi
 | Datei | Inhalt |
 |-------|--------|
 | `HANDOFF.md` | **⭐ Hier einsteigen** — aktueller Stand + To-dos (Campaign-Check, Arbeitstitel, Statistik, Folien) |
-| `arbeitstitel.md` | Titel-Kandidaten (Favorit + Alternativen) — Auswahl steht noch aus |
+| `notes/arbeitstitel.md` | Titel-Kandidaten (Favorit + Alternativen) — Auswahl steht noch aus |
 | `NEUANFANG.md` | **Lebende Referenz** — Warum/Was/Reihenfolge + aktueller Status |
 | `data/audit_20260618/VERDICT.md` | **Maßgebliches Voll-Audit-Urteil** (2026-06-18, 72 Agenten, 85 Befunde; GO-mit-Auflagen). Plus `l1_rtt_per_ip.md` + `asn_per_ip.md` als Beleg-Artefakte. *gitignored* (Konklusionen gehören in `setup/*.md`) |
 | `data/audit_20260616/VERDICT.md` | Älteres Audit-Urteil (3 Runden, 2026-06-16) + Echtdaten-Belege; *gitignored* |

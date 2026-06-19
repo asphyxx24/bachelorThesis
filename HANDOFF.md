@@ -5,7 +5,7 @@
 > Die **Messmethodik ist im Kern valide**, aber der **Ultracode-Voll-Audit vom 2026-06-18** (72 Agenten, Urteil
 > **GO-mit-Auflagen**, 85 Befunde) hat Doku-/Reporting-Korrekturen aufgedeckt, die VOR der Auswertung sitzen
 > müssen (s. §4) — durchweg **Doku/Reporting, KEINE Neumessungen**. **Erledigt seither:** Campaign-Check,
-> Arbeitstitel-Kandidaten (`arbeitstitel.md`), Zweitprüfer-Anfrage an Prof. Färber **raus**, Doku-/Tracking-Review
+> Arbeitstitel-Kandidaten (`notes/arbeitstitel.md`), Zweitprüfer-Anfrage an Prof. Färber **raus**, Doku-/Tracking-Review
 > (IP-Feld-Regel reconciled, C1 → „Backend statt Geografie", Azure-TTS ~94 ms), **L1-RTT- + ASN-Lücken am 19.6.
 > aus vorhandenen Daten geschlossen** (kein Neumessen), H1–H4 in den Docs eingearbeitet. **Jetzt dran:**
 > Arbeitstitel final wählen, **Datenaufbereitung, Statistik gegenprüfen, Interpretation, Prof-Folien.**
@@ -72,7 +72,7 @@ Voll-Urteil: `data/audit_20260618/VERDICT.md` (gitignored); Belege `data/audit_2
 > ⚠️ **Interpretations-Kompass:** Die **wasserdichte** Aussage ist die NEGATIVE: „Netznähe erklärt die
 > Spreizung nicht". Der Schritt zu „Backend" trägt den **Modellgrößen-Confound** (Groq = kleinstes Modell UND
 > spezielle HW). Formulieren als **„Backend (HW+Modell) statt Geografie"**, nicht „Engine-Rechenleistung allein".
-> (Deshalb „Engine/Backend" NICHT im Arbeitstitel — s. `arbeitstitel.md`.)
+> (Deshalb „Engine/Backend" NICHT im Arbeitstitel — s. `notes/arbeitstitel.md`.)
 
 ---
 
@@ -116,7 +116,7 @@ Eingearbeitet in `api_endpunkte.md` + `messprotokoll.md`.
 > - **`total_ms` längenabhängig** → `ttft`/`ttfa` primär. **Code eingefroren (f9e6dc8).**
 
 0. **Audit-Auflagen H1–H4 + M1 + ttl_ms — Doku-Teil erledigt (19.6.); in der Analyse weiter beachten (s. §4).**
-1. **Arbeitstitel final wählen** (`arbeitstitel.md`) und dem Betreuer vorlegen.
+1. **Arbeitstitel final wählen** (`notes/arbeitstitel.md`) und dem Betreuer vorlegen.
 2. *(optional, durch die Mail terminiert)* **Einseitiges Exposé/Methodik-Onepager**, falls Färber zusagt.
 3. **Datenaufbereitung:** Slots von EC2 ziehen (zuletzt `data/audit_20260618/ec2_data/`); Auswerte-Notebook/Skript bauen.
 4. **Statistik sauber + GEMEINSAM gegenprüfen** (nächste ungeprüfte Fehlerfläche): Aggregation **A4** (Median der
@@ -138,8 +138,9 @@ Eingearbeitet in `api_endpunkte.md` + `messprotokoll.md`.
 
 | Datei | Inhalt |
 |-------|--------|
-| `arbeitstitel.md` | Titel-Kandidaten (Favorit + 2 Alternativen) — finale Wahl steht aus |
-| `zweitpruefer_anfrage.md` | Versandte Zweitprüfer-Anfrage an Prof. Färber + Fit-Kontext |
+| `notes/` | Arbeits-/Korrespondenz-Ordner: Arbeitsplan, Titel-Kandidaten, Mail-Entwürfe, Exposé (md/html/pdf) |
+| `notes/arbeitstitel.md` | Titel-Kandidaten (Favorit + 2 Alternativen) — finale Wahl steht aus |
+| `notes/zweitpruefer_anfrage.md` | Versandte Zweitprüfer-Anfrage an Prof. Färber + Fit-Kontext |
 | `setup/messprotokoll.md` | Methodik (3 Layer, Metriken, **IP-Feld-Regel reconciled**, Aggregation A4, C1-Logik) |
 | `data/audit_20260618/VERDICT.md` | **Maßgebliches** Voll-Urteil (72 Agenten, GO-mit-Auflagen, H1–H4) |
 | `data/audit_20260618/l1_rtt_per_ip.md` | RTT je produktiv getroffener IP (L1-Lücke geschlossen, 100 % Traffic) |
