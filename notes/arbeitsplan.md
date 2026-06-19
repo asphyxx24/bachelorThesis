@@ -11,24 +11,29 @@
 > zieht sich als Querschnitt durch alle technischen Aufgaben. Werkzeug dafür: der `/explain <Thema>`-Befehl.
 
 **Status-Legende:** ☐ offen · ◐ in Arbeit · ☑ erledigt · ⏸ später/Blocker
-**Stand:** 2026-06-19
+**Stand:** 2026-06-19 — **A1 (Titelmail) + A2 (Exposé) sendefertig.** Repo-Root aufgeräumt: Arbeits-/
+Korrespondenz-/Exposé-Dateien liegen jetzt in `notes/`. Nächster großer Brocken: **Block B (Erklärbarkeit)**.
 
 ---
 
 ## Block A — Zeitkritisch / Außenkommunikation
 
-### A1 · Arbeitstitel an Prof. Wählisch schicken (HEUTE) ◐
+### A1 · Arbeitstitel an Prof. Wählisch schicken ☑ (sendefertig — nur noch absenden)
 - Wählisch will **mehrere Ideen** sehen und bei der nächsten Konsultation darüber sprechen.
-- Kandidaten liegen fertig in `arbeitstitel.md` (1 Favorit + 2 Alternativen + Platzhalter-Referenz).
-- ☑ **Mail-Entwurf erstellt:** `waehlisch_titel_mail.md` (3 Kandidaten + Rationale, warum „Engine" nicht im Titel).
-- [ ] **Offen:** durchlesen/anpassen → **selbst absenden**.
+- ☑ **3 Kandidaten** (unabhängig per Workflow generiert + bewertet) in `arbeitstitel.md`: Favorit
+  „Gleicher Edge, andere Latenz", Alt. 1 Frageform, Alt. 2 Methoden-Rigor.
+- ☑ **Mail-Entwurf fertig** (`waehlisch_titel_mail.md`): persönlich/knapp, ohne Semikola/Gedankenstriche,
+  Färber-Update integriert.
+- [ ] **Nur noch:** selbst absenden.
 
-### A2 · Exposé (1 Seite) + Gespräch für Prof. Färber (Zweitprüfer) ◐
-- Färber hat **gestern zugesagt**, will ein **Exposé** + ein **Gespräch**.
-- Anker aus `zweitpruefer_anfrage.md`: Fit über LLM-Serving-Performance/Effizienz, nicht Netzwerktiefe.
-- ☑ **Exposé-Entwurf erstellt + per Workflow überarbeitet:** `exposee.md` (5-Dimensionen-Review: Faktentreue/Fit/Sprache/Struktur/Angreifbarkeit → H2-Overclaim raus, negative Aussage primär, Färber-Vokabular, Geplant/Erhoben getrennt).
-- [ ] durchlesen/anpassen → **selbst an Färber senden** (Zahlen sind Zwischenstand, final nach ~23.6.).
-- [ ] **Gesprächstermin** vorschlagen/abstimmen.
+### A2 · Exposé (1 Seite) + Gespräch für Prof. Färber (Zweitprüfer) ☑ (sendefertig)
+- Färber hat **Interesse signalisiert**, will ein **Exposé** + ein **Gespräch im Juli**.
+- ☑ **Exposé fertig** (`exposee.md` / `.html` / `.pdf`): mehrfach per Workflow überarbeitet, dann **reine
+  Evaluation** gegen die Projektunterlagen → Urteil „**versandfertig mit kleinen Auflagen**"; alle mittel-
+  Auflagen + gewählte niedrig-Punkte umgesetzt. Layout 2 Seiten, lesbar, Methodik komplett auf S. 1.
+  **PDF = Deliverable/SSOT** (Quelle md/html behalten für spätere Änderungen).
+- [ ] **Nur noch:** selbst an Färber senden (Zahlen sind Zwischenstand, final nach Kampagnenende).
+- [ ] **Gesprächstermin im Juli** vorschlagen/abstimmen.
 - Hängt teils an Block B (das Exposé ist die Kurzform dessen, was Anton auch erklären können muss).
 
 ---
@@ -129,9 +134,9 @@
 
 ## Vorgeschlagene Reihenfolge (Diskussionsbasis)
 
-1. **A1 Arbeitstitel-Mail** (heute fällig, schnell erledigt).
-2. **A2 Exposé Färber** (terminiert durch seine Zusage; deckt sich inhaltlich mit Block B).
-3. **Block B Erklärbarkeit** parallel hochziehen — zahlt auf Konsultation *und* Exposé *und* Folien ein.
+1. ☑ **A1 Arbeitstitel-Mail** — sendefertig (nur noch absenden).
+2. ☑ **A2 Exposé Färber** — sendefertig (nur noch absenden + Juli-Termin abstimmen).
+3. **→ JETZT: Block B Erklärbarkeit** hochziehen — zahlt auf Konsultation *und* Exposé *und* Folien ein.
 4. **F1–F3 Auswertungs-Gerüst + Prototypen** (vorankommen, solange Kampagne läuft).
 5. **E Folien** (sobald B sitzt und erste Prototypen da sind).
 6. **C** wird bei der echten Auswertung scharf (finale Zahlen nach ~23.6.).
