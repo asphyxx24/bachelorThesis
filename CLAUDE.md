@@ -1,9 +1,11 @@
 # Bachelorarbeit — Messinfrastruktur (Neuaufbau)
 
-> **Stand 2026-06-14: Neuanfang.** Skripte, Setup und **alle Messungen** werden von Grund auf neu
-> gebaut. Lebende Referenz + aktueller Status: **`NEUANFANG.md`**. Alles Frühere liegt in **`archived/`**
-> (nur Nachschlagewerk, nicht mehr Grundlage). Leitprinzip: **erst Methodik schriftlich, dann Code,
-> dann messen.**
+> **Stand 2026-06-19: Messphase läuft, Code eingefroren.** Methodik und Skripte sind gebaut; die
+> Layer-3-Kampagne läuft seit 2026-06-16 auf EC2 `i-0f8f6d2414cecebb8` (Code eingefroren auf Commit
+> `f9e6dc8`), 16+ Slots gelandet, geplanter Stop ~2026-06-23. **Layer 3 läuft slotweise** (8 UTC-Slots/Tag);
+> **Layer 1 war eine EINMALIGE Momentaufnahme** (2026-06-16, kein Slotbetrieb). Nächste Phase: Auswertung,
+> Statistik, Folien. Lebende Referenz + Status: **`NEUANFANG.md`**, Einstieg **`HANDOFF.md`**. Alles Frühere
+> liegt in **`archived/`** (nur Nachschlagewerk). Leitprinzip: **erst Methodik schriftlich, dann Code, dann messen.**
 
 **Arbeitstitel (nicht angemeldet, frei änderbar — IN ÜBERARBEITUNG):** Kandidaten in **`arbeitstitel.md`**
 (neutral-deskriptiv, Rigor-Signal; „Engine"/„Backend" bewusst NICHT im Titel wegen Modellgrößen-Confound —
@@ -30,23 +32,35 @@ In beide Richtungen beantwortbar — „Netzwerk erklärt *weniger* als die Engi
 ## Contribution
 
 - **C1 (Kern) — „Backend statt Geografie":** Aus EU-Sicht dominiert die Backend-Verarbeitung (HW+Modell), nicht die
-  Netzwerknähe. **Schärfster Beleg — LLM bei identischer Edge-RTT:** OpenAI/Groq/Mistral terminieren *alle*
-  bei Cloudflare Frankfurt (~1 ms RTT, ASN 13335), doch LLM-`ttft` streut **75 → 268 → 476 ms (~6,4×;
-  n=200, paced, connect-inkl.)** — gleiches Netz, Differenz **muss** Backend sein (per-IP invariant; EU-Mistral
-  sogar langsamer als US-Groq → Geografie-Ordnung invertiert). **Zweiter Beleg:** Azure **schnellstes TTS** (`ttfa` ~94 ms)
-  trotz US-Konkurrenz. **STT (ehrlich):** auf der fairen Metrik `ttfp` ist Azure **nicht** langsamster — die
-  früher behauptete „Azure-STT-Endpointing-Inversion" war ein **Dump-Artefakt (Bulk-Compute)** und wird
-  **nicht** als Engine-Beleg geführt. S. `setup/messprotokoll.md` → „STT-Primärmetrik".
+  Netznähe. Die wasserdichte Aussage ist die *negative*: Netznähe erklärt die Latenzspreizung nicht.
+  **Schärfster Beleg — LLM bei identischer Edge-RTT:** OpenAI/Groq/Mistral terminieren *alle* bei Cloudflare
+  Frankfurt (AS13335, ~1 ms RTT). Das ist für **100 % des LLM-Traffics** gemessen und ASN-belegt (je Provider
+  2 CF-IPs ~50/50, alle AS13335 ~1 ms, nicht mehr per ASN unterstellt; Belege `data/audit_20260618/l1_rtt_per_ip.md`
+  + `asn_per_ip.md`). Trotzdem streut LLM-`ttft` in der Voll-Kampagne (16 Slots, Zwischenstand 2026-06-18)
+  **~68 → 280 → 440 ms (~6,5×; groq < mistral < openai; connect-inkl.; finale Zahlen nach Kampagnenende)** —
+  gleiches Netz, die Differenz kann nicht Netznähe sein (per-IP invariant; EU-Mistral sogar langsamer als
+  US-Groq → Geografie-Ordnung invertiert). Die früher zitierten **75/268/476 ms** sind der Predeploy-Pilot
+  (n=200, 2 Slots) und reproduzieren aus keinem Kampagnen-Datensatz. **Zweiter Beleg:** Azure **schnellstes TTS**
+  (`ttfa` ~94 ms, n=200); das gilt gegenüber Deepgram (US-Transit ~280 ms connect). OpenAI-TTS terminiert AUCH
+  bei Cloudflare-FRA (AS13335) und ist damit eine **zweite identical-edge-Instanz**, die C1 zusätzlich stützt.
+  **STT (ehrlich):** auf der fairen Metrik `ttfp` ist Azure **nicht** langsamster — die früher behauptete
+  „Azure-STT-Endpointing-Inversion" war ein **Dump-Artefakt (Bulk-Compute)** und wird **nicht** als Backend-Beleg
+  geführt. S. `setup/messprotokoll.md` → „STT-Primärmetrik".
 - **C2 — Drei-Schichten-Methodik + Cloudflare-/Edge-Grenze.**
 - **C3 (Methoden-Baustein) — Ping-basierte connect-Klassen-Heuristik** (`r` bewusst **nicht** als Gütemaß).
 
 ## Drei-Schichten-Architektur
 
 - **Layer 1 (Infrastruktur):** DNS, RTT/Ping (**TCP primär**, ICMP zur Validierung), TLS, Traceroute
-  → misst Netzwerk-Nähe zum **Host**.
+  → misst Netznähe zum **Host**. **Maßgeblich ist nur der EC2-Lauf** (ts 2026-06-16, RTT ~1 ms CF / ~11 ms Azure
+  / ~140 ms US). `data/layer1/` im Repo enthält zusätzlich einen macOS-Dev-Lauf (RTT ~17–21 ms), der **nicht**
+  in die Auswertung darf (kein Vantage-Stempel im Record, nur an der RTT-Größenordnung unterscheidbar; Audit H4).
 - **Layer 2 (Paketaufzeichnung):** tcpdump/PCAP (`measurements/layer2/`). **Eichung durchgeführt
   (2026-06-16):** App-`tcp_handshake_ms` = Wire-SYN→SYN-ACK auf **~0,1 ms** genau (Azure 11 ms & Deepgram
-  139 ms, je N=30) → Layer-3-Timer am Paket-Level validiert. Richere Zusatzinfo (IAT/Retransmits) = Analyse-Phase.
+  139 ms) → der **Connect-Timer** ist paket-validiert. **Wichtig (Audit H2):** die Eichung deckt NUR den
+  Connect-Timer (`tcp_handshake`), NICHT `ttft`/`ttfa` — diese starten erst beim Request-Absenden im
+  httpx/websockets-Stack und nutzen denselben `perf_counter`-Mechanismus, sind aber nicht direkt paket-geeicht.
+  Richere Zusatzinfo (IAT/Retransmits) = Analyse-Phase.
 - **Layer 3 (API-Latenz):** Cold-Start — atomare connect-Submetriken + `ttft`/`ttfa`/`total`
   → misst Engine-Verarbeitung über die volle **URL**.
 
@@ -89,7 +103,9 @@ In beide Richtungen beantwortbar — „Netzwerk erklärt *weniger* als die Engi
 | `HANDOFF.md` | **⭐ Hier einsteigen** — aktueller Stand + To-dos (Campaign-Check, Arbeitstitel, Statistik, Folien) |
 | `arbeitstitel.md` | Titel-Kandidaten (Favorit + Alternativen) — Auswahl steht noch aus |
 | `NEUANFANG.md` | **Lebende Referenz** — Warum/Was/Reihenfolge + aktueller Status |
-| `data/audit_20260616/VERDICT.md` | Voll-Audit-Urteil (3 Runden) + Echtdaten-Belege |
+| `data/audit_20260618/VERDICT.md` | **Maßgebliches Voll-Audit-Urteil** (2026-06-18, 72 Agenten, 85 Befunde; GO-mit-Auflagen). Plus `l1_rtt_per_ip.md` + `asn_per_ip.md` als Beleg-Artefakte. *gitignored* (Konklusionen gehören in `setup/*.md`) |
+| `data/audit_20260616/VERDICT.md` | Älteres Audit-Urteil (3 Runden, 2026-06-16) + Echtdaten-Belege; *gitignored* |
+| `setup/deployment.md` | EC2-Betrieb (Instanz, Slot-Cron, Stop-Plan) |
 | `setup/anbieter_auswahl.md` | Welche Anbieter je Dienst, mit Begründung |
 | `setup/api_endpunkte.md` | Verifizierte Hosts, URLs, Pfade, Auth-Methoden |
 | `setup/messprotokoll.md` | **Methodik** — alle 3 Layer, Metriken, Kampagne, Fehlerbehandlung |

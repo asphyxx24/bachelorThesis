@@ -38,8 +38,12 @@ Pro Kategorie **3 Anbieter** → **9 Mess-Endpunkte** insgesamt.
 ### STT — Deepgram, Rev.ai, Azure
 - **Deepgram (Nova-3):** Marktführend bei Streaming-STT-Latenz, US-gehostet über mehrere Rechenzentren
   mit kurz-TTL-DNS-Round-Robin (rotiert `md1`/`sac1`/`sv1`, **kein** Anycast/GeoDNS) → guter
-  Kontrast „weit weg, aber schnell". Die RTT-Streuung (~102–148 ms) erklärt sich aus dem je Messung
-  verbundenen DC; deshalb wird die verbundene Ziel-IP pro Run mitgeloggt (s. `messprotokoll.md`, A5).
+  Kontrast „weit weg, aber schnell". Die RTT-Streuung (~101–148 ms je nach getroffenem DC) erklärt sich aus dem
+  je Messung verbundenen Rechenzentrum; deshalb wird die verbundene Ziel-IP pro Run mitgeloggt (s. `messprotokoll.md`, A5).
+  Bestätigt per-IP über die Kampagne (16 Slots, 6 IPs, alle US: AS6461 Zayo ×3 + AS174 Cogent ×3;
+  s. `../data/audit_20260618/{l1_rtt_per_ip.md, asn_per_ip.md}`). Bemerkenswert: der langsamere `ttft`-Modus läuft
+  über die Cogent-IPs (38.68.64.131/.132), die die *niedrigere* RTT (~101 ms) haben → der langsame Modus ist
+  Backend/DC, nicht Netz (direkter C1-Beleg innerhalb eines Anbieters).
 - **Rev.ai (English):** Zweiter US-Anbieter, reifes English-Streaming-Modell, **roher WebSocket-Zugang
   ohne SDK** → methodisch konsistent zu Deepgram/Azure. *(Ersetzte ursprünglich AssemblyAI, dessen API
   Echtzeit-Pacing erzwang — damals, als alle STT gedumpt wurden, ein Inkonsistenz-Argument. **Seit
@@ -56,16 +60,22 @@ Pro Kategorie **3 Anbieter** → **9 Mess-Endpunkte** insgesamt.
 - **OpenAI (gpt-4o-mini):** US-GPU-Referenz, der De-facto-Standard.
 - **Groq (llama-3.1-8b-instant):** US, aber spezielle LPU-Hardware → testet, ob das **Backend insgesamt
   (Inferenz-HW + Modellgröße/-Architektur), nicht Geografie** die Latenz dominiert. *(Caveat: Groq variiert
-  HW UND Modellgröße (8B) gemeinsam → „Engine" als Bündel verstehen; robust ist die negative Aussage „nicht Geografie".)*
+  HW UND Modellgröße (8B) gemeinsam → „Backend/Engine" als Bündel; die im Sinn von C1 („Backend statt Geografie")
+  tragende Aussage ist die **negative**: die Netznähe erklärt die Spreizung nicht. OpenAI, Groq und Mistral
+  terminieren alle bei Cloudflare Frankfurt @ ~1 ms (100 % des LLM-Traffics gemessen + ASN-belegt, AS13335;
+  s. `../data/audit_20260618/{l1_rtt_per_ip.md, asn_per_ip.md}`).)*
 - **Mistral (mistral-small):** Der **EU-Anbieter** (Frankreich). Wichtig als geografisch naher
   Vergleichspunkt — und für die Verfügbarkeits-/Output-Dimension relevant.
 
 ### TTS — Deepgram, OpenAI, Azure
 - **Deepgram (Aura-2)** & **OpenAI (tts-1):** US-Streaming-TTS.
-- **Azure (Standard Neural):** **Schnellstes TTS** (`ttfa` ~94 ms, n=200) trotz US-Konkurrenz (OpenAI ~940 ms) —
-  empirisch sehr robust. Das ist der **zweite** C1-Beleg (Kernbeleg ist die LLM-Edge-Achse, s. `messprotokoll.md`).
-  Die within-Azure-Gegenüberstellung STT (~1 s bis erstes Wort) vs. TTS (~96 ms) bleibt höchstens eine
-  **Workload-Beobachtung** (5-s-Audio rein vs. Kurzsatz raus), **nicht** „reine Engine-Geschwindigkeit".
+- **Azure (Standard Neural):** **Schnellstes TTS** (`ttfa` ~94 ms, n=200) — empirisch sehr robust. Das ist der
+  **zweite** C1-Beleg (Kernbeleg ist die LLM-Edge-Achse, s. `messprotokoll.md`). Präzisierung: OpenAI-TTS
+  terminiert bei **Cloudflare Frankfurt** (162.159.140.245 / 172.66.0.243, AS13335, ~6 ms connect — dieselben IPs
+  wie OpenAI-LLM; s. `../data/audit_20260618/asn_per_ip.md`) und ist damit eine **zweite identical-edge-Instanz**
+  (~930 ms connect-exklusiv = reines Backend), die C1 stützt. „Trotz US-Konkurrenz" gilt daher nur gegenüber
+  **Deepgram-TTS** (echter US-connect ~280 ms). Die within-Azure-Gegenüberstellung STT (~1 s) vs. TTS (~94 ms)
+  bleibt höchstens eine **Workload-Beobachtung**, **nicht** „reine Engine-Geschwindigkeit".
 
 ## Warum überwiegend US-Anbieter? (Das ist Teil des Befundes, kein Mangel)
 

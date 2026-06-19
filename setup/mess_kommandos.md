@@ -19,6 +19,17 @@
 
 ## Layer 1 — Infrastruktur (aktives Messen)
 
+> **Betriebsmodus (wichtig für die Auswertung):** Layer 1 ist eine **EINMALIGE Momentaufnahme**. Der
+> auswertungsrelevante Lauf wurde am 2026-06-16 auf der EC2 (eu-central-1, Frankfurt) erhoben; es gibt **keinen**
+> Slot-/cron-Betrieb für Layer 1. Nur **Layer 3** misst slotweise (8 UTC-Slots/Tag per cron, s. unten +
+> `deployment.md`). Begründung: Netz-, Routing- und ASN-Eigenschaften ändern sich nicht im Stunden-Takt;
+> RTT-Schwankungen werden ohnehin über den per-Call `connect.tcp_handshake_ms` aus Layer 3 (16 Slots) mitgemessen.
+>
+> **Vantage-Disziplin (Audit H4):** L1-Werte sind NUR vom EC2-Lauf belastbar (RTT ~1 ms zu Cloudflare, ~11 ms
+> zu Azure, ~140 ms zu US-Hosts). Lokale macOS-Vortests liefern ~17–21 ms und dürfen **nicht** mit EC2-Daten
+> vermischt werden. Da die L1-Skripte (eingefrorener Code) **kein** platform/Vantage-Feld schreiben, wird die
+> Quelle über Datei-Zeitstempel (EC2 = 2026-06-16) und RTT-Größenordnung identifiziert.
+
 ### RTT primär: TCP-Ping (Port 443) — für alle 9
 Python-`socket`, kein CLI-Tool (misst SYN→SYN-ACK = 1 RTT auf Port 443):
 ```python
@@ -111,7 +122,7 @@ ultracode-Review** geprüft (Finden → adversariale Gegenprüfung), die bestät
 | Messung | Skript | setzt Befehl um | wichtige Entscheidungen / Rohdaten |
 |---------|--------|------------------|------------------------------------|
 | TCP-RTT (**primär**) | `tcp_ping.py` | Python-`socket`-Handshake | N=20, **min + median**, **alle** Rohwerte (`rtts_ms`), `resolved_ip`; Uhr stoppt vor `close()` |
-| ICMP-RTT (Cross-Check) | `icmp_ping.py` | `ping -c` | N=10; pingt die **aufgelöste IP** (gleiche IP wie TCP → fairer Vergleich); „geblockt" vs. echter Fehler getrennt; volle `raw`-Ausgabe |
+| ICMP-RTT (Cross-Check) | `icmp_ping.py` | `ping -c` | N=10; pingt die **aufgelöste IP**; bei DNS-Round-Robin-Hosts (Deepgram) kann das eine **andere** IP als der TCP-Ping sein (z. B. 216.200.21.204 vs. 208.184.56.200) → der Cross-Check ist dann nicht IP-identisch, sondern nur ASN-/Größenordnungs-Vergleich; „geblockt" vs. echter Fehler getrennt; volle `raw`-Ausgabe |
 | DNS Multi-Resolver | `dns_lookup.py` | `dig @8.8.8.8/1.1.1.1/9.9.9.9` | IPv4 je Resolver + TTL (über Google-Resolver; = **verbleibende Cache-TTL**) |
 | ASN/Netz je IP (**Bed. b**) | `asn_lookup.py` | `dig TXT …origin.asn.cymru.com` | **alle** IPv4s je Host, MOAS-sicheres Parsing, rohe Cymru-Zeile gespeichert |
 | TLS-Info + Timing | `tls_info.py` | Python-`ssl` | A1-Guard (Version **nur auf EC2** belastbar), TCP/TLS getrennt getimt, Cipher + Bits + Cert-CN/SAN |
@@ -151,8 +162,12 @@ sudo timeout 25 tcpdump -i ens5 -n -w data/layer2/cap_<prov>.pcap "tcp port 443 
 .venv/bin/python measurements/layer2/capture.py --host <host> --ip <IP> --n 30 --out data/layer2/applog_<prov>.jsonl
 .venv/bin/python measurements/layer2/analyze.py --pcap data/layer2/cap_<prov>.pcap --applog data/layer2/applog_<prov>.jsonl
 ```
-**Ergebnis:** App-`tcp_handshake_ms` = Wire-SYN→SYN-ACK auf ~0,1 ms genau (Azure 11 ms: +0,11; Deepgram
-139 ms: +0,12) → Layer-3-Timer am Paket-Level validiert (C2). Feste `--ip` bei Round-Robin (Deepgram).
+**Ergebnis:** App-`tcp_handshake_ms` = Wire-SYN→SYN-ACK gerichtet +0,11 ms genau (Median; Azure +0,11 bei 30/30,
+Deepgram +0,12 bei 28/30 — 2 Handshakes am Capture-Fensterrand; idx-0 = Cold-Start-Outlier ~+1,2 ms, ausgeschlossen).
+Damit ist **der Connect-Timer (`tcp_handshake_ms`) paket-validiert** — und nur dieser (Audit H2). **Wichtige Grenze:**
+`ttft`/`ttfa`/`ttfp` (die C1-tragenden Metriken) starten erst beim Request-Absenden im httpx/websockets-Mess-Stack
+und werden von dieser Eichung **NICHT** direkt paket-geeicht; sie nutzen denselben `perf_counter`-Mechanismus,
+dessen Connect-Komponente hier validiert wurde. Feste `--ip` bei Round-Robin (Deepgram).
 
 ### Richere PCAP-Analyse (Analyse-Phase, optional)
 Inter-Arrival-Times der Antwort-Pakete / Retransmits aus *während echter API-Calls* aufgezeichneten PCAPs —
@@ -167,15 +182,17 @@ festen Input sendet und die Timestamps/Submetriken misst (s. Layer-3-Abschnitt i
 über einen Runner mit Slot-/n-Parametern:
 ```bash
 python measurements/layer3/run.py --n 100 --tag 09h --api all   # oder: stt | llm | tts
-python measurements/layer3/run.py --n 3  --tag test --api stt --dry-run   # Test ohne Schreiben
+python measurements/layer3/run.py --n 2  --tag pilot --api stt --dry-run   # Test ohne Schreiben
 ```
 - `--n` Messungen pro Anbieter (Kampagne: 100), `--tag` Tageszeit-Slot (`09h`, `12h`, …, wird ins JSONL
   geschrieben → Gruppierung nach `tag`, nicht nach Timestamp, s. A12).
 - `MEASUREMENT_DELAY_S = 1.5` s Pause zwischen Einzelmessungen (Rate-Limit-Schutz).
 - Ergebnis: JSONL je Slot mit allen rohen Timestamps + Submetriken (s. Rohdaten-Speicherung im Protokoll).
 
-> Die Slot-Automatisierung (8 Slots/Tag, alle 3 h, 7 Tage) läuft per **cron** auf der EC2 — Deploy,
-> Instanz, Betrieb und Pilot-Ergebnisse stehen in **`setup/deployment.md`**.
+> Die Slot-Automatisierung (8 UTC-Slots/Tag `00/03/06/09/12/15/18/21h`, alle 3 h) läuft per **cron** auf der
+> EC2 — Deploy, Instanz, Betrieb und Pilot-Ergebnisse stehen in **`setup/deployment.md`**. **Nur Layer 3 ist
+> cron-/slotgetrieben; Layer 1 war eine einmalige EC2-Aufnahme (16.06.2026), Layer 2 eine einmalige
+> Handshake-Eichung (16.06.2026).** Eingefrorener Mess-Code: Commit `f9e6dc8`.
 
 ---
 

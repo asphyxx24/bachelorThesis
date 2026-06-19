@@ -147,8 +147,9 @@ Sonst gilt der Endpunkt als **Host-terminiert** (Verbindung endet am realen Back
 ### Ergebnis-Artefakt
 
 Die Klassifikation jedes Endpunkts steht als **feste Spalte „Terminierung (Edge/Host)"** in
-`api_endpunkte.md` (§Terminierung) = **Single Source of Truth**. Die Werte dort sind aus den
-DNS-/ASN-Beobachtungen **vorläufig** gesetzt und werden auf der EC2 per TCP-Ping + traceroute **bestätigt**.
+`api_endpunkte.md` (§Terminierung) = **Single Source of Truth**. Die Werte dort sind auf der EC2
+**bestätigt (2026-06-16/19)**: per-IP TCP-RTT aus L3-`connect.tcp_handshake_ms` + Team-Cymru-ASN über
+**alle** produktiv getroffenen IPs (Belege `data/audit_20260618/{l1_rtt_per_ip,asn_per_ip}.md`).
 
 ---
 
@@ -165,8 +166,14 @@ DNS-/ASN-Beobachtungen **vorläufig** gesetzt und werden auf der EC2 per TCP-Pin
 > | Deepgram (US) | ~139 ms | 139,01 ms | 138,87 ms | **+0,12 ms** |
 >
 > → Der Layer-3-App-Timer trifft die echte Wire-Latenz **an beiden Enden der RTT-Skala auf ~0,1 ms genau**
-> (der minimale Positiv-Offset ist die Kernel-Returnzeit nach dem SYN-ACK). Damit ist die Layer-3-
-> Zeitmessung **am Paket-Level validiert** — das beantwortet das „ich vertraue den Daten nicht" mit Daten.
+> (gerichteter Positiv-Offset ~+0,11 ms Median = Kernel-Returnzeit nach dem SYN-ACK; idx0-Cold-Start-Outlier
+> ausgeschlossen; Deepgram wire-validiert 28/30, Azure 30/30). **Genaue Reichweite (nicht überverkaufen,
+> Audit H2):** Geeicht ist der **Connect-Timer `tcp_handshake_ms`** (SYN→SYN-ACK). **`ttft`/`ttfa` sind NICHT
+> direkt paket-geeicht**: sie starten erst beim Request-Absenden im produktiven httpx-/websockets-Stack (nicht
+> im Raw-Socket-Eichpfad), nutzen aber **denselben `perf_counter`-Mechanismus** wie der validierte Connect-Timer.
+> Optionaler Ausbau (Analyse-Phase): erstes Antwort-Paket aus dem PCAP gegen `ttft` paaren. So beantwortet die
+> Eichung das „ich vertraue den Daten nicht" für den Connect-Teil paket-genau, für ttft/ttfa über den geteilten,
+> validierten Timer.
 > Roh-Belege: `data/layer2/cap_{azure,deepgram}.pcap` + `applog_*.jsonl`.
 > **Noch offen (Analyse-Phase, kein Vertrauens-Blocker):** das *Mehr* aus Punkt 2 unten (Inter-Arrival-Times
 > der Antwort-Pakete, Retransmits) aus während-der-API-Calls aufgezeichneten PCAPs — die Eichung selbst steht.
@@ -320,8 +327,10 @@ Token/Audio?** Das ist **nicht** über alle Kategorien gleich — und das wird h
 
 - **STT misst Netz-Roundtrip + Engine-Reaktion** (Connect ist abgezogen, separat in den Submetriken; der
   in `ttfp` verbleibende ~1-RTT-Netzanteil ist via Layer-1-RTT herausrechenbar — keine *reine* Rechenzeit).
-  → User-perceived STT-Cold-Start bis erstes Wort = `connect_total_ms + stt_ttfp_ms` (Primär; in der
-  Auswertung addiert). Variante „bis Final" = `connect_total_ms + stt_ttft_ms` (Stream-Ende-Final, sekundär).
+  → Zwei getrennte Größen: (1) **STT-Standalone-Responsiveness** (Zeit bis erstes Live-Wort) =
+  `connect_total_ms + stt_ttfp_ms` — gut für „reagiert die Engine zügig", aber **keine** Pipeline-Eingangsgröße.
+  (2) **Sequenzieller STT-Beitrag zur E2E-Pipeline** = `connect_total_ms + stt_ttft_ms` (Stream-Ende-Final) —
+  der Wert, auf den das LLM tatsächlich wartet, und damit der **Primär**-Eingang in die E2E-Faltung (Audit M1).
   **Definition `connect_total_ms` für STT (eindeutig):** `= ws_connect_ms + session_init_ms` — der reale Pfad
   bis Audio fließen kann (echter WS-Connect inkl. Upgrade-RTT + Session-Init, z.B. Rev.ai-„connected"). Das
   Wegwerf-`connect{dns,tcp,tls}` ist **nur** Layer-1-/Cross-Layer-Referenz, **kein** E2E-Eingang (es differiert
@@ -331,10 +340,14 @@ Token/Audio?** Das ist **nicht** über alle Kategorien gleich — und das wird h
   Die Submetriken oben werden hier als **separate Referenzmessung** (Wegwerf-Socket) zusätzlich erhoben,
   damit man den connect-Anteil bei Bedarf herausrechnen kann.
 
-> **Konsequenz für die E2E-Pipeline:** `stt_connect + stt_ttfp + llm_ttft + tts_ttfa` zählt connect
-> **nicht doppelt** — STT trägt connect + ttfp (post-connect, endpointing-frei), LLM/TTS tragen nur
-> ttft/ttfa (connect bereits enthalten). Cross-Provider wird **nie** rohes connect verglichen, sondern
-> nur der user-perceived Cold-Start je Phase.
+> **Konsequenz für die E2E-Pipeline (sequenziell — Primärformel):** Die Forschungsfrage zielt auf eine
+> **sequenzielle** Voice-Pipeline: das LLM kann erst auf dem **finalen** Transkript starten. Daher summiert die
+> **Primär-E2E** den STT-Beitrag mit **`stt_ttft`** (Final), nicht mit `ttfp`:
+> `stt_connect_total + stt_ttft + llm_ttft + tts_ttfa`. Das zählt connect **nicht doppelt** — STT trägt connect +
+> ttft, LLM/TTS tragen nur ttft/ttfa. Die `ttfp`-Summe wird **separat als „STT-Standalone-Responsiveness"**
+> etikettiert und ist **keine** realisierbare Pipeline-Latenz — sie unterschätzt die STT-Phase um ~3,7–3,9 s
+> (Median `ttft − ttfp`: Deepgram +3734 ms, Rev.ai +3683 ms, Azure +3934 ms; Audit M1). Cross-Provider wird **nie**
+> rohes connect verglichen, sondern nur der user-perceived Cold-Start je Phase.
 
 ### Metriken je Kategorie (vollständig)
 
@@ -343,17 +356,19 @@ Token/Audio?** Das ist **nicht** über alle Kategorien gleich — und das wird h
 | Submetriken (s. o.) | ✓ | ✓ (Referenz) | ✓ (Referenz) | Verbindungsaufbau, atomar |
 | `ttfp_ms` (Time-to-first-Partial) | ✓ (**primär**) | — | — | STT: Zeit bis erstes Live-Wort (endpointing-frei) |
 | `*_ttft_ms` / `ttfa_ms` | ✓ (sekundär) | ✓ | ✓ | Zeit bis erstes Token/Audio (STT-ttft = Stream-Ende-Final) |
-| `total_ms` | ✓ | ✓ | ✓ | Dauer bis Antwort vollständig |
-| `ttl_ms` (Time to Last Token) | — | ✓ | — | nur LLM |
+| `total_ms` | ✓ | ✓ | ✓ | Dauer bis Antwort vollständig (= Time-to-Last-Token bei LLM; **kein** separates `ttl_ms`-Feld im Code/Daten) |
 
 #### Primär- vs. Sekundärmetrik — Output-Mengen-Confound (A8)
 
 - **Primär (Engine-Metrik): `ttft`/`ttfa`.** Zeit bis zum **ersten** Token/Audio ist von der Output-**Menge**
   **unabhängig** → fairer Engine-Vergleich. Feste Inputs standardisieren nur die **Eingabe**; die
   Ausgabemenge ist es **nicht** (`max_tokens=50` ist Obergrenze, kein Fixwert).
-- **Sekundär: `total_ms`/`ttl_ms`.** Skalieren mit der Output-Menge — ein wortkarges Modell „gewinnt"
-  durch Knappheit, nicht durch Geschwindigkeit. Daher nur sekundär bzw. **pro Token normalisiert**
-  (`ttl_ms / output_tokens`) berichten; die rohe Output-Menge wird mitgespeichert (A10/A11).
+- **Sekundär: `total_ms`.** Skaliert mit der Output-Menge — ein wortkarges Modell „gewinnt" durch
+  Knappheit, nicht durch Geschwindigkeit. Daher nur sekundär bzw. **pro Token normalisiert** berichten;
+  die rohe Output-Menge (Token-/Chunk-Zahl) wird mitgespeichert (A10/A11). **Es gibt kein separates
+  `ttl_ms`-Feld** (Time to Last Token); die Zeit bis zum letzten Token ist `total_ms`. Die Pro-Token-Rate
+  wird in der Analyse als `(total_ms − ttft_ms) / output_tokens` (reine Generationsrate) bzw. ersatzweise
+  `total_ms / output_tokens` aus den roh gespeicherten Feldern gerechnet.
 - **TTS-Inversion vom Output-Mengen-Confound nicht betroffen** (`ttfa` = erstes Audio, mengen-unabhängig);
   bei TTS ist nur der **Container mp3** gepinnt, **nicht die Bitrate** (Azure erzwingt 48 kbit/s, Deepgram/OpenAI
   Provider-Default → `audio_bytes` differiert ~3,6×). Folge: **`ttfa` bleibt fair** (erstes Audio-Byte,
@@ -422,15 +437,24 @@ Clips) — **kein** einheitlicher Stille-Timer. So beschriften, nicht als Engine
 > **Korrekte C1-Logik (gegen Echtdaten geprüft — der STT-Weg trägt C1 NICHT, frühere Endpointing-Lesart war
 > falsch).** Worauf „Engine/Backend schlägt Geografie" **wirklich** ruht (s. CLAUDE.md C1):
 > 1. **Kernbeleg — LLM @ identischer Edge-RTT:** OpenAI, Groq und Mistral terminieren **alle** bei Cloudflare
->    in Frankfurt (~1 ms RTT, ASN 13335 — Layer 1). Bei **identischer Netz-Distanz** streut LLM-`ttft`
->    **75 ms (Groq) → 268 ms (Mistral) → 476 ms (OpenAI) ≈ 6,4×** (n=200, paced, connect-inkl.; selbst
->    nachgerechnet). **Per-IP invariant** (Edge-Shuffle = 0 Effekt) und Geografie-Ordnung sogar **invertiert**
->    (EU-Mistral 3,6× langsamer als US-Groq). Gleiches Netz, ~6,4× Unterschied → die Differenz **muss**
->    Backend/Engine sein, nicht Geografie. Sauberster, am wenigsten anfechtbarer Beleg. *(„Engine" = Bündel
->    aus Modellgröße/-Architektur + Inferenz-HW (Groq LPU) + Serving-Stack; die robuste Aussage ist die
->    NEGATIVE „Netznähe erklärt es nicht".)*
-> 2. **Zweiter Beleg — TTS:** Azure ist **schnellstes TTS** (`ttfa` ~94 ms) trotz US-Konkurrenz (OpenAI ~940 ms);
->    empirisch sehr robust (metrik-/aggregations-fest).
+>    in Frankfurt (~1 ms RTT, ASN 13335 — Layer 1; **für 100 % des LLM-Traffics belegt**: jeder Host wird
+>    per DNS-Round-Robin über 2 CF-IPs ~50/50 bedient, **beide** = AS13335 mit RTT je ~1 ms über alle 16 Slots
+>    gemessen — nicht nur die je 1 vom L1-Ping; Belege `data/audit_20260618/`). Bei **identischer Netz-Distanz** streut LLM-`ttft`
+>    **68 ms (Groq) → 280 ms (Mistral) → 439 ms (OpenAI) ≈ 6,5×** (Voll-Kampagne, 16 Slots, paced,
+>    connect-inkl., Zwischenstand 2026-06-18; gepoolte Mediane je Endpunkt, n=1520/1497/1519; openai/groq=6,50×,
+>    mistral/groq=4,15×; finale Zahlen nach Kampagnenende). *(Der frühere Predeploy-Pilot lag bei ~60/263/436 ms;
+>    die zuvor zitierten 75/268/476 ms reproduzieren aus keinem Datensatz und werden nicht mehr geführt — die
+>    Voll-Kampagne ist mit 6,5× ggü. 6,4× konservativer.)* **Per-IP invariant** (Edge-Shuffle = 0 Effekt) und
+>    Geografie-Ordnung sogar **invertiert** (EU-Mistral ~4,1× langsamer als US-Groq). Gleiches Netz, ~6,5×
+>    Unterschied → die Spreizung wird durch **Netznähe nicht erklärt**. *(„Backend" = Bündel aus
+>    Modellgröße/-Architektur + Inferenz-HW (Groq LPU) + Serving-Stack; wegen des Modellgrößen-Confounds ist die
+>    wasserdichte Aussage die NEGATIVE „Netznähe erklärt die Spreizung nicht".)*
+> 2. **Zweiter Beleg — TTS:** Azure ist **schnellstes TTS** (`ttfa` ~94 ms, n=200). Der Vorsprung **gegenüber
+>    Deepgram** (US-Host, ~280 ms connect) ist eine echte Geografie-/Backend-Mischung. **OpenAI-TTS ist dagegen
+>    eine ZWEITE identical-edge-Instanz:** es terminiert wie die OpenAI-/Groq-/Mistral-LLMs bei Cloudflare-FRA
+>    (IPs 162.159.140.245 / 172.66.0.243, AS13335, ~6 ms connect) — sein `ttfa` ~940 ms ist bei **identischer
+>    Edge-Nähe** wie Azure fast 10× langsamer = **reines Backend** (~930 ms connect-exklusiv). Das **stärkt C1**;
+>    „trotz US-Konkurrenz" gilt präzise **nur gegenüber Deepgram**. Empirisch robust (metrik-/aggregations-fest).
 > 3. **STT — ehrlich:** Auf der fairen Metrik `ttfp` ist Azure **nicht** der langsamste STT (gleichauf mit
 >    Deepgram). Die alte „Azure verliert STT"-Aussage galt nur auf der confounded Dump-`ttft` (Bulk-Compute) →
 >    **wird NICHT mehr als Engine-Beleg geführt.** Die within-Azure-STT/TTS-Gegenüberstellung bleibt höchstens
@@ -515,8 +539,14 @@ Ohne fixe Schwellen ist „Verfügbarkeit X %" nicht reproduzierbar/angreifbar �
 - **Schwellen sind nachträglich justierbar:** Da Roh-Text, Chunk-Zahl und Byte-Zahl **vollständig**
   gespeichert werden (A5/A10), kann die Erfolgsdefinition in der Analyse verschärft/gelockert werden,
   **ohne** neu zu messen. Die Tabelle ist der **Default**, nicht in Stein.
-- **Fehler-Enum (roh je Run gespeichert):** `timeout` · `connection_reset` · `http_4xx` · `http_5xx` ·
-  `empty_output` · `degenerate_output` (Output < Schwelle). → Grundlage der Verfügbarkeits-/Joint-Completion-Dimension (A8).
+- **Fehler-Erfassung (roher Exception-String je Run, Normalisierung in der Analyse):** Der Code speichert
+  pro Fehlschlag den **rohen** Fehler-String (z.B. `ReadTimeout: ...`, `http_503`), **kein** vorab
+  kategorisiertes `error_kind`-Enum. Die Bucketierung in `timeout` · `connection_reset` · `http_4xx` ·
+  `http_5xx` · `empty_output` · `degenerate_output` erfolgt **in der Auswertung** durch String-/Status-Mapping
+  und wird **vor jeder Failure-Gruppierung explizit dokumentiert**. **Achtung beim Filtern:** Ein naiver Filter
+  `error == 'timeout'` verfehlt die echten Timeouts — diese stehen als `ReadTimeout: ...` im Roh-String (16 Slots:
+  158× `ReadTimeout` (alle tts_openai), 22× `http_503`, 3× `timeout` bei 183 Fails). Timeouts per Teilstring-Match
+  bucketieren, nicht per Gleichheit. → Grundlage der Verfügbarkeits-/Joint-Completion-Dimension (A8).
 
 ---
 

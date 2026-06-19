@@ -32,12 +32,10 @@ Diese drei Dinge sind unabhängig davon, wie die Zahlen erhoben wurden — sie w
 
 ### 2.1 Der Reframe — „Backend statt Geografie" (die Contribution)
 
-- **Kernbefund (C1):** Aus EU-Sicht dominiert die **Backend-Verarbeitung (HW+Modell)** des Providers, **nicht** die
-  Netzwerknähe. **Schärfster Beleg — LLM bei identischer Edge-RTT:** OpenAI/Groq/Mistral terminieren alle
-  bei Cloudflare Frankfurt (~1 ms RTT), aber LLM-`ttft` streut **75 → 268 → 476 ms (~6,4×; n=200, paced)** →
-  gleiches Netz, Differenz = Backend (per-IP invariant; EU-Mistral sogar langsamer als US-Groq). Zweiter Beleg: Azure **schnellstes TTS** trotz US-Konkurrenz. STT ehrlich: auf der
-  fairen Metrik `ttfp` ist Azure **nicht** langsamster — die alte „Azure-STT-Endpointing-Inversion" war ein
-  Dump-Artefakt (Bulk-Compute), kein Engine-Beleg. S. `setup/messprotokoll.md` → „STT-Primärmetrik".
+- **Kernbefund (C1) — „Backend statt Geografie":** Aus EU-Sicht dominiert die **Backend-Verarbeitung (HW+Modell)**, **nicht** die
+  Netzwerknähe. Die wasserdichte Aussage ist die **negative**: „Netznähe erklärt die Spreizung nicht." („Engine/Backend" bleibt wegen des Modellgrößen-Confounds bewusst aus dem Arbeitstitel.) **Schärfster Beleg — LLM bei identischer Edge-RTT:** OpenAI/Groq/Mistral terminieren alle bei Cloudflare Frankfurt (AS13335, ~1 ms RTT — über 2 CF-IPs je Provider ~50/50, beide AS13335, für 100 % des LLM-Traffics gemessen+ASN-belegt, s. `data/audit_20260618/{l1_rtt_per_ip.md, asn_per_ip.md}`), aber LLM-`ttft` streut über die Voll-Kampagne (16 Slots, Zwischenstand) **~68 → 280 → 440 ms (~6,5×; groq<mistral<openai)** → gleiches Netz, Differenz nicht EU-Edge-Nähe (per-IP invariant; EU-Mistral langsamer als US-Groq). Zweiter Beleg: Azure **schnellstes TTS** (`ttfa` ~94 ms) — „trotz US-Konkurrenz" gilt nur gegenüber Deepgram; OpenAI-TTS terminiert AUCH bei Cloudflare-FRA (zweite identical-edge → stärkt C1). STT ehrlich: auf `ttfp` ist Azure **nicht** langsamster — die alte „Azure-STT-Endpointing-Inversion" war ein Dump-Artefakt (Bulk-Compute), kein Engine-Beleg. S. `setup/messprotokoll.md` → „STT-Primärmetrik".
+
+> **Hinweis zu den Headline-Zahlen (Audit 2026-06-18, H1):** Die früher genannten **75/268/476 ms (~6,4×)** sind der Predeploy-Pilot (n=200, 2 Slots) und reproduzieren aus keinem Kampagnen-Datensatz. Maßgeblich ist die Voll-Kampagne (16 Slots, Zwischenstand): **groq 67,6 / mistral 280,2 / openai 439,2 ms; openai/groq = 6,50×** (finale Zahlen nach Kampagnenende). C1 inhaltlich unberührt (Ordnung invariant, 6,5× konservativer).
 - **C2 — Drei-Schichten-Methodik + Cloudflare-/Edge-Grenze** (bei einem Teil der Provider terminiert
   die Verbindung an einem Edge-Knoten, nicht am US-Server).
 - **C3 (Methoden-Baustein, NICHT Headline):** Ping-basierte connect-Klassen-Heuristik. `r` bewusst
@@ -189,7 +187,7 @@ Setup besser können muss**. Die Punkte sind hier als Anforderungen umformuliert
   **`setup/deployment.md`** + Layer-3-Tabelle in `mess_kommandos.md`. Erinnerung: [[l3-campaign-deployed]].
 - **2026-06-16:** ✅ **Methodik 3× ultracode-auditiert (23 → 62 → 85 Befunde) + alle Fixes umgesetzt; Code `f9e6dc8`.**
   - **STT auf `ttfp` + 1×-Realtime-Pacing** (paralleler Empfang via `asyncio.gather`); `ttft`=Stream-Ende-Final sekundär. **LLM F2** (`output_tokens`) **+ F3** (Erfolg inhaltlich). IPv4 bei STT gepinnt.
-  - **C1 datengestützt neu verankert:** Kernbeleg = **LLM @ identischer Edge-RTT** (75/268/476 ms ≈ 6,4× bei ~1 ms Cloudflare, per-IP invariant, Geografie invertiert); 2. Beleg Azure-schnellstes-TTS; STT ehrlich (kein Engine-Beleg). Die alte „Azure-STT-Endpointing/1722 ms"-These war Dump-Bulk-Compute → **falsch, gestrichen**.
+  - **C1 datengestützt neu verankert:** Kernbeleg = **LLM @ identischer Edge-RTT** (~1 ms Cloudflare, per-IP invariant, Geografie invertiert); 2. Beleg Azure-schnellstes-TTS; STT ehrlich (kein Engine-Beleg). Die alte „Azure-STT-Endpointing/1722 ms"-These war Dump-Bulk-Compute → **falsch, gestrichen**. (Die hier ursprünglich genannten 75/268/476 ms ≈ 6,4× wurden am 2026-06-18 als Predeploy-Pilot erkannt → s. Eintrag 2026-06-18; maßgeblich sind 68/280/440 ms ≈ 6,5×.)
   - **LAYER 2 ECHT gebaut + geeicht** (`measurements/layer2/`): App-`tcp_handshake` = Wire-SYN→SYN-ACK auf **±0,1 ms** (Azure 11 ms / Deepgram 139 ms, je N=30) → Layer-3 paket-validiert (C2). Beantwortet Wählischs Datenvertrauen mit Daten.
   - **Deepgram-ASN korrigiert** (6 IPs/2 ASNs/2 RTT-Klassen). Voll-Urteil: `data/audit_20260616/VERDICT.md`.
 - **⭐ HIER WEITERMACHEN: siehe `HANDOFF.md`** — Campaign-Check, **Arbeitstitel wählen** (Kandidaten fertig in
@@ -199,6 +197,11 @@ Setup besser können muss**. Die Punkte sind hier als Anforderungen umformuliert
   Datensatz **vertrauenswürdig**, 0 Wertfehler, C1 diurnal stabil, Anomalien providerseitig (Mistral-503 @03h,
   OpenAI-TTS ~30s-Hang). Nichts neu zu messen — nur Auswertungs-Disziplin (s. `data/audit_20260617/VERDICT.md`
   + Disziplin-Block in `HANDOFF.md` §4).
+- **2026-06-18:** ✅ **Ultracode-Voll-Audit (72 Agenten, 85 Befunde) — Urteil GO-mit-Auflagen.** Methodik im Kern valide, C1 über alle 16 Slots invariant, Auflagen durchweg **Doku-/Reporting-Korrekturen, keine Neumessungen.** Voll-Urteil `data/audit_20260618/VERDICT.md`. Wichtigste:
+  - **H1 (in Docs gefixt):** Headline-LLM-`ttft` **75/268/476 ms** = Predeploy-Pilot, reproduziert aus keinem Kampagnen-Datensatz; Voll-Kampagne (16 Slots) = **~68/280/440 ms, ~6,5×** (groq<mistral<openai). C1 unberührt. → in §2.1 korrigiert.
+  - **H2:** Layer-2-Eichung validiert nur den **Connect-Timer**, nicht `ttft`/`ttfa`. **H3:** Fehler-Enum (F4) existiert nicht in Code/Daten; Filter `error=='timeout'` verfehlt 158/161 Timeouts. **H4:** `data/layer1/` im Repo = macOS-Dev-Lauf (~17-21 ms), nicht EC2 (~1 ms); nur EC2-L1 nutzen.
+  - **M1:** sequenzielle E2E braucht `connect + stt_ttft` (ttfp unterschätzt STT um ~3,7 s). **M2:** OpenAI-TTS = 2. identical-edge (CF-FRA) → stärkt C1. **Fehlend:** `ttl_ms` existiert nicht → gestrichen.
+- **2026-06-19:** ✅ **L1-RTT- + ASN-Lücken aus vorhandenen Daten GESCHLOSSEN (kein Neumessen).** Über `connect.resolved_ip` der 16 Slots ist 100 % des Traffics RTT-gedeckt + ASN-belegt (`data/audit_20260618/{l1_rtt_per_ip.md,asn_per_ip.md}`): alle LLM-Hosts + OpenAI-TTS = AS13335 Cloudflare @ ~1 ms; Deepgram Multi-DC Zayo AS6461 ×3 + Cogent AS174 ×3 (Slow-Mode-DC ~101 ms = Backend); rev.ai 3× AWS AS16509 ~140 ms; Azure AS8075 ~11 ms. Eingearbeitet in `api_endpunkte.md` + `messprotokoll.md`. Doku-Voll-Durchgang (alle Docs aktualisiert, `/prime` erweitert). Kampagne: EC2 `i-0f8f6d2414cecebb8`, 16+ Slots, Code `f9e6dc8`, **Stop ~23.6.**; nur Layer 3 slotweise, Layer 1 = einmalige Momentaufnahme (16.6.). C1 umbenannt „Backend statt Geografie". Arbeitstitel: 3 Kandidaten (Favorit s. `arbeitstitel.md`), finale Wahl offen. Zweitprüfer-Anfrage Prof. Färber raus, Antwort offen.
 
 ## 7. Externe Aufräum-Erinnerungen (aus altem HANDOFF, weiterhin offen)
 

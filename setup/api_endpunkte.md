@@ -1,6 +1,6 @@
 # API-Endpunkte & Hostnames (verifiziert)
 
-> Angelegt: 2026-06-14 · Teil des Neuaufbaus (s. `../NEUANFANG.md`, `anbieter_auswahl.md`)
+> Angelegt: 2026-06-14 · Teil des Neuaufbaus (s. `../NEUANFANG.md`, `anbieter_auswahl.md`) · Host-/Terminierungs-Einordnung aktualisiert 2026-06-19 (L1-RTT + ASN je IP geschlossen)
 >
 > **Quelle der Genauigkeit:** Pfade, Query-Parameter und Auth-Methoden sind aus den real
 > funktionierenden (archivierten) Mess-Skripten extrahiert (`archived/measurements/layer3/*.py`,
@@ -125,10 +125,11 @@ Alle drei sprechen das **OpenAI-kompatible** `/chat/completions`-Schema, `stream
 | `api.mistral.ai` | `172.66.2.203`, `162.159.142.207` | Cloudflare-Range |
 | `italynorth.tts.speech.microsoft.com` | → `*.italynorth.cloudapp.azure.com` → `4.232.100.220` | Azure Italy North |
 
-> *Die „erste Einordnung" ist nur eine grobe IP-Range-Beobachtung, **noch keine Layer-1-Analyse**.
-> Dass OpenAI/Groq/Mistral in Cloudflare-Ranges auflösen, ist genau die Stelle, an der die spätere
-> Layer-1-/Edge-Auflösung ansetzen wird (Anycast/Edge vs. tatsächlicher Backend-Standort). Bewusst
-> hier nur als Rohbeobachtung festgehalten, nicht gedeutet.
+> *Die „erste Einordnung" oben war die DNS-Rohbeobachtung vom 2026-06-14. **Die Layer-1-/Edge-Auflösung ist
+> inzwischen durchgeführt und bestätigt** (s. §Terminierung unten): per-IP TCP-RTT + Team-Cymru-ASN über alle
+> produktiv getroffenen IPs (EC2, 2026-06-16/19). Deepgram löst real auf 6 IPs in 2 US-ASNs auf (Zayo AS6461,
+> Cogent AS174), rev.ai auf 3 AWS-IPs (AS16509); die LLMs + OpenAI-TTS je auf 2 Cloudflare-IPs (AS13335, ~1 ms).
+> Per-IP-Belege: `../data/audit_20260618/{l1_rtt_per_ip.md, asn_per_ip.md}`.
 
 > **TLS-Fußnote (rev.ai):** `api.rev.ai` ist der **einzige** der 7 Hosts, der nur **TLS 1.2** aushandelt
 > (die übrigen 6 sprechen TLS 1.3) — ein echter Server-Befund, kein Mess-Artefakt. ⚠️ **Nicht** über
@@ -141,18 +142,19 @@ Alle drei sprechen das **OpenAI-kompatible** `/chat/completions`-Schema, `stream
 > **Single Source of Truth** für den zentralen Erklärschritt (Prof-Einwand „3 Anbieter mit ~1 ms RTT").
 > Klassifikator-Definition + Begründung: `messprotokoll.md` (§Layer 1 — Endpunkt-Terminierung).
 > **Edge-terminiert** gdw. **(a) TCP-RTT ≈ 1–2 ms aus FRA ∧ (b) IP in CDN-ASN ∧ (c) traceroute bricht
-> am CDN ab** — sonst **Host**. ⚠️ Werte unten sind aus DNS/ASN **vorläufig**; RTT + traceroute werden
-> auf der EC2 bestätigt.
+> am CDN ab** — sonst **Host**. ✅ **Bestätigt (EC2, 2026-06-16/19):** per-IP TCP-RTT aus
+> L3-`connect.tcp_handshake_ms` + Team-Cymru-ASN über **alle** produktiv getroffenen IPs (nicht nur die je
+> 1 vom einmaligen L1-Ping) — Belege `data/audit_20260618/{l1_rtt_per_ip,asn_per_ip}.md`.
 
-| Endpunkt (Host) | ASN / Org (vorläufig) | TCP-RTT FRA (vorläufig) | **Terminierung** | Begründung |
-|-----------------|-----------------------|-------------------------|------------------|------------|
-| `api.deepgram.com` | AS6461 Zayo / AS174 Cogent (Multi-DC) | ~102–148 ms | **Host** | hohe RTT (a✗), kein CDN-AS (b✗) — trotz „Anycast"-Label |
-| `api.rev.ai` | AS16509 Amazon (US-Oregon) | US, hoch (zu messen) | **Host** | AWS-Backend, kein CDN-AS |
-| `italynorth.stt.speech.microsoft.com` | AS8075 Microsoft (Italy North) | ~12 ms | **Host** | echtes EU-RZ, **kein** CDN-AS (b✗) — niedrige RTT ist real |
-| `italynorth.tts.speech.microsoft.com` | AS8075 Microsoft (Italy North) | ~12 ms | **Host** | echtes EU-RZ, **kein** CDN-AS (b✗) — niedrige RTT ist real |
-| `api.openai.com` | AS13335 Cloudflare | ~1–2 ms (zu bestätigen) | **Edge** | CDN-AS (b✓) + ~1 ms (a✓); Backend hinter Edge unbekannt |
-| `api.groq.com` | AS13335 Cloudflare | ~1–2 ms (zu bestätigen) | **Edge** | CDN-AS (b✓) + ~1 ms (a✓); Backend hinter Edge unbekannt |
-| `api.mistral.ai` | AS13335 Cloudflare | ~1–2 ms (zu bestätigen) | **Edge** | CDN-AS (b✓) + ~1 ms (a✓); **EU-Backend RTT-maskiert** (Limitation) |
+| Endpunkt (Host) | ASN / Org (bestätigt) | TCP-RTT FRA (gemessen, Median je IP) | **Terminierung** | Begründung |
+|-----------------|-----------------------|--------------------------------------|------------------|------------|
+| `api.deepgram.com` | AS6461 Zayo ×3 + AS174 Cogent ×3 (Multi-DC, beide US) | ~101–148 ms | **Host** | hohe RTT (a✗), kein CDN-AS (b✗); 2 US-ASNs = echtes Multi-DC (Slow-Mode-DC Cogent `38.68.64.131/.132` hat sogar *niedrigere* RTT ~101 ms → Backend, nicht Netz) |
+| `api.rev.ai` | AS16509 Amazon (US, alle 3 IPs) | ~140 ms | **Host** | AWS-Backend, kein CDN-AS |
+| `italynorth.stt.speech.microsoft.com` | AS8075 Microsoft (Italy North) | ~11 ms | **Host** | echtes EU-RZ, **kein** CDN-AS (b✗) — niedrige RTT ist real |
+| `italynorth.tts.speech.microsoft.com` | AS8075 Microsoft (Italy North) | ~11 ms | **Host** | echtes EU-RZ, **kein** CDN-AS (b✗) — niedrige RTT ist real |
+| `api.openai.com` | AS13335 Cloudflare (beide IPs) | ~1,2 ms (beide IPs) | **Edge** | CDN-AS (b✓) + ~1 ms (a✓); Backend hinter Edge unbekannt |
+| `api.groq.com` | AS13335 Cloudflare (beide IPs) | ~1,1–1,5 ms (beide IPs) | **Edge** | CDN-AS (b✓) + ~1 ms (a✓); Backend hinter Edge unbekannt |
+| `api.mistral.ai` | AS13335 Cloudflare (beide IPs) | ~1,1–1,2 ms (beide IPs) | **Edge** | CDN-AS (b✓) + ~1 ms (a✓); **EU-Backend RTT-maskiert** (Limitation) |
 
 > **Lesart:** Niedrige RTT bedeutet **nicht** automatisch „Edge" — Azure (Italy North) hat ~12 ms und ist
 > **Host** (echtes EU-RZ, kein CDN-AS). Genau diese Trennung trägt die STT/TTS-Inversion: Azures Vorsprung

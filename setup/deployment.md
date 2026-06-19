@@ -4,6 +4,11 @@
 >
 > Wie und wo die Layer-3-Messkampagne läuft, wie man sie prüft/stoppt, und welche Belege der Pilot
 > geliefert hat. Operative Detail-Notiz für Reproduzierbarkeit + den eigenen Überblick.
+>
+> **Scope:** Nur **Layer 3** läuft hier slotweise (cron, 8 UTC-Slots/Tag). **Layer 1** war eine einmalige
+> EC2-Momentaufnahme (RTT/DNS/ASN/Traceroute/TLS, 2026-06-16), **Layer 2** eine einmalige Handshake-Eichung
+> (2026-06-16) — beide kein Slot-Betrieb. Achtung Auswertung: `data/layer1/` im Repo ist ein macOS-Dev-Lauf
+> (~17–21 ms), **nicht** der EC2-Lauf (~1 ms); nur EC2-L1 verwenden (Audit H4).
 
 ## Vantage Point (Instanz)
 
@@ -35,6 +40,9 @@
   Calls = ein einziges Final-Segment), die 12h/15h-`ttft` sind also gültig. Ziel: 7 Tage × 8 Slots (~2026-06-23).
   Die 4 Slots + Pilot vom 15./16.6. (alter STT-Code, **ohne** `ttfp`) liegen in
   `data/layer3/campaign_old_predeploy_20260616/` → **verworfen**, nicht Teil der Wertungsdaten.
+- **Maßgeblicher Freeze-Commit = `f9e6dc8`** (nicht `f1f0d47`). Der Layer-3-Mess-Code (`llm.py`/`tts.py`/`stt.py`/
+  `run.py`/`config.py`) ist zwischen `f1f0d47` und `f9e6dc8` **identisch** (dazwischen nur Layer-2-Eichung + Doku,
+  keine layer3-Datei geändert) → alle Slots ab 18h sind code-konsistent zur eingefrorenen Version. Per `git diff f1f0d47 f9e6dc8 -- measurements/layer3` belegbar.
 
 cron-Zeile (je Slot):
 ```bash
@@ -74,7 +82,7 @@ cron-Zeile (je Slot):
 tail ~/thesis/data/layer3/cron.log
 ls ~/thesis/data/layer3/campaign/                 # eine Datei je Slot
 
-# Nach ~7 Tagen (Ziel ~2026-06-22): Kampagne stoppen
+# Nach ~7 Tagen (Ziel ~2026-06-23): Kampagne stoppen
 crontab -r                                         # cron-Slots entfernen
 # Instanz stoppen (Billing aus) bzw. terminieren:
 .venv/bin/aws ec2 stop-instances --region eu-central-1 --instance-ids i-0f8f6d2414cecebb8
@@ -85,6 +93,9 @@ crontab -r                                         # cron-Slots entfernen
 
 ## Offene Punkte
 
-- **Daten-Validierung per ultracode** (Messfehler/Methodik gegen ECHTE Slot-Daten) — sinnvoll ab ~1 Tag Daten (Diurnal-Abdeckung).
-- **Layer 2 (PCAP):** separater Capture (N≈30 Cold-Starts/Provider) — jederzeit auf derselben EC2 nachholbar.
-- **WER (A14):** sample.wav-Provenienz + Referenz/Normalisierung klären, bevor WER ausgewertet wird.
+- **Daten-Validierung per ultracode:** ✅ erledigt — Voll-Audit 2026-06-18 (`data/audit_20260618/VERDICT.md`),
+  Urteil **GO-mit-Auflagen**; Auflagen sind Doku-/Reporting-Korrekturen (s. `HANDOFF.md` §4), keine Neumessungen.
+- **Layer 2 (Handshake-Eichung):** ✅ erledigt (2026-06-16, Connect-Timer paket-validiert). Offen nur die
+  **richere** PCAP-Analyse (IAT/Retransmits *während* echter Calls) — Kür, jederzeit auf derselben EC2 nachholbar.
+- **WER (A14):** sample.wav-Provenienz + Referenz/Normalisierung klären, bevor WER ausgewertet wird (Out-of-Scope für Latenz).
+- **~2026-06-23:** Kampagne stoppen (`crontab -r` + Instanz stoppen).

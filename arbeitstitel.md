@@ -1,4 +1,4 @@
-# Arbeitstitel (Stand 2026-06-17)
+# Arbeitstitel (Stand 2026-06-19)
 
 Kandidaten zum Vorlegen bei Betreuer/Zweitprüfer. Arbeitstitel ist nicht angemeldet, frei änderbar.
 Gemeinsame Linie: neutral-deskriptiv, kein Overclaim, Rigor- statt Behauptungs-Signal — die
@@ -22,7 +22,7 @@ einer Echtzeit-Voice-Pipeline aus EU-Sicht**
 (STT, LLM, TTS) aus EU-Perspektive**
 
 - Sagt das Ergebnis im Titel, aber nur die *wasserdichte* Hälfte: identische Edge-RTT (alle drei
-  LLMs bei Cloudflare FRA, ~1 ms), trotzdem ttft 75 → 476 ms (~6,4×) → Netznähe erklärt es nicht.
+  LLMs bei Cloudflare FRA, ~1 ms, gemessen + ASN-belegt für 100 % des LLM-Traffics), trotzdem ttft ~68 → 440 ms (~6,5×) → Netznähe erklärt es nicht.
 - Einprägsam und verteidigbar; meidet die „Engine"-Falle.
 - Risiko: „Nähe ohne Vorteil" ist eine These — Text muss die negative Lesart sauber halten.
 
