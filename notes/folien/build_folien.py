@@ -411,8 +411,8 @@ SLIDES = [
       bullets=["Schritt zu Backend trägt **Modellgrößen-Confound**",
                "Groq = kleinstes Modell **+ LPU**",
                "→ **Backend (Hardware + Modell) statt Geografie**",
-               "**2. Beleg (TTS):** OpenAI-TTS @ CF-FRA → ~942 ms ttfa = fast **reines Backend** (connect ~1 ms)"],
-      note="Verteidigbar ist nur die negative Aussage; der Schritt zu 'Backend' trägt den Modellgrößen-Confound — Groq ist das kleinste Modell auf LPU-Hardware — deshalb 'Backend (Hardware + Modell) statt Geografie'; OpenAI-TTS am selben Edge bei ~942 ms ttfa (connect ~1 ms → fast reines Backend) ist ein zweiter Beleg am gleichen Edge."),
+               "**2. Beleg (TTS):** OpenAI-TTS @ CF-FRA: connect **~1 ms** gemessen, trotzdem **~942 ms** ttfa → **nicht durch EU-Netznähe erklärbar**"],
+      note="Verteidigbar ist nur die negative Aussage; der Schritt zu 'Backend' trägt den Modellgrößen-Confound — Groq ist das kleinste Modell auf LPU-Hardware — deshalb 'Backend (Hardware + Modell) statt Geografie'. OpenAI-TTS terminiert am selben Cloudflare-Edge (connect ~1 ms gemessen), braucht aber ~942 ms bis zum ersten Audio — die EU-Netznähe kann das nicht erklären. 'Reines Backend' behaupte ich bewusst nicht (hinter dem Edge steckt auch unsichtbarer Backhaul); dass es Verarbeitung ist, zeigt der Vergleich bei identischem Netzpfad: OpenAI-LLM und -TTS teilen dieselben Cloudflare-IPs, differieren aber um ~455 ms — das kann kein Netz sein."),
 
  dict(id="d4", kind="divider", section="Abschluss", num="4", title="Abschluss",
       subs=["Stand", "Nächste Schritte", "Diskussion"],
