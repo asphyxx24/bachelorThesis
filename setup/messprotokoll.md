@@ -438,22 +438,23 @@ Clips) — **kein** einheitlicher Stille-Timer. So beschriften, nicht als Engine
 > falsch).** Worauf „Engine/Backend schlägt Geografie" **wirklich** ruht (s. CLAUDE.md C1):
 > 1. **Kernbeleg — LLM @ identischer Edge-RTT:** OpenAI, Groq und Mistral terminieren **alle** bei Cloudflare
 >    in Frankfurt (~1 ms RTT, ASN 13335 — Layer 1; **für 100 % des LLM-Traffics belegt**: jeder Host wird
->    per DNS-Round-Robin über 2 CF-IPs ~50/50 bedient, **beide** = AS13335 mit RTT je ~1 ms über alle 16 Slots
+>    per DNS-Round-Robin über 2 CF-IPs ~50/50 bedient, **beide** = AS13335 mit RTT je ~1 ms über alle Slots
 >    gemessen — nicht nur die je 1 vom L1-Ping; Belege `data/audit_20260618/`). Bei **identischer Netz-Distanz** streut LLM-`ttft`
->    **68 ms (Groq) → 280 ms (Mistral) → 439 ms (OpenAI) ≈ 6,5×** (Voll-Kampagne, 16 Slots, paced,
->    connect-inkl., Zwischenstand 2026-06-18; gepoolte Mediane je Endpunkt, n=1520/1497/1519; openai/groq=6,50×,
->    mistral/groq=4,15×; finale Zahlen nach Kampagnenende). *(Der frühere Predeploy-Pilot lag bei ~60/263/436 ms;
->    die zuvor zitierten 75/268/476 ms reproduzieren aus keinem Datensatz und werden nicht mehr geführt — die
->    Voll-Kampagne ist mit 6,5× ggü. 6,4× konservativer.)* **Per-IP invariant** (Edge-Shuffle = 0 Effekt) und
->    Geografie-Ordnung sogar **invertiert** (EU-Mistral ~4,1× langsamer als US-Groq). Gleiches Netz, ~6,5×
+>    **67 ms (Groq) → 279 ms (Mistral) → 487 ms (OpenAI) ≈ 7,3×** (Vollkampagne, abgeschlossen (56/56), paced,
+>    connect-inkl.; A4 = Median der Slot-Mediane, success-only: 66,9/278,9/486,6 ms; openai/groq=7,3× (gepoolt 8,3×),
+>    mistral/groq=~4,2×; Bootstrap-CI noch ausstehend). *(Der frühere Predeploy-Pilot lag bei ~60/263/436 ms;
+>    die zuvor zitierten 75/268/476 ms reproduzieren aus keinem Datensatz und werden nicht mehr geführt — der finale
+>    Faktor (7,3×, gepoolt 8,3×) ist sogar GRÖSSER als der Pilot: Ordnung identisch, der Kernbefund wird dadurch
+>    STÄRKER.)* **Per-IP invariant** (Edge-Shuffle = 0 Effekt) und
+>    Geografie-Ordnung sogar **invertiert** (EU-Mistral ~4,2× langsamer als US-Groq). Gleiches Netz, 7,3×
 >    Unterschied → die Spreizung wird durch **Netznähe nicht erklärt**. *(„Backend" = Bündel aus
 >    Modellgröße/-Architektur + Inferenz-HW (Groq LPU) + Serving-Stack; wegen des Modellgrößen-Confounds ist die
 >    wasserdichte Aussage die NEGATIVE „Netznähe erklärt die Spreizung nicht".)*
-> 2. **Zweiter Beleg — TTS:** Azure ist **schnellstes TTS** (`ttfa` ~94 ms, n=200). Der Vorsprung **gegenüber
->    Deepgram** (US-Host, ~280 ms connect) ist eine echte Geografie-/Backend-Mischung. **OpenAI-TTS ist dagegen
+> 2. **Zweiter Beleg — TTS:** Azure ist **schnellstes TTS** (`ttfa` ~94 ms; Deepgram-TTS ~516 ms). Der Vorsprung **gegenüber
+>    Deepgram** (US-Host) ist eine echte Geografie-/Backend-Mischung. **OpenAI-TTS ist dagegen
 >    eine ZWEITE identical-edge-Instanz:** es terminiert wie die OpenAI-/Groq-/Mistral-LLMs bei Cloudflare-FRA
->    (IPs 162.159.140.245 / 172.66.0.243, AS13335, ~6 ms connect) — sein `ttfa` ~940 ms ist bei **identischer
->    Edge-Nähe** wie Azure fast 10× langsamer = **reines Backend** (~930 ms connect-exklusiv). Das **stärkt C1**;
+>    (IPs 162.159.140.245 / 172.66.0.243, AS13335, ~1 ms connect) — sein `ttfa` ~942 ms ist bei **identischer
+>    Edge-Nähe** wie Azure fast 10× langsamer = **reines Backend** (~941 ms connect-exklusiv). Das **stärkt C1**;
 >    „trotz US-Konkurrenz" gilt präzise **nur gegenüber Deepgram**. Empirisch robust (metrik-/aggregations-fest).
 > 3. **STT — ehrlich:** Auf der fairen Metrik `ttfp` ist Azure **nicht** der langsamste STT (gleichauf mit
 >    Deepgram). Die alte „Azure verliert STT"-Aussage galt nur auf der confounded Dump-`ttft` (Bulk-Compute) →
@@ -544,8 +545,8 @@ Ohne fixe Schwellen ist „Verfügbarkeit X %" nicht reproduzierbar/angreifbar �
   kategorisiertes `error_kind`-Enum. Die Bucketierung in `timeout` · `connection_reset` · `http_4xx` ·
   `http_5xx` · `empty_output` · `degenerate_output` erfolgt **in der Auswertung** durch String-/Status-Mapping
   und wird **vor jeder Failure-Gruppierung explizit dokumentiert**. **Achtung beim Filtern:** Ein naiver Filter
-  `error == 'timeout'` verfehlt die echten Timeouts — diese stehen als `ReadTimeout: ...` im Roh-String (16 Slots:
-  158× `ReadTimeout` (alle tts_openai), 22× `http_503`, 3× `timeout` bei 183 Fails). Timeouts per Teilstring-Match
+  `error == 'timeout'` verfehlt die echten Timeouts — diese stehen als `ReadTimeout: ...` im Roh-String (Vollkampagne,
+  abgeschlossen (56/56), A4: 173× `ReadTimeout` (alle tts_openai, 3,1 % von 5600), 22× `http_503` (mistral)). Timeouts per Teilstring-Match
   bucketieren, nicht per Gleichheit. → Grundlage der Verfügbarkeits-/Joint-Completion-Dimension (A8).
 
 ---
@@ -620,7 +621,7 @@ Wochentag → 7 Tage), **nicht** an der Kalenderdauer. Eine BA ist keine Trend-/
   robust; laufen sie auseinander → das ist selbst ein (diurnal-/ausfall-)Befund.
 - **Diurnal-Profil:** Die 8 Slot-Mediane (über 7 Tage) sind zugleich das **Tageszeit-Profil** je Endpunkt
   (Auswerteachse für US-Backend-Last, s. Audit D).
-- **Timeouts/Fehlschläge (OpenAI-TTS ~8 % ReadTimeouts, 16/200 in der Kampagne — die ~12 % stammten aus alten Dump-Slots; `ttfa=None`) fallen aus dem Latenz-Median heraus
+- **Timeouts/Fehlschläge (OpenAI-TTS 3,1 % (173/5600) ReadTimeouts in der Kampagne; `ttfa=None`) fallen aus dem Latenz-Median heraus
   — werden aber als eigene Verfügbarkeits-Achse (A8) IMMER neben jede Latenzzahl gestellt.** Sonst „gewinnt" ein
   Anbieter durch verschwundene Slow/Fail-Calls (Survivorship-Bias). „Schnellstes TTS" nur mit Ausfall-Asterisk.
   Für TTS zusätzlich **p95/p99/max gepoolt** berichten (Azure-`ttfa`-Tail bis ~9,7 s ist echtes Backend-Tail).
@@ -656,8 +657,9 @@ gepoolten Runs, ≥10.000 Resamples). In `requirements.txt` sicherstellen.
 - **Monte-Carlo-Faltung** statt Median-Summe: pro Pipeline-Kandidat (STT×LLM×TTS) aus den empirischen
   Verteilungen ziehen → E2E-Verteilung mit p50/p90/p95 **+ CI** (statt drei addierter Punktschätzer).
 - **Joint-Completion / Pareto-Front:** Latenz **gegen** Zuverlässigkeit (Ausfallrate) auftragen — ein
-  „Gewinner" wird erst **nach** der Front benannt (z.B. OpenAI-TTS ist nicht der langsamste, hat aber ~8 %
-  Ausfall → nicht pauschal „beste Pipeline"; Ausfallraten je Provider erst aus der vollen Kampagne festschreiben).
+  „Gewinner" wird erst **nach** der Front benannt (z.B. OpenAI-TTS ist nicht der langsamste, hat aber 3,1 % (173/5600)
+  Ausfall → nicht pauschal „beste Pipeline"; Ausfallraten je Provider: Mistral ok 99,6 % (22× http_503),
+  OpenAI-TTS ok 96,9 % (173× ReadTimeout), Deepgram-STT ok 99,9 %, Rest 100 %).
 
 ---
 

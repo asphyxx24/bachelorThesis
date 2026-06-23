@@ -18,7 +18,7 @@ mein Name ist Anton Rusik; ich studiere Informatik (B.Sc.) an der Fakultät Info
 
 Thematisch untersuche ich empirisch, wie stark Netzwerk- und Infrastruktureigenschaften die Latenzunterschiede kommerzieller STT-, LLM- und TTS-Dienste (u. a. OpenAI, Groq, Mistral, Azure, Deepgram) aus EU-Perspektive erklären, verglichen mit der Backend-Verarbeitung der Anbieter.
 
-Methodisch trenne ich dazu drei Schichten (Netzwerk-Infrastruktur, Paketebene und API-Latenz) und validiere die Messzeiten auf Paketebene. Ein zentrales Ergebnis: Bei nahezu identischer Netzwerkanbindung streut die Antwortlatenz der LLM-Dienste um rund das Sechseinhalbfache (Zwischenstand). Die Unterschiede entstehen also im Backend der Anbieter und nicht in der geografischen Netzwerknähe.
+Methodisch trenne ich dazu drei Schichten (Netzwerk-Infrastruktur, Paketebene und API-Latenz) und validiere die Messzeiten auf Paketebene. Ein zentrales Ergebnis: Bei nahezu identischer Netzwerkanbindung streut die Antwortlatenz der LLM-Dienste um rund das Achtfache (56 von 56 Slots, A4). Die Unterschiede entstehen also im Backend der Anbieter und nicht in der geografischen Netzwerknähe.
 
 Über eine kurze Rückmeldung, ob ein Zweitgutachten für Sie in Frage käme, würde ich mich sehr freuen. Gern stelle ich Ihnen vorab ein einseitiges Exposé samt Methodik-Übersicht zu oder erläutere die Arbeit in einem kurzen Gespräch.
 

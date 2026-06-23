@@ -1,8 +1,8 @@
 # Bachelorarbeit — Messinfrastruktur (Neuaufbau)
 
-> **Stand 2026-06-19: Messphase läuft, Code eingefroren.** Methodik und Skripte sind gebaut; die
+> **Stand 2026-06-23: Vollkampagne, abgeschlossen (56/56), Code eingefroren.** Methodik und Skripte sind gebaut; die
 > Layer-3-Kampagne läuft seit 2026-06-16 auf EC2 `i-0f8f6d2414cecebb8` (Code eingefroren auf Commit
-> `f9e6dc8`), 16+ Slots gelandet, geplanter Stop ~2026-06-23. **Layer 3 läuft slotweise** (8 UTC-Slots/Tag);
+> `f9e6dc8`), 56 von 56 Slots (A4) gelandet, Vollkampagne abgeschlossen (56/56). **Layer 3 läuft slotweise** (8 UTC-Slots/Tag);
 > **Layer 1 war eine EINMALIGE Momentaufnahme** (2026-06-16, kein Slotbetrieb). Nächste Phase: Auswertung,
 > Statistik, Folien. Lebende Referenz + Status: **`NEUANFANG.md`**, Einstieg **`HANDOFF.md`**. Alles Frühere
 > liegt in **`archived/`** (nur Nachschlagewerk). Leitprinzip: **erst Methodik schriftlich, dann Code, dann messen.**
@@ -36,13 +36,16 @@ In beide Richtungen beantwortbar — „Netzwerk erklärt *weniger* als die Engi
   **Schärfster Beleg — LLM bei identischer Edge-RTT:** OpenAI/Groq/Mistral terminieren *alle* bei Cloudflare
   Frankfurt (AS13335, ~1 ms RTT). Das ist für **100 % des LLM-Traffics** gemessen und ASN-belegt (je Provider
   2 CF-IPs ~50/50, alle AS13335 ~1 ms, nicht mehr per ASN unterstellt; Belege `data/audit_20260618/l1_rtt_per_ip.md`
-  + `asn_per_ip.md`). Trotzdem streut LLM-`ttft` in der Voll-Kampagne (16 Slots, Zwischenstand 2026-06-18)
-  **~68 → 280 → 440 ms (~6,5×; groq < mistral < openai; connect-inkl.; finale Zahlen nach Kampagnenende)** —
+  + `asn_per_ip.md`). Trotzdem streut LLM-`ttft` in der Voll-Kampagne (Vollkampagne, abgeschlossen (56/56), A4, success-only)
+  **~67 → 279 → 487 ms (~7,3×, gepoolt 8,3×; groq < mistral < openai; connect-inkl.; Bootstrap-CI noch ausstehend)** —
   gleiches Netz, die Differenz kann nicht Netznähe sein (per-IP invariant; EU-Mistral sogar langsamer als
-  US-Groq → Geografie-Ordnung invertiert). Die früher zitierten **75/268/476 ms** sind der Predeploy-Pilot
-  (n=200, 2 Slots) und reproduzieren aus keinem Kampagnen-Datensatz. **Zweiter Beleg:** Azure **schnellstes TTS**
-  (`ttfa` ~94 ms, n=200); das gilt gegenüber Deepgram (US-Transit ~280 ms connect). OpenAI-TTS terminiert AUCH
-  bei Cloudflare-FRA (AS13335) und ist damit eine **zweite identical-edge-Instanz**, die C1 zusätzlich stützt.
+  US-Groq → Geografie-Ordnung invertiert). Der finale Faktor (~7,3×, gepoolt 8,3×) ist sogar **größer** als
+  der Pilot — Ordnung identisch, der Kernbefund wird dadurch **stärker**. Die früher zitierten **75/268/476 ms**
+  sind der Predeploy-Pilot (n=200, 2 Slots) und reproduzieren aus keinem Kampagnen-Datensatz. **Zweiter Beleg:**
+  Azure **schnellstes TTS** (`ttfa` ~94 ms); das gilt gegenüber Deepgram (US-Transit, `ttfa` ~516 ms). OpenAI-TTS
+  terminiert AUCH bei Cloudflare-FRA (AS13335, connect ~1 ms — identical edge wie OpenAI-LLM) und ist damit eine
+  **zweite identical-edge-Instanz**, die C1 zusätzlich stützt: trotz ~1 ms connect liegt `ttfa` bei ~942 ms
+  (connect-exkl. ~941 ms, ≈ reines Backend).
   **STT (ehrlich):** auf der fairen Metrik `ttfp` ist Azure **nicht** langsamster — die früher behauptete
   „Azure-STT-Endpointing-Inversion" war ein **Dump-Artefakt (Bulk-Compute)** und wird **nicht** als Backend-Beleg
   geführt. S. `setup/messprotokoll.md` → „STT-Primärmetrik".

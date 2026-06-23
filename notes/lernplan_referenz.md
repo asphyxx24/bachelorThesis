@@ -3,15 +3,15 @@
 > **Nutzung:** Das ist **nicht** zum Vorab-Lesen. Zu jedem Modul aus `lernplan.md` gehst du erst selbst durch
 > (mit mir per `/explain`), versuchst die Erklär-Fragen **in eigenen Worten** zu beantworten — und **erst danach**
 > schlägst du hier nach, um zu prüfen/ergänzen. So bleibt es aktives Lernen. Zahlen sind faktengeprüft
-> (Zwischenstand, finale nach Kampagnenende ~23.6.). Quellen stehen im Gerüst.
+> (56 von 56 Slots, A4, success-only; Bootstrap-CI noch ausstehend). Quellen stehen im Gerüst.
 
 ---
 
 ## Gesamt — Die Arbeit in einem Satz
 > „Ich messe von einem festen Punkt in Frankfurt aus die Cold-Start-Latenz von 9 kommerziellen Cloud-AI-APIs
 > (STT, LLM, TTS) in drei sauber getrennten Schichten — Netz-Infrastruktur, Paketebene, API-Latenz — und zeige:
-> Drei LLMs hängen am **selben** Cloudflare-Edge in Frankfurt (~1 ms), antworten aber bis zu **6,5× unterschiedlich
-> schnell. Also kann die Netznähe die Spreizung nicht erklären** — sie entsteht im Backend der Anbieter."
+> Drei LLMs hängen am **selben** Cloudflare-Edge in Frankfurt (~1 ms), antworten aber bis zu **~7,3× (gepoolt 8,3×)
+> unterschiedlich schnell. Also kann die Netznähe die Spreizung nicht erklären** — sie entsteht im Backend der Anbieter."
 
 ---
 
@@ -30,9 +30,9 @@
 ## M3 — C1 „Backend statt Geografie" + schärfster Beleg
 - **Wasserdichte Aussage ist NEGATIV:** „Netznähe erklärt die Spreizung **nicht**." (Nicht „Engines immer schneller".)
 - LLM @ identischem Edge: OpenAI/Groq/Mistral terminieren **alle** bei Cloudflare FRA (AS13335, ~1 ms), 100 % Traffic
-  gemessen + ASN-belegt. `ttft` (16 Slots): **Groq 67,6 / Mistral 280,2 / OpenAI 439,2 ms** → openai/groq = **6,50×**.
+  gemessen + ASN-belegt. `ttft` (56 von 56 Slots, A4): **Groq 66,9 / Mistral 278,9 / OpenAI 486,6 ms** → openai/groq = **~7,3×** (gepoolt 8,3×).
   **Geografie invertiert:** EU-Mistral langsamer als US-Groq.
-- TTS-Zweitbeleg: OpenAI-TTS **auch** bei CF-FRA (gleiche IPs) → `ttfa` ~930 ms = reines Backend. Azure schnellstes
+- TTS-Zweitbeleg: OpenAI-TTS **auch** bei CF-FRA (gleiche IPs, connect ~1 ms) → `ttfa` ~942 ms = reines Backend. Azure schnellstes
   TTS (`ttfa` ~94 ms); „trotz US-Konkurrenz" sauber nur ggü. Deepgram (~280 ms connect, echter US-Transit).
 - STT **kein** C1-Beleg: auf `ttfp` ist Azure nicht langsamster; alte „1722-ms-Endpointing"-These = Dump-Artefakt, gestrichen.
 - **Confound:** Groq = kleinstes Modell **und** spezielle HW (LPU) zugleich → „Backend (HW+Modell) statt Geografie",
@@ -48,7 +48,7 @@
 - EC2 `c6i.large` (nicht burstable → keine CPU-Credit-Drosselung), Frankfurt, OpenSSL 3.x, UTC, chrony.
 - Cold-Start, kein Pooling: jede Messung neue TCP+TLS → „erste-Eindruck"-Latenz; Verbindungsaufbau zum Backend
   = interessanter Anteil aus EU-Sicht.
-- Kampagne: 7×8 Slots × n=100, interleaved = 56 Slots = 5.600/Endpunkt = 50.400 Calls. Zwischenstand 16 Slots.
+- Kampagne: 7×8 Slots × n=100, interleaved = 56 Slots = 5.600/Endpunkt = 50.400 Calls. Vollkampagne, abgeschlossen (56/56) (A4).
 - `run_meta` je Slot: git-Commit (+dirty), Lockfile-Hash, instance_id, cpu_steal (keine Drosselung), OpenSSL, chrony.
   Code eingefroren `f9e6dc8`.
 
@@ -76,7 +76,7 @@
 - `ttft` (Final) vermischt Engine-Speed + **Endpointing-Policy** (verschieden je Anbieter) → unfair. (Azure-1722-ms = Dump-Artefakt.)
 - Lösung: Primär `ttfp` (erstes Interim-Wort, vor Finalisierung). Audio **1×-realtime gepact** (4096 B / ~0,128 s) +
   **paralleler Empfang** (`asyncio.gather`) — sonst kein Interim.
-- Gepact: Azure ~1045 ≈ Deepgram ~1046 ms (**gleichauf**), Rev.ai höher → Azure nicht langsamster. `ttft` bleibt sekundär (ehrlich „inkl. Endpointing").
+- Gepact: Azure ~1045 ≈ Deepgram ~1045 ms (**gleichauf**), Rev.ai ~1494 ms höher → Azure nicht langsamster. `ttft` bleibt sekundär (ehrlich „inkl. Endpointing").
 - 3 Grenzen: ~0,8 s Pacing-Floor (nur Deltas = Signal); kaum geografie-sensitiv; Emissions-Kadenz teils Policy.
 
 ## M10 — Code-Architektur & Timing
@@ -95,18 +95,18 @@
 - Modell-Pinning wo möglich (`gpt-4o-mini-2024-07-18`, `llama-3.1-8b-instant`, `mistral-small-2603`); `effective_model` geloggt (Drift).
 
 ## M12 — Datenartefakte & echte Ergebnisse
-- Maßgeblich: `data/audit_20260618/ec2_data/` (16 Slots). Belege: `l1_rtt_per_ip.md`, `asn_per_ip.md`.
-- Kernzahlen: LLM-`ttft` 67,6/280,2/439,2 (~6,5×); Edge ~1 ms; L2 ±0,1 ms; Azure-TTS ~94 ms; OpenAI-TTS ~930 ms; STT-`ttfp` ~1045–1142 ms.
-- Interim/final: 16-Slot + EC2-L1 + L2-PCAP = belastbar (Zwischenstand). Pilot & macOS-L1 = nicht verwenden. Diurnal = unbestätigt.
+- Maßgeblich: `data/audit_20260618/ec2_data/` (56 von 56 Slots, A4). Belege: `l1_rtt_per_ip.md`, `asn_per_ip.md`.
+- Kernzahlen: LLM-`ttft` 66,9/278,9/486,6 (~7,3×, gepoolt 8,3×); Edge ~1 ms; L2 ±0,1 ms; Azure-TTS ~94 ms; OpenAI-TTS ~942 ms (connect ~1 ms); STT-`ttfp` ~1045/1045/1494 ms.
+- Final: 56-Slot-A4 + EC2-L1 + L2-PCAP = belastbar (Bootstrap-CI noch ausstehend). Pilot & macOS-L1 = nicht verwenden. Diurnal = unbestätigt.
 
 ## M13 — Aggregation A4 & Verfügbarkeit
 - A4: je (Endpunkt, Slot) Median → **Headline = Median der Slot-Mediane** + gepoolt als Gegenprobe + Bootstrap-95%-CI.
   ⚠ Interim noch strittig (Slot-Bootstrap n=8 „lumpy" → pooled gegenprüfen).
 - Perzentile: p50/p90 slot-auflösbar; p95/p99 nur volle Kampagne (n·(1−q) ≥ 5–10).
-- Verfügbarkeit = eigene Achse: Latenz nur success-only, Verfügbarkeit separat, Pareto (Latenz vs. Verfügbarkeit). OpenAI-TTS „schnell" aber 10,4 % Fails.
+- Verfügbarkeit = eigene Achse: Latenz nur success-only, Verfügbarkeit separat, Pareto (Latenz vs. Verfügbarkeit). OpenAI-TTS „schnell" aber 3,1 % (173/5600) Fails.
 
 ## M14 — HIGH-Auflagen H1–H4
-- H1: 75/268/476 = Pilot, nicht reproduzierbar → 67,6/280,2/439,2. Selbstkorrektur = Vertrauens-Plus.
+- H1: 75/268/476 = Pilot, nicht reproduzierbar → 66,9/278,9/486,6 (56-Slot-A4). Selbstkorrektur = Vertrauens-Plus.
 - H2: nur Connect-Timer geeicht (s. M7).
 - H3: kein `error_kind`-Enum; `error=='timeout'` verfehlt 158/161 → Roh-String per Teilstring bucketieren (`ReadTimeout`=tts_openai, `http_503`, `timeout`).
 - H4: `data/layer1/` = macOS → nur EC2-L1 / `l1_rtt_per_ip.md`.
@@ -118,15 +118,15 @@
   CF-FRA→US, differieren ~370 ms) → „nicht in der EU-Edge-Nähe".
 - M4: rev.ai TLS 1.2 = ganze Extra-RTT (~143 ms) = Protokoll, nicht Geografie.
 - M6: Round-0-Cold-Start verzerrt Tails (Median immun) → r0 als Warm-up.
-- M9/M10: Deepgram-`ttfp`-Tageskurve = Input-Text-Artefakt (corr 0,915); OpenAI-TTS-Fail real **10,4 %** (nicht 8 %), Diurnal unbestätigt (~1,5 Tage/Slot).
+- M9/M10: Deepgram-`ttfp`-Tageskurve = Input-Text-Artefakt (corr 0,915); OpenAI-TTS-Fail real **3,1 % (173/5600)** (nicht 8 %, nicht 10,4 %), Diurnal unbestätigt (~1,5 Tage/Slot).
 
 ## M16 — Limitationen & ehrliche Story
-- Single Vantage Point (FRA): RTT-/Edge-Zahlen FRA-spezifisch. **C1 robust**, weil bei *konstanter* Netzdistanz gemessen → 6,5× gilt aus jeder EU-Sicht.
+- Single Vantage Point (FRA): RTT-/Edge-Zahlen FRA-spezifisch. **C1 robust**, weil bei *konstanter* Netzdistanz gemessen → ~7,3× (gepoolt 8,3×) gilt aus jeder EU-Sicht.
 - Confounds: Modellgröße+HW gekoppelt (Groq); Software-Stack nicht isoliert → „Backend (HW+Modell)".
 - STT kein Engine-Beleg. Out of Scope: Transkript-/Audio-Qualität (nur Latenz + Verfügbarkeit). Diurnal = Snapshot.
 
 ## M17 — Prüfer-Einwände (Karteikarten)
-- „3 Anbieter ~1 ms?" → Edge-Klassifikation (RTT ≤2 ms + CDN-ASN + Traceroute), per IP über 16 Slots; Infrastruktur, kein Messfehler; Backend separat → 6,5×.
+- „3 Anbieter ~1 ms?" → Edge-Klassifikation (RTT ≤2 ms + CDN-ASN + Traceroute), per IP über 56 Slots; Infrastruktur, kein Messfehler; Backend separat → ~7,3× (gepoolt 8,3×).
 - „STT langsam?" → `ttfp` (vor Endpointing); gepact Azure ≈ Deepgram (~1045 ms).
 - „Warum 5.600 / Aggregation?" → 7×8×100; Median der Slot-Mediane + pooled + Bootstrap-CI.
 - „macOS vs. EC2?" → nur EC2 (OpenSSL 3.x); macOS markiert + ausgeschlossen.
@@ -134,7 +134,7 @@
 - „Nur Modellgröße?" → ja, der Confound — deshalb wasserdichte Aussage NEGATIV; invertierte Geografie (EU-Mistral > US-Groq) zeigt es unabhängig.
 
 ## M18 — Stand & offene Punkte
-- Kampagne bis ~23.6. (finale Zahlen danach); Arbeitstitel-Wahl offen; Färber angefragt (Exposé raus, Juli-Gespräch);
+- Kampagne beendet (Vollkampagne, abgeschlossen (56/56), A4 = finale Zahlen; Bootstrap-CI noch ausstehend); Arbeitstitel-Wahl offen; Färber angefragt (Exposé raus, Juli-Gespräch);
   Audit-Auflagen in der Auswertung anzuwenden; Folien (Block E) offen. **Nicht** mehr nötig: Neumessungen/Code-Umbau — nur Auswertung + Reporting.
 
 ---
@@ -201,10 +201,10 @@
   → ehrlich als Limitation der Cross-Layer-Brücke benennen (trifft genau die vom Prof bemängelte Verankerung).
 
 ## M13 (Ergänzung) — Survivorship-Zensur & Monte-Carlo-Faltung
-- **Survivorship-Zensur:** Bei OpenAI-TTS (10,4 % Fails) ist **jedes Quantil oberhalb der Fail-Rate** am
+- **Survivorship-Zensur:** Bei OpenAI-TTS (3,1 % (173/5600) Fails) ist **jedes Quantil oberhalb der Fail-Rate** am
   30-s-Timeout **zensiert** — p95/p99 sind ~30 s (Cap), kein echtes Backend-Tail. Deshalb kann OpenAI-TTS
   gleichzeitig schnell (p50) **und** das schlechteste Tail haben. Immer berichten: „p95 = X (nur erfolgreiche,
-  87,6 %); Gesamtverfügbarkeit separat."
+  96,9 %); Gesamtverfügbarkeit separat."
 - **E2E = Monte-Carlo-Faltung:** Pipeline-Gesamtlatenz **nicht** durch Median-Addition, sondern: aus jeder
   Phasen-Verteilung (`stt_ttft`, `llm_ttft`, `tts_ttfa`) zufällig ziehen, summieren, ~10.000× wiederholen → echte
   E2E-Verteilung mit p50/p90/p95 + CI (p95 der Summe ≠ Summe der p95).

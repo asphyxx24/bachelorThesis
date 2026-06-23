@@ -57,7 +57,7 @@ cron-Zeile (je Slot):
 | Azure STT/TTS | **~11–12 ms** | echtes EU-RZ (Italy North), **kein** CDN-AS |
 | Deepgram / Rev.ai | **~137–139 ms** | echtes US-Backend |
 
-- **RTT-Klassen (C2):** drei saubere Klassen (Edge ~1 ms / Azure-EU-RZ ~11 ms / US-Backend ~140 ms) live bestätigt. *(Die frühere „STT/TTS-Inversion (C1)"-Lesart mit ~1721 ms STT + ~254 ms TTS ist ÜBERHOLT: die n=3-Pilot-Zahlen sind durch die n=200-Kampagne ersetzt (Azure-`ttfa` ~94 ms; STT-`ttft`-Konstanz war Dump-Bulk-Compute, kein Endpointing-Timer). C1 ruht jetzt auf der LLM-Edge-Achse — s. `messprotokoll.md` → „Korrekte C1-Logik". Dieser Pilot zählt nur als RTT-/Edge-Beleg, nicht als C1-Latenzbeleg.)*
+- **RTT-Klassen (C2):** drei saubere Klassen (Edge ~1 ms / Azure-EU-RZ ~11 ms / US-Backend ~140 ms) live bestätigt. *(Die frühere „STT/TTS-Inversion (C1)"-Lesart mit ~1721 ms STT + ~254 ms TTS ist ÜBERHOLT: die n=3-Pilot-Zahlen sind durch die Vollkampagne ersetzt (Azure-`ttfa` ~93 ms; STT-`ttft`-Konstanz war Dump-Bulk-Compute, kein Endpointing-Timer). C1 ruht jetzt auf der LLM-Edge-Achse — s. `messprotokoll.md` → „Korrekte C1-Logik". Dieser Pilot zählt nur als RTT-/Edge-Beleg, nicht als C1-Latenzbeleg.)*
 - **A1:** auf EC2 echtes OpenSSL → **6× TLS 1.3**, rev.ai **TLS 1.2** (der eine echte 1.2-Host, kein LibreSSL-Artefakt).
 - **A6:** `cpu_steal 37→37` über den Slot → **kein** burstable-Throttling (c6i.large empirisch belegt).
 - **Rev.ai-Billing:** Wall-Clock ~2 s/Call → **15-s-Boden** greift → ~15 s/Call → **~1.400 min** für die volle Kampagne.

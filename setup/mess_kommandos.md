@@ -23,7 +23,7 @@
 > auswertungsrelevante Lauf wurde am 2026-06-16 auf der EC2 (eu-central-1, Frankfurt) erhoben; es gibt **keinen**
 > Slot-/cron-Betrieb für Layer 1. Nur **Layer 3** misst slotweise (8 UTC-Slots/Tag per cron, s. unten +
 > `deployment.md`). Begründung: Netz-, Routing- und ASN-Eigenschaften ändern sich nicht im Stunden-Takt;
-> RTT-Schwankungen werden ohnehin über den per-Call `connect.tcp_handshake_ms` aus Layer 3 (16 Slots) mitgemessen.
+> RTT-Schwankungen werden ohnehin über den per-Call `connect.tcp_handshake_ms` aus Layer 3 (56 von 56 Slots) mitgemessen.
 >
 > **Vantage-Disziplin (Audit H4):** L1-Werte sind NUR vom EC2-Lauf belastbar (RTT ~1 ms zu Cloudflare, ~11 ms
 > zu Azure, ~140 ms zu US-Hosts). Lokale macOS-Vortests liefern ~17–21 ms und dürfen **nicht** mit EC2-Daten

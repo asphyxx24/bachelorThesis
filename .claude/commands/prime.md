@@ -23,11 +23,11 @@ Wenn die Phase Auswertung/Statistik/Folien ist, zusätzlich (sonst weglassen):
 
 **Offene Audit-Auflagen:** [aus VERDICT.md die noch ungefixten HIGH-Befunde in je 1 Zeile; mindestens H1 nennen:
 Headline-LLM-ttft 75/268/476 ms ist Predeploy-Pilot, nicht reproduzierbar aus der Kampagne; maßgeblich
-Voll-Kampagne ~68/280/440 ms (~6,5×); C1-Ordnung davon unberührt. Falls VERDICT.md fehlt: "Audit-Verdict
-gitignored, nicht im Repo — H1-Zahlen-Wording vor dem Schreiben prüfen."]
+Voll-Kampagne (56 von 56 Slots, A4) ~67/279/487 ms (~7,3×, gepoolt 8,3×); C1-Ordnung davon unberührt. Falls
+VERDICT.md fehlt: "Audit-Verdict gitignored, nicht im Repo — H1-Zahlen-Wording vor dem Schreiben prüfen."]
 
 **Offene Entscheidungen:** [aus HANDOFF.md, je 1 Zeile: Arbeitstitel final wählen; Zweitprüfer-Antwort
-Prof. Färber abwarten; finale Headline-Zahlen nach Kampagnenende einsetzen]
+Prof. Färber abwarten; finale Headline-Zahlen aus der Vollkampagne (56/56, abgeschlossen) einsetzen]
 
 **Auswertungs-Disziplin (SSOT `setup/messprotokoll.md`):** Aggregation A4 (Median der Slot-Mediane, nicht
 gepoolt) + Bootstrap-CI; IP-Feld-Regel + C1-Logik beachten; Latenz nur success-only, Verfügbarkeit eigene Achse;

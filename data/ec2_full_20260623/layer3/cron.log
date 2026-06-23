@@ -1,0 +1,767 @@
+Slot '21h': n=100 × 9 = 900 Calls | git=7da0803(dirty) instanz=i-0f8f6d2414cecebb8 dry-run=False
+  Runde 10/100 — ok=88 fail=2
+  Runde 20/100 — ok=175 fail=5
+  Runde 30/100 — ok=262 fail=8
+  Runde 40/100 — ok=352 fail=8
+  Runde 50/100 — ok=441 fail=9
+  Runde 60/100 — ok=531 fail=9
+  Runde 70/100 — ok=620 fail=10
+  Runde 80/100 — ok=709 fail=11
+  Runde 90/100 — ok=797 fail=13
+  Runde 100/100 — ok=886 fail=14
+
+vollständig: 100/100 Runden, 886 ok, 14 Fehlschläge  -> /home/ubuntu/thesis/data/layer3/campaign/21h_20260615_210001.jsonl
+Slot '00h': n=100 × 9 = 900 Calls | git=7da0803(dirty) instanz=i-0f8f6d2414cecebb8 dry-run=False
+  Runde 10/100 — ok=88 fail=2
+  Runde 20/100 — ok=177 fail=3
+  Runde 30/100 — ok=264 fail=6
+  Runde 40/100 — ok=354 fail=6
+  Runde 50/100 — ok=444 fail=6
+  Runde 60/100 — ok=533 fail=7
+  Runde 70/100 — ok=622 fail=8
+  Runde 80/100 — ok=709 fail=11
+  Runde 90/100 — ok=798 fail=12
+  Runde 100/100 — ok=887 fail=13
+
+vollständig: 100/100 Runden, 887 ok, 13 Fehlschläge  -> /home/ubuntu/thesis/data/layer3/campaign/00h_20260616_000001.jsonl
+Slot '03h': n=100 × 9 = 900 Calls | git=7da0803(dirty) instanz=i-0f8f6d2414cecebb8 dry-run=False
+  Runde 10/100 — ok=89 fail=1
+  Runde 20/100 — ok=175 fail=5
+  Runde 30/100 — ok=264 fail=6
+  Runde 40/100 — ok=353 fail=7
+  Runde 50/100 — ok=443 fail=7
+  Runde 60/100 — ok=533 fail=7
+  Runde 70/100 — ok=622 fail=8
+  Runde 80/100 — ok=709 fail=11
+  Runde 90/100 — ok=796 fail=14
+  Runde 100/100 — ok=885 fail=15
+
+vollständig: 100/100 Runden, 885 ok, 15 Fehlschläge  -> /home/ubuntu/thesis/data/layer3/campaign/03h_20260616_030001.jsonl
+Slot '06h': n=100 × 9 = 900 Calls | git=7da0803(dirty) instanz=i-0f8f6d2414cecebb8 dry-run=False
+  Runde 10/100 — ok=89 fail=1
+  Runde 20/100 — ok=179 fail=1
+  Runde 30/100 — ok=268 fail=2
+  Runde 40/100 — ok=355 fail=5
+  Runde 50/100 — ok=445 fail=5
+  Runde 60/100 — ok=535 fail=5
+  Runde 70/100 — ok=624 fail=6
+  Runde 80/100 — ok=714 fail=6
+  Runde 90/100 — ok=804 fail=6
+  Runde 100/100 — ok=892 fail=8
+
+vollständig: 100/100 Runden, 892 ok, 8 Fehlschläge  -> /home/ubuntu/thesis/data/layer3/campaign/06h_20260616_060002.jsonl
+Slot '12h': n=100 × 9 = 900 Calls | git=7f04770 instanz=i-0f8f6d2414cecebb8 dry-run=False
+  Runde 10/100 — ok=89 fail=1
+  Runde 20/100 — ok=177 fail=3
+  Runde 30/100 — ok=266 fail=4
+  Runde 40/100 — ok=356 fail=4
+  Runde 50/100 — ok=444 fail=6
+  Runde 60/100 — ok=534 fail=6
+  Runde 70/100 — ok=624 fail=6
+  Runde 80/100 — ok=713 fail=7
+  Runde 90/100 — ok=803 fail=7
+  Runde 100/100 — ok=891 fail=9
+
+vollständig: 100/100 Runden, 891 ok, 9 Fehlschläge  -> /home/ubuntu/thesis/data/layer3/campaign/12h_20260616_120001.jsonl
+Slot '15h': n=100 × 9 = 900 Calls | git=7f04770 instanz=i-0f8f6d2414cecebb8 dry-run=False
+  Runde 10/100 — ok=88 fail=2
+  Runde 20/100 — ok=178 fail=2
+  Runde 30/100 — ok=267 fail=3
+  Runde 40/100 — ok=357 fail=3
+  Runde 50/100 — ok=446 fail=4
+  Runde 60/100 — ok=535 fail=5
+  Runde 70/100 — ok=625 fail=5
+  Runde 80/100 — ok=715 fail=5
+  Runde 90/100 — ok=804 fail=6
+  Runde 100/100 — ok=893 fail=7
+
+vollständig: 100/100 Runden, 893 ok, 7 Fehlschläge  -> /home/ubuntu/thesis/data/layer3/campaign/15h_20260616_150001.jsonl
+Slot '18h': n=100 × 9 = 900 Calls | git=f9e6dc8 instanz=i-0f8f6d2414cecebb8 dry-run=False
+  Runde 10/100 — ok=88 fail=2
+  Runde 20/100 — ok=178 fail=2
+  Runde 30/100 — ok=266 fail=4
+  Runde 40/100 — ok=355 fail=5
+  Runde 50/100 — ok=445 fail=5
+  Runde 60/100 — ok=535 fail=5
+  Runde 70/100 — ok=625 fail=5
+  Runde 80/100 — ok=713 fail=7
+  Runde 90/100 — ok=802 fail=8
+  Runde 100/100 — ok=890 fail=10
+
+vollständig: 100/100 Runden, 890 ok, 10 Fehlschläge  -> /home/ubuntu/thesis/data/layer3/campaign/18h_20260616_180001.jsonl
+Slot '21h': n=100 × 9 = 900 Calls | git=f9e6dc8 instanz=i-0f8f6d2414cecebb8 dry-run=False
+  Runde 10/100 — ok=88 fail=2
+  Runde 20/100 — ok=177 fail=3
+  Runde 30/100 — ok=265 fail=5
+  Runde 40/100 — ok=354 fail=6
+  Runde 50/100 — ok=443 fail=7
+  Runde 60/100 — ok=532 fail=8
+  Runde 70/100 — ok=620 fail=10
+  Runde 80/100 — ok=708 fail=12
+  Runde 90/100 — ok=794 fail=16
+  Runde 100/100 — ok=883 fail=17
+
+vollständig: 100/100 Runden, 883 ok, 17 Fehlschläge  -> /home/ubuntu/thesis/data/layer3/campaign/21h_20260616_210001.jsonl
+Slot '00h': n=100 × 9 = 900 Calls | git=f9e6dc8 instanz=i-0f8f6d2414cecebb8 dry-run=False
+  Runde 10/100 — ok=89 fail=1
+  Runde 20/100 — ok=178 fail=2
+  Runde 30/100 — ok=266 fail=4
+  Runde 40/100 — ok=353 fail=7
+  Runde 50/100 — ok=440 fail=10
+  Runde 60/100 — ok=528 fail=12
+  Runde 70/100 — ok=617 fail=13
+  Runde 80/100 — ok=705 fail=15
+  Runde 90/100 — ok=795 fail=15
+  Runde 100/100 — ok=885 fail=15
+
+vollständig: 100/100 Runden, 885 ok, 15 Fehlschläge  -> /home/ubuntu/thesis/data/layer3/campaign/00h_20260617_000001.jsonl
+Slot '03h': n=100 × 9 = 900 Calls | git=f9e6dc8 instanz=i-0f8f6d2414cecebb8 dry-run=False
+  Runde 10/100 — ok=90 fail=0
+  Runde 20/100 — ok=180 fail=0
+  Runde 30/100 — ok=267 fail=3
+  Runde 40/100 — ok=354 fail=6
+  Runde 50/100 — ok=435 fail=15
+  Runde 60/100 — ok=514 fail=26
+  Runde 70/100 — ok=599 fail=31
+  Runde 80/100 — ok=688 fail=32
+  Runde 90/100 — ok=775 fail=35
+  Runde 100/100 — ok=862 fail=38
+
+vollständig: 100/100 Runden, 862 ok, 38 Fehlschläge  -> /home/ubuntu/thesis/data/layer3/campaign/03h_20260617_030001.jsonl
+Slot '06h': n=100 × 9 = 900 Calls | git=f9e6dc8 instanz=i-0f8f6d2414cecebb8 dry-run=False
+  Runde 10/100 — ok=89 fail=1
+  Runde 20/100 — ok=178 fail=2
+  Runde 30/100 — ok=267 fail=3
+  Runde 40/100 — ok=357 fail=3
+  Runde 50/100 — ok=447 fail=3
+  Runde 60/100 — ok=534 fail=6
+  Runde 70/100 — ok=623 fail=7
+  Runde 80/100 — ok=711 fail=9
+  Runde 90/100 — ok=801 fail=9
+  Runde 100/100 — ok=889 fail=11
+
+vollständig: 100/100 Runden, 889 ok, 11 Fehlschläge  -> /home/ubuntu/thesis/data/layer3/campaign/06h_20260617_060001.jsonl
+Slot '09h': n=100 × 9 = 900 Calls | git=f9e6dc8 instanz=i-0f8f6d2414cecebb8 dry-run=False
+  Runde 10/100 — ok=90 fail=0
+  Runde 20/100 — ok=180 fail=0
+  Runde 30/100 — ok=270 fail=0
+  Runde 40/100 — ok=359 fail=1
+  Runde 50/100 — ok=448 fail=2
+  Runde 60/100 — ok=537 fail=3
+  Runde 70/100 — ok=627 fail=3
+  Runde 80/100 — ok=716 fail=4
+  Runde 90/100 — ok=805 fail=5
+  Runde 100/100 — ok=894 fail=6
+
+vollständig: 100/100 Runden, 894 ok, 6 Fehlschläge  -> /home/ubuntu/thesis/data/layer3/campaign/09h_20260617_090001.jsonl
+Slot '12h': n=100 × 9 = 900 Calls | git=f9e6dc8 instanz=i-0f8f6d2414cecebb8 dry-run=False
+  Runde 10/100 — ok=90 fail=0
+  Runde 20/100 — ok=178 fail=2
+  Runde 30/100 — ok=268 fail=2
+  Runde 40/100 — ok=358 fail=2
+  Runde 50/100 — ok=447 fail=3
+  Runde 60/100 — ok=536 fail=4
+  Runde 70/100 — ok=625 fail=5
+  Runde 80/100 — ok=712 fail=8
+  Runde 90/100 — ok=801 fail=9
+  Runde 100/100 — ok=890 fail=10
+
+vollständig: 100/100 Runden, 890 ok, 10 Fehlschläge  -> /home/ubuntu/thesis/data/layer3/campaign/12h_20260617_120001.jsonl
+Slot '15h': n=100 × 9 = 900 Calls | git=f9e6dc8 instanz=i-0f8f6d2414cecebb8 dry-run=False
+  Runde 10/100 — ok=89 fail=1
+  Runde 20/100 — ok=176 fail=4
+  Runde 30/100 — ok=266 fail=4
+  Runde 40/100 — ok=355 fail=5
+  Runde 50/100 — ok=445 fail=5
+  Runde 60/100 — ok=534 fail=6
+  Runde 70/100 — ok=624 fail=6
+  Runde 80/100 — ok=714 fail=6
+  Runde 90/100 — ok=803 fail=7
+  Runde 100/100 — ok=892 fail=8
+
+vollständig: 100/100 Runden, 892 ok, 8 Fehlschläge  -> /home/ubuntu/thesis/data/layer3/campaign/15h_20260617_150002.jsonl
+Slot '18h': n=100 × 9 = 900 Calls | git=f9e6dc8 instanz=i-0f8f6d2414cecebb8 dry-run=False
+  Runde 10/100 — ok=89 fail=1
+  Runde 20/100 — ok=179 fail=1
+  Runde 30/100 — ok=269 fail=1
+  Runde 40/100 — ok=358 fail=2
+  Runde 50/100 — ok=448 fail=2
+  Runde 60/100 — ok=538 fail=2
+  Runde 70/100 — ok=627 fail=3
+  Runde 80/100 — ok=716 fail=4
+  Runde 90/100 — ok=806 fail=4
+  Runde 100/100 — ok=896 fail=4
+
+vollständig: 100/100 Runden, 896 ok, 4 Fehlschläge  -> /home/ubuntu/thesis/data/layer3/campaign/18h_20260617_180001.jsonl
+Slot '21h': n=100 × 9 = 900 Calls | git=f9e6dc8 instanz=i-0f8f6d2414cecebb8 dry-run=False
+  Runde 10/100 — ok=89 fail=1
+  Runde 20/100 — ok=177 fail=3
+  Runde 30/100 — ok=264 fail=6
+  Runde 40/100 — ok=353 fail=7
+  Runde 50/100 — ok=443 fail=7
+  Runde 60/100 — ok=532 fail=8
+  Runde 70/100 — ok=621 fail=9
+  Runde 80/100 — ok=711 fail=9
+  Runde 90/100 — ok=800 fail=10
+  Runde 100/100 — ok=888 fail=12
+
+vollständig: 100/100 Runden, 888 ok, 12 Fehlschläge  -> /home/ubuntu/thesis/data/layer3/campaign/21h_20260617_210001.jsonl
+Slot '00h': n=100 × 9 = 900 Calls | git=f9e6dc8 instanz=i-0f8f6d2414cecebb8 dry-run=False
+  Runde 10/100 — ok=90 fail=0
+  Runde 20/100 — ok=178 fail=2
+  Runde 30/100 — ok=266 fail=4
+  Runde 40/100 — ok=355 fail=5
+  Runde 50/100 — ok=442 fail=8
+  Runde 60/100 — ok=531 fail=9
+  Runde 70/100 — ok=620 fail=10
+  Runde 80/100 — ok=710 fail=10
+  Runde 90/100 — ok=798 fail=12
+  Runde 100/100 — ok=887 fail=13
+
+vollständig: 100/100 Runden, 887 ok, 13 Fehlschläge  -> /home/ubuntu/thesis/data/layer3/campaign/00h_20260618_000001.jsonl
+Slot '03h': n=100 × 9 = 900 Calls | git=f9e6dc8 instanz=i-0f8f6d2414cecebb8 dry-run=False
+  Runde 10/100 — ok=90 fail=0
+  Runde 20/100 — ok=180 fail=0
+  Runde 30/100 — ok=269 fail=1
+  Runde 40/100 — ok=359 fail=1
+  Runde 50/100 — ok=448 fail=2
+  Runde 60/100 — ok=537 fail=3
+  Runde 70/100 — ok=626 fail=4
+  Runde 80/100 — ok=715 fail=5
+  Runde 90/100 — ok=803 fail=7
+  Runde 100/100 — ok=889 fail=11
+
+vollständig: 100/100 Runden, 889 ok, 11 Fehlschläge  -> /home/ubuntu/thesis/data/layer3/campaign/03h_20260618_030001.jsonl
+Slot '06h': n=100 × 9 = 900 Calls | git=f9e6dc8 instanz=i-0f8f6d2414cecebb8 dry-run=False
+  Runde 10/100 — ok=90 fail=0
+  Runde 20/100 — ok=179 fail=1
+  Runde 30/100 — ok=266 fail=4
+  Runde 40/100 — ok=355 fail=5
+  Runde 50/100 — ok=444 fail=6
+  Runde 60/100 — ok=533 fail=7
+  Runde 70/100 — ok=623 fail=7
+  Runde 80/100 — ok=713 fail=7
+  Runde 90/100 — ok=801 fail=9
+  Runde 100/100 — ok=890 fail=10
+
+vollständig: 100/100 Runden, 890 ok, 10 Fehlschläge  -> /home/ubuntu/thesis/data/layer3/campaign/06h_20260618_060001.jsonl
+Slot '09h': n=100 × 9 = 900 Calls | git=f9e6dc8 instanz=i-0f8f6d2414cecebb8 dry-run=False
+  Runde 10/100 — ok=88 fail=2
+  Runde 20/100 — ok=178 fail=2
+  Runde 30/100 — ok=268 fail=2
+  Runde 40/100 — ok=356 fail=4
+  Runde 50/100 — ok=445 fail=5
+  Runde 60/100 — ok=534 fail=6
+  Runde 70/100 — ok=623 fail=7
+  Runde 80/100 — ok=712 fail=8
+  Runde 90/100 — ok=801 fail=9
+  Runde 100/100 — ok=890 fail=10
+
+vollständig: 100/100 Runden, 890 ok, 10 Fehlschläge  -> /home/ubuntu/thesis/data/layer3/campaign/09h_20260618_090001.jsonl
+Slot '12h': n=100 × 9 = 900 Calls | git=f9e6dc8 instanz=i-0f8f6d2414cecebb8 dry-run=False
+  Runde 10/100 — ok=89 fail=1
+  Runde 20/100 — ok=179 fail=1
+  Runde 30/100 — ok=269 fail=1
+  Runde 40/100 — ok=357 fail=3
+  Runde 50/100 — ok=447 fail=3
+  Runde 60/100 — ok=537 fail=3
+  Runde 70/100 — ok=626 fail=4
+  Runde 80/100 — ok=714 fail=6
+  Runde 90/100 — ok=804 fail=6
+  Runde 100/100 — ok=893 fail=7
+
+vollständig: 100/100 Runden, 893 ok, 7 Fehlschläge  -> /home/ubuntu/thesis/data/layer3/campaign/12h_20260618_120002.jsonl
+Slot '15h': n=100 × 9 = 900 Calls | git=f9e6dc8 instanz=i-0f8f6d2414cecebb8 dry-run=False
+  Runde 10/100 — ok=88 fail=2
+  Runde 20/100 — ok=177 fail=3
+  Runde 30/100 — ok=267 fail=3
+  Runde 40/100 — ok=357 fail=3
+  Runde 50/100 — ok=447 fail=3
+  Runde 60/100 — ok=536 fail=4
+  Runde 70/100 — ok=626 fail=4
+  Runde 80/100 — ok=716 fail=4
+  Runde 90/100 — ok=806 fail=4
+  Runde 100/100 — ok=896 fail=4
+
+vollständig: 100/100 Runden, 896 ok, 4 Fehlschläge  -> /home/ubuntu/thesis/data/layer3/campaign/15h_20260618_150001.jsonl
+Slot '18h': n=100 × 9 = 900 Calls | git=f9e6dc8 instanz=i-0f8f6d2414cecebb8 dry-run=False
+  Runde 10/100 — ok=90 fail=0
+  Runde 20/100 — ok=180 fail=0
+  Runde 30/100 — ok=270 fail=0
+  Runde 40/100 — ok=360 fail=0
+  Runde 50/100 — ok=450 fail=0
+  Runde 60/100 — ok=540 fail=0
+  Runde 70/100 — ok=630 fail=0
+  Runde 80/100 — ok=720 fail=0
+  Runde 90/100 — ok=810 fail=0
+  Runde 100/100 — ok=900 fail=0
+
+vollständig: 100/100 Runden, 900 ok, 0 Fehlschläge  -> /home/ubuntu/thesis/data/layer3/campaign/18h_20260618_180001.jsonl
+Slot '21h': n=100 × 9 = 900 Calls | git=f9e6dc8 instanz=i-0f8f6d2414cecebb8 dry-run=False
+  Runde 10/100 — ok=90 fail=0
+  Runde 20/100 — ok=180 fail=0
+  Runde 30/100 — ok=270 fail=0
+  Runde 40/100 — ok=360 fail=0
+  Runde 50/100 — ok=450 fail=0
+  Runde 60/100 — ok=540 fail=0
+  Runde 70/100 — ok=630 fail=0
+  Runde 80/100 — ok=720 fail=0
+  Runde 90/100 — ok=810 fail=0
+  Runde 100/100 — ok=900 fail=0
+
+vollständig: 100/100 Runden, 900 ok, 0 Fehlschläge  -> /home/ubuntu/thesis/data/layer3/campaign/21h_20260618_210001.jsonl
+Slot '00h': n=100 × 9 = 900 Calls | git=f9e6dc8 instanz=i-0f8f6d2414cecebb8 dry-run=False
+  Runde 10/100 — ok=90 fail=0
+  Runde 20/100 — ok=180 fail=0
+  Runde 30/100 — ok=270 fail=0
+  Runde 40/100 — ok=360 fail=0
+  Runde 50/100 — ok=450 fail=0
+  Runde 60/100 — ok=540 fail=0
+  Runde 70/100 — ok=630 fail=0
+  Runde 80/100 — ok=720 fail=0
+  Runde 90/100 — ok=810 fail=0
+  Runde 100/100 — ok=900 fail=0
+
+vollständig: 100/100 Runden, 900 ok, 0 Fehlschläge  -> /home/ubuntu/thesis/data/layer3/campaign/00h_20260619_000001.jsonl
+Slot '03h': n=100 × 9 = 900 Calls | git=f9e6dc8 instanz=i-0f8f6d2414cecebb8 dry-run=False
+  Runde 10/100 — ok=90 fail=0
+  Runde 20/100 — ok=180 fail=0
+  Runde 30/100 — ok=270 fail=0
+  Runde 40/100 — ok=360 fail=0
+  Runde 50/100 — ok=450 fail=0
+  Runde 60/100 — ok=540 fail=0
+  Runde 70/100 — ok=630 fail=0
+  Runde 80/100 — ok=720 fail=0
+  Runde 90/100 — ok=810 fail=0
+  Runde 100/100 — ok=900 fail=0
+
+vollständig: 100/100 Runden, 900 ok, 0 Fehlschläge  -> /home/ubuntu/thesis/data/layer3/campaign/03h_20260619_030001.jsonl
+Slot '06h': n=100 × 9 = 900 Calls | git=f9e6dc8 instanz=i-0f8f6d2414cecebb8 dry-run=False
+  Runde 10/100 — ok=90 fail=0
+  Runde 20/100 — ok=180 fail=0
+  Runde 30/100 — ok=270 fail=0
+  Runde 40/100 — ok=360 fail=0
+  Runde 50/100 — ok=450 fail=0
+  Runde 60/100 — ok=540 fail=0
+  Runde 70/100 — ok=630 fail=0
+  Runde 80/100 — ok=720 fail=0
+  Runde 90/100 — ok=810 fail=0
+  Runde 100/100 — ok=900 fail=0
+
+vollständig: 100/100 Runden, 900 ok, 0 Fehlschläge  -> /home/ubuntu/thesis/data/layer3/campaign/06h_20260619_060001.jsonl
+Slot '09h': n=100 × 9 = 900 Calls | git=f9e6dc8 instanz=i-0f8f6d2414cecebb8 dry-run=False
+  Runde 10/100 — ok=90 fail=0
+  Runde 20/100 — ok=180 fail=0
+  Runde 30/100 — ok=270 fail=0
+  Runde 40/100 — ok=360 fail=0
+  Runde 50/100 — ok=450 fail=0
+  Runde 60/100 — ok=540 fail=0
+  Runde 70/100 — ok=630 fail=0
+  Runde 80/100 — ok=720 fail=0
+  Runde 90/100 — ok=810 fail=0
+  Runde 100/100 — ok=900 fail=0
+
+vollständig: 100/100 Runden, 900 ok, 0 Fehlschläge  -> /home/ubuntu/thesis/data/layer3/campaign/09h_20260619_090001.jsonl
+Slot '12h': n=100 × 9 = 900 Calls | git=f9e6dc8 instanz=i-0f8f6d2414cecebb8 dry-run=False
+  Runde 10/100 — ok=90 fail=0
+  Runde 20/100 — ok=180 fail=0
+  Runde 30/100 — ok=270 fail=0
+  Runde 40/100 — ok=360 fail=0
+  Runde 50/100 — ok=450 fail=0
+  Runde 60/100 — ok=540 fail=0
+  Runde 70/100 — ok=630 fail=0
+  Runde 80/100 — ok=720 fail=0
+  Runde 90/100 — ok=810 fail=0
+  Runde 100/100 — ok=900 fail=0
+
+vollständig: 100/100 Runden, 900 ok, 0 Fehlschläge  -> /home/ubuntu/thesis/data/layer3/campaign/12h_20260619_120002.jsonl
+Slot '15h': n=100 × 9 = 900 Calls | git=f9e6dc8 instanz=i-0f8f6d2414cecebb8 dry-run=False
+  Runde 10/100 — ok=90 fail=0
+  Runde 20/100 — ok=179 fail=1
+  Runde 30/100 — ok=269 fail=1
+  Runde 40/100 — ok=359 fail=1
+  Runde 50/100 — ok=449 fail=1
+  Runde 60/100 — ok=539 fail=1
+  Runde 70/100 — ok=629 fail=1
+  Runde 80/100 — ok=719 fail=1
+  Runde 90/100 — ok=809 fail=1
+  Runde 100/100 — ok=899 fail=1
+
+vollständig: 100/100 Runden, 899 ok, 1 Fehlschläge  -> /home/ubuntu/thesis/data/layer3/campaign/15h_20260619_150001.jsonl
+Slot '18h': n=100 × 9 = 900 Calls | git=f9e6dc8 instanz=i-0f8f6d2414cecebb8 dry-run=False
+  Runde 10/100 — ok=90 fail=0
+  Runde 20/100 — ok=180 fail=0
+  Runde 30/100 — ok=270 fail=0
+  Runde 40/100 — ok=360 fail=0
+  Runde 50/100 — ok=450 fail=0
+  Runde 60/100 — ok=540 fail=0
+  Runde 70/100 — ok=630 fail=0
+  Runde 80/100 — ok=720 fail=0
+  Runde 90/100 — ok=810 fail=0
+  Runde 100/100 — ok=900 fail=0
+
+vollständig: 100/100 Runden, 900 ok, 0 Fehlschläge  -> /home/ubuntu/thesis/data/layer3/campaign/18h_20260619_180002.jsonl
+Slot '21h': n=100 × 9 = 900 Calls | git=f9e6dc8 instanz=i-0f8f6d2414cecebb8 dry-run=False
+  Runde 10/100 — ok=90 fail=0
+  Runde 20/100 — ok=180 fail=0
+  Runde 30/100 — ok=270 fail=0
+  Runde 40/100 — ok=360 fail=0
+  Runde 50/100 — ok=450 fail=0
+  Runde 60/100 — ok=540 fail=0
+  Runde 70/100 — ok=630 fail=0
+  Runde 80/100 — ok=720 fail=0
+  Runde 90/100 — ok=810 fail=0
+  Runde 100/100 — ok=900 fail=0
+
+vollständig: 100/100 Runden, 900 ok, 0 Fehlschläge  -> /home/ubuntu/thesis/data/layer3/campaign/21h_20260619_210001.jsonl
+Slot '00h': n=100 × 9 = 900 Calls | git=f9e6dc8 instanz=i-0f8f6d2414cecebb8 dry-run=False
+  Runde 10/100 — ok=90 fail=0
+  Runde 20/100 — ok=180 fail=0
+  Runde 30/100 — ok=270 fail=0
+  Runde 40/100 — ok=360 fail=0
+  Runde 50/100 — ok=450 fail=0
+  Runde 60/100 — ok=540 fail=0
+  Runde 70/100 — ok=630 fail=0
+  Runde 80/100 — ok=720 fail=0
+  Runde 90/100 — ok=810 fail=0
+  Runde 100/100 — ok=900 fail=0
+
+vollständig: 100/100 Runden, 900 ok, 0 Fehlschläge  -> /home/ubuntu/thesis/data/layer3/campaign/00h_20260620_000001.jsonl
+Slot '03h': n=100 × 9 = 900 Calls | git=f9e6dc8 instanz=i-0f8f6d2414cecebb8 dry-run=False
+  Runde 10/100 — ok=90 fail=0
+  Runde 20/100 — ok=180 fail=0
+  Runde 30/100 — ok=270 fail=0
+  Runde 40/100 — ok=360 fail=0
+  Runde 50/100 — ok=450 fail=0
+  Runde 60/100 — ok=540 fail=0
+  Runde 70/100 — ok=630 fail=0
+  Runde 80/100 — ok=720 fail=0
+  Runde 90/100 — ok=810 fail=0
+  Runde 100/100 — ok=900 fail=0
+
+vollständig: 100/100 Runden, 900 ok, 0 Fehlschläge  -> /home/ubuntu/thesis/data/layer3/campaign/03h_20260620_030001.jsonl
+Slot '06h': n=100 × 9 = 900 Calls | git=f9e6dc8 instanz=i-0f8f6d2414cecebb8 dry-run=False
+  Runde 10/100 — ok=90 fail=0
+  Runde 20/100 — ok=180 fail=0
+  Runde 30/100 — ok=270 fail=0
+  Runde 40/100 — ok=360 fail=0
+  Runde 50/100 — ok=450 fail=0
+  Runde 60/100 — ok=540 fail=0
+  Runde 70/100 — ok=630 fail=0
+  Runde 80/100 — ok=720 fail=0
+  Runde 90/100 — ok=810 fail=0
+  Runde 100/100 — ok=900 fail=0
+
+vollständig: 100/100 Runden, 900 ok, 0 Fehlschläge  -> /home/ubuntu/thesis/data/layer3/campaign/06h_20260620_060001.jsonl
+Slot '09h': n=100 × 9 = 900 Calls | git=f9e6dc8 instanz=i-0f8f6d2414cecebb8 dry-run=False
+  Runde 10/100 — ok=90 fail=0
+  Runde 20/100 — ok=180 fail=0
+  Runde 30/100 — ok=270 fail=0
+  Runde 40/100 — ok=360 fail=0
+  Runde 50/100 — ok=450 fail=0
+  Runde 60/100 — ok=540 fail=0
+  Runde 70/100 — ok=630 fail=0
+  Runde 80/100 — ok=720 fail=0
+  Runde 90/100 — ok=810 fail=0
+  Runde 100/100 — ok=900 fail=0
+
+vollständig: 100/100 Runden, 900 ok, 0 Fehlschläge  -> /home/ubuntu/thesis/data/layer3/campaign/09h_20260620_090001.jsonl
+Slot '12h': n=100 × 9 = 900 Calls | git=f9e6dc8 instanz=i-0f8f6d2414cecebb8 dry-run=False
+  Runde 10/100 — ok=90 fail=0
+  Runde 20/100 — ok=180 fail=0
+  Runde 30/100 — ok=270 fail=0
+  Runde 40/100 — ok=360 fail=0
+  Runde 50/100 — ok=450 fail=0
+  Runde 60/100 — ok=540 fail=0
+  Runde 70/100 — ok=630 fail=0
+  Runde 80/100 — ok=720 fail=0
+  Runde 90/100 — ok=810 fail=0
+  Runde 100/100 — ok=900 fail=0
+
+vollständig: 100/100 Runden, 900 ok, 0 Fehlschläge  -> /home/ubuntu/thesis/data/layer3/campaign/12h_20260620_120001.jsonl
+Slot '15h': n=100 × 9 = 900 Calls | git=f9e6dc8 instanz=i-0f8f6d2414cecebb8 dry-run=False
+  Runde 10/100 — ok=90 fail=0
+  Runde 20/100 — ok=180 fail=0
+  Runde 30/100 — ok=270 fail=0
+  Runde 40/100 — ok=360 fail=0
+  Runde 50/100 — ok=450 fail=0
+  Runde 60/100 — ok=540 fail=0
+  Runde 70/100 — ok=630 fail=0
+  Runde 80/100 — ok=720 fail=0
+  Runde 90/100 — ok=810 fail=0
+  Runde 100/100 — ok=900 fail=0
+
+vollständig: 100/100 Runden, 900 ok, 0 Fehlschläge  -> /home/ubuntu/thesis/data/layer3/campaign/15h_20260620_150002.jsonl
+Slot '18h': n=100 × 9 = 900 Calls | git=f9e6dc8 instanz=i-0f8f6d2414cecebb8 dry-run=False
+  Runde 10/100 — ok=90 fail=0
+  Runde 20/100 — ok=180 fail=0
+  Runde 30/100 — ok=270 fail=0
+  Runde 40/100 — ok=360 fail=0
+  Runde 50/100 — ok=450 fail=0
+  Runde 60/100 — ok=540 fail=0
+  Runde 70/100 — ok=630 fail=0
+  Runde 80/100 — ok=720 fail=0
+  Runde 90/100 — ok=810 fail=0
+  Runde 100/100 — ok=900 fail=0
+
+vollständig: 100/100 Runden, 900 ok, 0 Fehlschläge  -> /home/ubuntu/thesis/data/layer3/campaign/18h_20260620_180001.jsonl
+Slot '21h': n=100 × 9 = 900 Calls | git=f9e6dc8 instanz=i-0f8f6d2414cecebb8 dry-run=False
+  Runde 10/100 — ok=90 fail=0
+  Runde 20/100 — ok=180 fail=0
+  Runde 30/100 — ok=270 fail=0
+  Runde 40/100 — ok=360 fail=0
+  Runde 50/100 — ok=450 fail=0
+  Runde 60/100 — ok=540 fail=0
+  Runde 70/100 — ok=630 fail=0
+  Runde 80/100 — ok=720 fail=0
+  Runde 90/100 — ok=810 fail=0
+  Runde 100/100 — ok=900 fail=0
+
+vollständig: 100/100 Runden, 900 ok, 0 Fehlschläge  -> /home/ubuntu/thesis/data/layer3/campaign/21h_20260620_210001.jsonl
+Slot '00h': n=100 × 9 = 900 Calls | git=f9e6dc8 instanz=i-0f8f6d2414cecebb8 dry-run=False
+  Runde 10/100 — ok=90 fail=0
+  Runde 20/100 — ok=180 fail=0
+  Runde 30/100 — ok=270 fail=0
+  Runde 40/100 — ok=360 fail=0
+  Runde 50/100 — ok=450 fail=0
+  Runde 60/100 — ok=540 fail=0
+  Runde 70/100 — ok=630 fail=0
+  Runde 80/100 — ok=720 fail=0
+  Runde 90/100 — ok=810 fail=0
+  Runde 100/100 — ok=900 fail=0
+
+vollständig: 100/100 Runden, 900 ok, 0 Fehlschläge  -> /home/ubuntu/thesis/data/layer3/campaign/00h_20260621_000001.jsonl
+Slot '03h': n=100 × 9 = 900 Calls | git=f9e6dc8 instanz=i-0f8f6d2414cecebb8 dry-run=False
+  Runde 10/100 — ok=90 fail=0
+  Runde 20/100 — ok=180 fail=0
+  Runde 30/100 — ok=270 fail=0
+  Runde 40/100 — ok=360 fail=0
+  Runde 50/100 — ok=450 fail=0
+  Runde 60/100 — ok=540 fail=0
+  Runde 70/100 — ok=630 fail=0
+  Runde 80/100 — ok=720 fail=0
+  Runde 90/100 — ok=810 fail=0
+  Runde 100/100 — ok=900 fail=0
+
+vollständig: 100/100 Runden, 900 ok, 0 Fehlschläge  -> /home/ubuntu/thesis/data/layer3/campaign/03h_20260621_030002.jsonl
+Slot '06h': n=100 × 9 = 900 Calls | git=f9e6dc8 instanz=i-0f8f6d2414cecebb8 dry-run=False
+  Runde 10/100 — ok=90 fail=0
+  Runde 20/100 — ok=180 fail=0
+  Runde 30/100 — ok=270 fail=0
+  Runde 40/100 — ok=360 fail=0
+  Runde 50/100 — ok=450 fail=0
+  Runde 60/100 — ok=540 fail=0
+  Runde 70/100 — ok=630 fail=0
+  Runde 80/100 — ok=720 fail=0
+  Runde 90/100 — ok=810 fail=0
+  Runde 100/100 — ok=900 fail=0
+
+vollständig: 100/100 Runden, 900 ok, 0 Fehlschläge  -> /home/ubuntu/thesis/data/layer3/campaign/06h_20260621_060001.jsonl
+Slot '09h': n=100 × 9 = 900 Calls | git=f9e6dc8 instanz=i-0f8f6d2414cecebb8 dry-run=False
+  Runde 10/100 — ok=90 fail=0
+  Runde 20/100 — ok=180 fail=0
+  Runde 30/100 — ok=270 fail=0
+  Runde 40/100 — ok=360 fail=0
+  Runde 50/100 — ok=450 fail=0
+  Runde 60/100 — ok=540 fail=0
+  Runde 70/100 — ok=630 fail=0
+  Runde 80/100 — ok=720 fail=0
+  Runde 90/100 — ok=810 fail=0
+  Runde 100/100 — ok=900 fail=0
+
+vollständig: 100/100 Runden, 900 ok, 0 Fehlschläge  -> /home/ubuntu/thesis/data/layer3/campaign/09h_20260621_090001.jsonl
+Slot '12h': n=100 × 9 = 900 Calls | git=f9e6dc8 instanz=i-0f8f6d2414cecebb8 dry-run=False
+  Runde 10/100 — ok=90 fail=0
+  Runde 20/100 — ok=180 fail=0
+  Runde 30/100 — ok=270 fail=0
+  Runde 40/100 — ok=360 fail=0
+  Runde 50/100 — ok=450 fail=0
+  Runde 60/100 — ok=540 fail=0
+  Runde 70/100 — ok=630 fail=0
+  Runde 80/100 — ok=720 fail=0
+  Runde 90/100 — ok=810 fail=0
+  Runde 100/100 — ok=900 fail=0
+
+vollständig: 100/100 Runden, 900 ok, 0 Fehlschläge  -> /home/ubuntu/thesis/data/layer3/campaign/12h_20260621_120001.jsonl
+Slot '15h': n=100 × 9 = 900 Calls | git=f9e6dc8 instanz=i-0f8f6d2414cecebb8 dry-run=False
+  Runde 10/100 — ok=90 fail=0
+  Runde 20/100 — ok=180 fail=0
+  Runde 30/100 — ok=270 fail=0
+  Runde 40/100 — ok=360 fail=0
+  Runde 50/100 — ok=450 fail=0
+  Runde 60/100 — ok=540 fail=0
+  Runde 70/100 — ok=630 fail=0
+  Runde 80/100 — ok=720 fail=0
+  Runde 90/100 — ok=810 fail=0
+  Runde 100/100 — ok=900 fail=0
+
+vollständig: 100/100 Runden, 900 ok, 0 Fehlschläge  -> /home/ubuntu/thesis/data/layer3/campaign/15h_20260621_150001.jsonl
+Slot '18h': n=100 × 9 = 900 Calls | git=f9e6dc8 instanz=i-0f8f6d2414cecebb8 dry-run=False
+  Runde 10/100 — ok=90 fail=0
+  Runde 20/100 — ok=180 fail=0
+  Runde 30/100 — ok=270 fail=0
+  Runde 40/100 — ok=360 fail=0
+  Runde 50/100 — ok=450 fail=0
+  Runde 60/100 — ok=540 fail=0
+  Runde 70/100 — ok=630 fail=0
+  Runde 80/100 — ok=720 fail=0
+  Runde 90/100 — ok=810 fail=0
+  Runde 100/100 — ok=900 fail=0
+
+vollständig: 100/100 Runden, 900 ok, 0 Fehlschläge  -> /home/ubuntu/thesis/data/layer3/campaign/18h_20260621_180001.jsonl
+Slot '21h': n=100 × 9 = 900 Calls | git=f9e6dc8 instanz=i-0f8f6d2414cecebb8 dry-run=False
+  Runde 10/100 — ok=90 fail=0
+  Runde 20/100 — ok=180 fail=0
+  Runde 30/100 — ok=270 fail=0
+  Runde 40/100 — ok=360 fail=0
+  Runde 50/100 — ok=450 fail=0
+  Runde 60/100 — ok=540 fail=0
+  Runde 70/100 — ok=630 fail=0
+  Runde 80/100 — ok=720 fail=0
+  Runde 90/100 — ok=810 fail=0
+  Runde 100/100 — ok=900 fail=0
+
+vollständig: 100/100 Runden, 900 ok, 0 Fehlschläge  -> /home/ubuntu/thesis/data/layer3/campaign/21h_20260621_210001.jsonl
+Slot '00h': n=100 × 9 = 900 Calls | git=f9e6dc8 instanz=i-0f8f6d2414cecebb8 dry-run=False
+  Runde 10/100 — ok=90 fail=0
+  Runde 20/100 — ok=180 fail=0
+  Runde 30/100 — ok=270 fail=0
+  Runde 40/100 — ok=360 fail=0
+  Runde 50/100 — ok=450 fail=0
+  Runde 60/100 — ok=540 fail=0
+  Runde 70/100 — ok=630 fail=0
+  Runde 80/100 — ok=720 fail=0
+  Runde 90/100 — ok=810 fail=0
+  Runde 100/100 — ok=900 fail=0
+
+vollständig: 100/100 Runden, 900 ok, 0 Fehlschläge  -> /home/ubuntu/thesis/data/layer3/campaign/00h_20260622_000001.jsonl
+Slot '03h': n=100 × 9 = 900 Calls | git=f9e6dc8 instanz=i-0f8f6d2414cecebb8 dry-run=False
+  Runde 10/100 — ok=90 fail=0
+  Runde 20/100 — ok=180 fail=0
+  Runde 30/100 — ok=270 fail=0
+  Runde 40/100 — ok=360 fail=0
+  Runde 50/100 — ok=450 fail=0
+  Runde 60/100 — ok=540 fail=0
+  Runde 70/100 — ok=630 fail=0
+  Runde 80/100 — ok=720 fail=0
+  Runde 90/100 — ok=810 fail=0
+  Runde 100/100 — ok=900 fail=0
+
+vollständig: 100/100 Runden, 900 ok, 0 Fehlschläge  -> /home/ubuntu/thesis/data/layer3/campaign/03h_20260622_030001.jsonl
+Slot '06h': n=100 × 9 = 900 Calls | git=f9e6dc8 instanz=i-0f8f6d2414cecebb8 dry-run=False
+  Runde 10/100 — ok=90 fail=0
+  Runde 20/100 — ok=180 fail=0
+  Runde 30/100 — ok=270 fail=0
+  Runde 40/100 — ok=360 fail=0
+  Runde 50/100 — ok=450 fail=0
+  Runde 60/100 — ok=540 fail=0
+  Runde 70/100 — ok=630 fail=0
+  Runde 80/100 — ok=720 fail=0
+  Runde 90/100 — ok=810 fail=0
+  Runde 100/100 — ok=900 fail=0
+
+vollständig: 100/100 Runden, 900 ok, 0 Fehlschläge  -> /home/ubuntu/thesis/data/layer3/campaign/06h_20260622_060001.jsonl
+Slot '09h': n=100 × 9 = 900 Calls | git=f9e6dc8 instanz=i-0f8f6d2414cecebb8 dry-run=False
+  Runde 10/100 — ok=90 fail=0
+  Runde 20/100 — ok=180 fail=0
+  Runde 30/100 — ok=270 fail=0
+  Runde 40/100 — ok=360 fail=0
+  Runde 50/100 — ok=450 fail=0
+  Runde 60/100 — ok=540 fail=0
+  Runde 70/100 — ok=630 fail=0
+  Runde 80/100 — ok=720 fail=0
+  Runde 90/100 — ok=810 fail=0
+  Runde 100/100 — ok=900 fail=0
+
+vollständig: 100/100 Runden, 900 ok, 0 Fehlschläge  -> /home/ubuntu/thesis/data/layer3/campaign/09h_20260622_090001.jsonl
+Slot '12h': n=100 × 9 = 900 Calls | git=f9e6dc8 instanz=i-0f8f6d2414cecebb8 dry-run=False
+  Runde 10/100 — ok=90 fail=0
+  Runde 20/100 — ok=180 fail=0
+  Runde 30/100 — ok=270 fail=0
+  Runde 40/100 — ok=360 fail=0
+  Runde 50/100 — ok=450 fail=0
+  Runde 60/100 — ok=540 fail=0
+  Runde 70/100 — ok=630 fail=0
+  Runde 80/100 — ok=720 fail=0
+  Runde 90/100 — ok=810 fail=0
+  Runde 100/100 — ok=900 fail=0
+
+vollständig: 100/100 Runden, 900 ok, 0 Fehlschläge  -> /home/ubuntu/thesis/data/layer3/campaign/12h_20260622_120001.jsonl
+Slot '15h': n=100 × 9 = 900 Calls | git=f9e6dc8 instanz=i-0f8f6d2414cecebb8 dry-run=False
+  Runde 10/100 — ok=90 fail=0
+  Runde 20/100 — ok=180 fail=0
+  Runde 30/100 — ok=270 fail=0
+  Runde 40/100 — ok=360 fail=0
+  Runde 50/100 — ok=450 fail=0
+  Runde 60/100 — ok=540 fail=0
+  Runde 70/100 — ok=630 fail=0
+  Runde 80/100 — ok=720 fail=0
+  Runde 90/100 — ok=810 fail=0
+  Runde 100/100 — ok=900 fail=0
+
+vollständig: 100/100 Runden, 900 ok, 0 Fehlschläge  -> /home/ubuntu/thesis/data/layer3/campaign/15h_20260622_150001.jsonl
+Slot '18h': n=100 × 9 = 900 Calls | git=f9e6dc8 instanz=i-0f8f6d2414cecebb8 dry-run=False
+  Runde 10/100 — ok=90 fail=0
+  Runde 20/100 — ok=180 fail=0
+  Runde 30/100 — ok=270 fail=0
+  Runde 40/100 — ok=360 fail=0
+  Runde 50/100 — ok=450 fail=0
+  Runde 60/100 — ok=540 fail=0
+  Runde 70/100 — ok=630 fail=0
+  Runde 80/100 — ok=720 fail=0
+  Runde 90/100 — ok=810 fail=0
+  Runde 100/100 — ok=900 fail=0
+
+vollständig: 100/100 Runden, 900 ok, 0 Fehlschläge  -> /home/ubuntu/thesis/data/layer3/campaign/18h_20260622_180001.jsonl
+Slot '21h': n=100 × 9 = 900 Calls | git=f9e6dc8 instanz=i-0f8f6d2414cecebb8 dry-run=False
+  Runde 10/100 — ok=90 fail=0
+  Runde 20/100 — ok=180 fail=0
+  Runde 30/100 — ok=270 fail=0
+  Runde 40/100 — ok=360 fail=0
+  Runde 50/100 — ok=450 fail=0
+  Runde 60/100 — ok=540 fail=0
+  Runde 70/100 — ok=630 fail=0
+  Runde 80/100 — ok=720 fail=0
+  Runde 90/100 — ok=810 fail=0
+  Runde 100/100 — ok=900 fail=0
+
+vollständig: 100/100 Runden, 900 ok, 0 Fehlschläge  -> /home/ubuntu/thesis/data/layer3/campaign/21h_20260622_210002.jsonl
+Slot '00h': n=100 × 9 = 900 Calls | git=f9e6dc8 instanz=i-0f8f6d2414cecebb8 dry-run=False
+  Runde 10/100 — ok=90 fail=0
+  Runde 20/100 — ok=180 fail=0
+  Runde 30/100 — ok=270 fail=0
+  Runde 40/100 — ok=360 fail=0
+  Runde 50/100 — ok=450 fail=0
+  Runde 60/100 — ok=540 fail=0
+  Runde 70/100 — ok=630 fail=0
+  Runde 80/100 — ok=720 fail=0
+  Runde 90/100 — ok=810 fail=0
+  Runde 100/100 — ok=900 fail=0
+
+vollständig: 100/100 Runden, 900 ok, 0 Fehlschläge  -> /home/ubuntu/thesis/data/layer3/campaign/00h_20260623_000002.jsonl
+Slot '03h': n=100 × 9 = 900 Calls | git=f9e6dc8 instanz=i-0f8f6d2414cecebb8 dry-run=False
+  Runde 10/100 — ok=89 fail=1
+  Runde 20/100 — ok=179 fail=1
+  Runde 30/100 — ok=269 fail=1
+  Runde 40/100 — ok=359 fail=1
+  Runde 50/100 — ok=449 fail=1
+  Runde 60/100 — ok=539 fail=1
+  Runde 70/100 — ok=629 fail=1
+  Runde 80/100 — ok=719 fail=1
+  Runde 90/100 — ok=809 fail=1
+  Runde 100/100 — ok=899 fail=1
+
+vollständig: 100/100 Runden, 899 ok, 1 Fehlschläge  -> /home/ubuntu/thesis/data/layer3/campaign/03h_20260623_030001.jsonl
+Slot '06h': n=100 × 9 = 900 Calls | git=f9e6dc8 instanz=i-0f8f6d2414cecebb8 dry-run=False
+  Runde 10/100 — ok=90 fail=0
+  Runde 20/100 — ok=180 fail=0
+  Runde 30/100 — ok=270 fail=0
+  Runde 40/100 — ok=360 fail=0
+  Runde 50/100 — ok=450 fail=0
+  Runde 60/100 — ok=540 fail=0
+  Runde 70/100 — ok=630 fail=0
+  Runde 80/100 — ok=720 fail=0
+  Runde 90/100 — ok=810 fail=0
+  Runde 100/100 — ok=900 fail=0
+
+vollständig: 100/100 Runden, 900 ok, 0 Fehlschläge  -> /home/ubuntu/thesis/data/layer3/campaign/06h_20260623_060001.jsonl
